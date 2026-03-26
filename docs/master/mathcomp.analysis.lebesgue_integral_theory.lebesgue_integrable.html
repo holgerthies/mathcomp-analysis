@@ -992,7 +992,7 @@ d.-measurable%classic D ->
 forall [h : T -> R] [g : T -> \bar R],
 measurable_fun (T:=T)
   (U:=Real_sort__canonical__measurable_structure_SigmaRing R) D h ->
-[bounded h x | x in D] ->
+pseudometric_normed_Zmodule.bounded_near [eta h] (filter.globally D) ->
 mu.-integrable D g -> mu.-integrable D ((EFin \o h) \* g)%E
 
 integrableMr is not universe polymorphic
@@ -1034,7 +1034,8 @@ forall [f : T -> \bar R] [h : T -> R],
 mu.-integrable D f ->
 measurable_fun (T:=T)
   (U:=Real_sort__canonical__measurable_structure_SigmaRing R) D h ->
-[bounded h x | x in D] -> mu.-integrable D (f \* (EFin \o h))%E
+pseudometric_normed_Zmodule.bounded_near [eta h] (filter.globally D) ->
+mu.-integrable D (f \* (EFin \o h))%E
 
 integrableMl is not universe polymorphic
 Arguments integrableMl [d]%_measure_display_scope 
@@ -1183,7 +1184,8 @@ d.-measurable%classic A ->
 (mu A < +oo)%E ->
 measurable_fun (T:=T)
   (U:=Real_sort__canonical__measurable_structure_SigmaRing R) A f ->
-[bounded f x | x in A] -> mu.-integrable A (EFin \o f)
+pseudometric_normed_Zmodule.bounded_near [eta f] (filter.globally A) ->
+mu.-integrable A (EFin \o f)
 
 measurable_bounded_integrable is not universe polymorphic
 Arguments measurable_bounded_integrable [d]%_measure_display_scope 

@@ -1432,7 +1432,7 @@ forall [d : measure_display] [R : realFieldType] [T : sigmaRingType d]
 trivIset (T:=T) [set: nat] F ->
 forall
   [t : set constructive_ereal_extended__canonical__Algebra_BaseAddUMagma],
-nbhs (mu (\bigcup_n F n)%classic) t ->
+filter.nbhs (mu (\bigcup_n F n)%classic) t ->
 exists2 i : nat,
   [set: nat]%classic i &
   ((fun N : nat => [set n | N <= n]) i
@@ -3120,7 +3120,7 @@ trivIset (T:=T) [set: nat] F ->
 d.-measurable%classic (\bigcup_n F n) ->
 forall
   [t : set constructive_ereal_extended__canonical__Algebra_BaseAddUMagma],
-nbhs (mu (\bigcup_n F n)%classic) t ->
+filter.nbhs (mu (\bigcup_n F n)%classic) t ->
 exists2 i : nat,
   [set: nat]%classic i &
   ((fun N : nat => [set n | N <= n]) i
@@ -3265,7 +3265,7 @@ trivIset
 (d.-ring).-measurable%classic (\bigcup_n F n) ->
 forall
   [t : set constructive_ereal_extended__canonical__Algebra_BaseAddUMagma],
-nbhs (measure (R:=R) mu (\bigcup_n F n)) t ->
+filter.nbhs (measure (R:=R) mu (\bigcup_n F n)) t ->
 exists2 i : nat,
   [set: nat]%classic i &
   ((fun N : nat => [set n | N <= n]) i
@@ -3305,7 +3305,7 @@ trivIset (T:=T) [set: nat] F ->
 d.-measurable%classic (\bigcup_n F n) ->
 forall
   [t : set constructive_ereal_extended__canonical__Algebra_BaseAddUMagma],
-nbhs (mu (\bigcup_n F n)%classic) t ->
+filter.nbhs (mu (\bigcup_n F n)%classic) t ->
 exists2 i : nat,
   [set: nat]%classic i &
   ((fun N : nat => [set n | N <= n]) i
@@ -6261,7 +6261,9 @@ forall [d : measure_display] [T : ringOfSetsType d]
 (forall i : nat, d.-measurable%classic (F i)) ->
 d.-measurable%classic (\bigcup_n F n) ->
 {homo F : n m / n <= m >-> (n <= m)%O} ->
-((mu \o F) x @[x --> \oo] --> mu (\bigcup_n F n))%classic
+filter.cvg_to
+  (filter.nbhs (filter.fmap (mu \o F) (filter.nbhs filter.eventually)))
+  (filter.nbhs (mu (\bigcup_n F n)%classic))
 
 nondecreasing_cvg_mu is not universe polymorphic
 Expanded type for implicit arguments
@@ -6273,7 +6275,7 @@ forall [d : measure_display] [T : ringOfSetsType d]
 d.-measurable%classic (\bigcup_n F n) ->
 {homo F : n m / n <= m >-> (n <= m)%O} ->
 forall [t : set \bar R],
-nbhs (mu (\bigcup_n F n)%classic) t ->
+filter.nbhs (mu (\bigcup_n F n)%classic) t ->
 exists2 i : nat,
   [set: nat]%classic i &
   ((fun N : nat => [set n | N <= n]) i `<=` (mu \o F) @^-1` t)%classic
@@ -6318,7 +6320,9 @@ forall [d : measure_display] [T : algebraOfSetsType d]
 (forall i : nat, d.-measurable%classic (F i)) ->
 d.-measurable%classic (\bigcap_n F n) ->
 {homo F : n m / n <= m >-> (m <= n)%O} ->
-((mu \o F) x @[x --> \oo] --> mu (\bigcap_n F n))%classic
+filter.cvg_to
+  (filter.nbhs (filter.fmap (mu \o F) (filter.nbhs filter.eventually)))
+  (filter.nbhs (mu (\bigcap_n F n)%classic))
 
 nonincreasing_cvg_mu is not universe polymorphic
 Expanded type for implicit arguments
@@ -6331,7 +6335,7 @@ forall [d : measure_display] [T : algebraOfSetsType d]
 d.-measurable%classic (\bigcap_n F n) ->
 {homo F : n m / n <= m >-> (m <= n)%O} ->
 forall [t : set \bar R],
-nbhs (mu (\bigcap_n F n)%classic) t ->
+filter.nbhs (mu (\bigcap_n F n)%classic) t ->
 exists2 i : nat,
   [set: nat]%classic i &
   ((fun N : nat => [set n | N <= n]) i `<=` (mu \o F) @^-1` t)%classic
@@ -6492,8 +6496,12 @@ forall {d : measure_display} {T : measurableType d}
   (F : (set T) ^nat),
 (forall k : nat, d.-measurable%classic (F k)) ->
 (mu (\bigcup_(k in [set k | (0 <= k)%N]) F k)%classic < +oo)%E ->
-(mu (\bigcup_(k in [set k | n <= k]) F k) @[n --> \oo] --> 
- mu (lim_sup_set F))%classic
+filter.cvg_to
+  (filter.nbhs
+     (filter.fmap
+        (fun n : nat => mu (\bigcup_(k in [set k | n <= k]) F k)%classic)
+        (filter.nbhs filter.eventually)))
+  (filter.nbhs (mu (lim_sup_set F)))
 
 lim_sup_set_cvg is not universe polymorphic
 Arguments lim_sup_set_cvg {d}%_measure_display_scope 

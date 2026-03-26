@@ -1959,7 +1959,9 @@ Qed.</div></details>
 <span class="vernacular">Lemma</span><span class="id"> </span><span id="simple_bounded" class="id"><a name="simple_bounded" class="" title="simple_bounded :
 forall [d : measure_display] [T : sigmaRingType d] 
   [R : realType] (f : {sfun T >-> R}),
-bounded_fun f
+[set f0 | pseudometric_normed_Zmodule.bounded_near [eta f0]
+            (filter.globally [set: T])]%classic
+  f
 
 simple_bounded is not universe polymorphic
 Arguments simple_bounded [d]%_measure_display_scope [T R] f
