@@ -1365,8 +1365,7 @@ Declared in library mathcomp.reals.reals, line 466, characters 6-18
 <div class="proofscript">
 <span class="gallina-kwd"> by</span><span class="id"> rewrite</span><span class="id"> </span><span class="id"><a href="mathcomp.classical.classical_sets.html#inE">inE</a></span><span class="id">;</span><span class="gallina-kwd"> exists</span> (<span class="id"><a href="https://math-comp.github.io/htmldoc_2_4_0/mathcomp.algebra.archimedean.html#Num.floor">Num</a></span>.<span class="id"><a href="https://math-comp.github.io/htmldoc_2_4_0/mathcomp.algebra.archimedean.html#Num.floor">floor</a></span><span class="id"> x</span>). Qed.</div></details>
 <br/>
-<span class="vernacular">Lemma</span><span class="id"> </span><span id="RfloorE" class="id"><a name="RfloorE" class="" title="RfloorE :
-forall [R : realType] (x : R), Rfloor (R:=R) x = (Num.Def.floor x)%:~R%R
+<span class="vernacular">Lemma</span><span class="id"> </span><span id="RfloorE" class="id"><a name="RfloorE" class="" title="RfloorE : forall [R : realType] (x : R), Rfloor (R:=R) x = (floor x)%:~R%R
 
 RfloorE is not universe polymorphic
 Arguments RfloorE [R] x%_ring_scope
@@ -1379,8 +1378,7 @@ Declared in library mathcomp.reals.reals, line 469, characters 6-13
 <div class="proofscript">
 <span class="gallina-kwd"> by</span><span class="id"> []</span>. Qed.</div></details>
 <br/>
-<span class="vernacular">Lemma</span><span class="id"> </span><span id="mem_rg1_floor" class="id"><a name="mem_rg1_floor" class="" title="mem_rg1_floor :
-forall [R : realType] (x : R), range1 (R:=R) (Num.Def.floor x)%:~R x
+<span class="vernacular">Lemma</span><span class="id"> </span><span id="mem_rg1_floor" class="id"><a name="mem_rg1_floor" class="" title="mem_rg1_floor : forall [R : realType] (x : R), range1 (R:=R) (floor x)%:~R x
 
 mem_rg1_floor is not universe polymorphic
 Arguments mem_rg1_floor [R] x%_ring_scope
