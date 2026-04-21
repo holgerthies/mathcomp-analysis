@@ -274,7 +274,8 @@ Declared in library mathcomp.analysis.ess_sup_inf, line 35, characters 11-18
 <span class="vernacular">Lemma</span><span class="id"> </span><span id="ess_supEae" class="id"><a name="ess_supEae" class="" title="ess_supEae :
 forall [d : measure_display] {T : semiRingOfSetsType d} 
   {R : realType} (mu : measure T R) (f : T -> \bar R),
-ess_sup mu f = ereal_inf (R:=R) [set y | (\forall x \ae mu, (f x <= y)%E)]
+ess_sup mu f =
+ereal.ereal_inf (R:=R) [set y | (\forall x \ae mu, (f x <= y)%E)]
 
 ess_supEae is not universe polymorphic
 Arguments ess_supEae [d]%_measure_display_scope {T R} mu f%_function_scope
@@ -336,7 +337,7 @@ measurable_fun (T:=T)
         R)
   [set: T] f ->
 ess_sup mu f =
-ereal_inf (R:=R) [set y | mu (f @^-1` `]y, +oo[)%classic = 0%R]
+ereal.ereal_inf (R:=R) [set y | mu (f @^-1` `]y, +oo[)%classic = 0%R]
 
 ess_supEmu0 is not universe polymorphic
 Arguments ess_supEmu0 [d]%_measure_display_scope {T R} 
@@ -835,7 +836,8 @@ Declared in library mathcomp.analysis.ess_sup_inf, line 239, characters 11-18
 <span class="vernacular">Lemma</span><span class="id"> </span><span id="ess_infEae" class="id"><a name="ess_infEae" class="" title="ess_infEae :
 forall [d : measure_display] {T : semiRingOfSetsType d} 
   {R : realType} (mu : measure T R) (f : T -> \bar R),
-ess_inf mu f = ereal_sup (R:=R) [set y | (\forall x \ae mu, (y <= f x)%E)]
+ess_inf mu f =
+ereal.ereal_sup (R:=R) [set y | (\forall x \ae mu, (y <= f x)%E)]
 
 ess_infEae is not universe polymorphic
 Arguments ess_infEae [d]%_measure_display_scope {T R} mu f%_function_scope
