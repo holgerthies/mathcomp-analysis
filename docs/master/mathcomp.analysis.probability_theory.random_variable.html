@@ -952,8 +952,7 @@ Qed.</div></details>
 <span class="vernacular">Lemma</span><span class="id"> </span><span id="cvg_cdfy1" class="id"><a name="cvg_cdfy1" class="" title="cvg_cdfy1 :
 forall [d : measure_display] {T : measurableType d} 
   {R : realType} [P : probability T R] (X : {RV P >-> R}),
-filter.cvg_to (filter.nbhs (filter.fmap (cdf (P:=P) X) (filter.nbhs +oo%R)))
-  (filter.nbhs 1%E)
+(cdf (P:=P) X x @[x --> +oo%R] --> 1%E)%classic
 
 cvg_cdfy1 is not universe polymorphic
 Expanded type for implicit arguments
@@ -961,7 +960,7 @@ cvg_cdfy1 :
 forall [d : measure_display] {T : measurableType d} 
   {R : realType} [P : probability T R] (X : {RV P >-> R}) 
   [t : set \bar R],
-filter.nbhs 1%E t ->
+nbhs 1%E t ->
 exists M : R,
   M \is Num.real /\
   (forall x : R, (M < x)%R -> (cdf (P:=P) X @^-1` t)%classic x)
@@ -996,8 +995,7 @@ Qed.</div></details>
 <span class="vernacular">Lemma</span><span class="id"> </span><span id="cvg_cdfNy0" class="id"><a name="cvg_cdfNy0" class="" title="cvg_cdfNy0 :
 forall [d : measure_display] {T : measurableType d} 
   {R : realType} [P : probability T R] (X : {RV P >-> R}),
-filter.cvg_to (filter.nbhs (filter.fmap (cdf (P:=P) X) (filter.nbhs -oo%R)))
-  (filter.nbhs 0%R)
+(cdf (P:=P) X x @[x --> -oo%R] --> 0%R)%classic
 
 cvg_cdfNy0 is not universe polymorphic
 Expanded type for implicit arguments
@@ -1005,7 +1003,7 @@ cvg_cdfNy0 :
 forall [d : measure_display] {T : measurableType d} 
   {R : realType} [P : probability T R] (X : {RV P >-> R}) 
   [t : set \bar R],
-filter.nbhs 0%R t ->
+nbhs 0%R t ->
 exists M : R,
   M \is Num.real /\
   (forall x : R, (x < M)%R -> (cdf (P:=P) X @^-1` t)%classic x)
@@ -1053,7 +1051,7 @@ cdf_right_continuous :
 forall [d : measure_display] {T : measurableType d} 
   {R : realType} [P : probability T R] [X : {RV P >-> R}] 
   [x : R] [t : set \bar R],
-filter.nbhs (cdf (P:=P) X x) t ->
+nbhs (cdf (P:=P) X x) t ->
 exists2 i : R,
   [set e | (0 < e)%R]%classic i &
   (ball_ [eta normr] x i
@@ -1824,8 +1822,7 @@ Qed.</div></details>
 <span class="vernacular">Lemma</span><span class="id"> </span><span id="cvg_ccdfy0" class="id"><a name="cvg_ccdfy0" class="" title="cvg_ccdfy0 :
 forall [d : measure_display] {T : measurableType d} 
   {R : realType} [P : probability T R] (X : {RV P >-> R}),
-filter.cvg_to (filter.nbhs (filter.fmap (ccdf (P:=P) X) (filter.nbhs +oo%R)))
-  (filter.nbhs 0%R)
+(ccdf (P:=P) X x @[x --> +oo%R] --> 0%R)%classic
 
 cvg_ccdfy0 is not universe polymorphic
 Expanded type for implicit arguments
@@ -1833,7 +1830,7 @@ cvg_ccdfy0 :
 forall [d : measure_display] {T : measurableType d} 
   {R : realType} [P : probability T R] (X : {RV P >-> R}) 
   [t : set \bar R],
-filter.nbhs 0%R t ->
+nbhs 0%R t ->
 exists M : R,
   M \is Num.real /\
   (forall x : R, (M < x)%R -> (ccdf (P:=P) X @^-1` t)%classic x)
@@ -1856,8 +1853,7 @@ Qed.</div></details>
 <span class="vernacular">Lemma</span><span class="id"> </span><span id="cvg_ccdfNy1" class="id"><a name="cvg_ccdfNy1" class="" title="cvg_ccdfNy1 :
 forall [d : measure_display] {T : measurableType d} 
   {R : realType} [P : probability T R] (X : {RV P >-> R}),
-filter.cvg_to (filter.nbhs (filter.fmap (ccdf (P:=P) X) (filter.nbhs -oo%R)))
-  (filter.nbhs 1%E)
+(ccdf (P:=P) X x @[x --> -oo%R] --> 1%E)%classic
 
 cvg_ccdfNy1 is not universe polymorphic
 Expanded type for implicit arguments
@@ -1865,7 +1861,7 @@ cvg_ccdfNy1 :
 forall [d : measure_display] {T : measurableType d} 
   {R : realType} [P : probability T R] (X : {RV P >-> R}) 
   [t : set \bar R],
-filter.nbhs 1%E t ->
+nbhs 1%E t ->
 exists M : R,
   M \is Num.real /\
   (forall x : R, (x < M)%R -> (ccdf (P:=P) X @^-1` t)%classic x)
@@ -1896,7 +1892,7 @@ ccdf_right_continuous :
 forall [d : measure_display] {T : measurableType d} 
   {R : realType} [P : probability T R] [X : {RV P >-> R}] 
   [x : R] [t : set \bar R],
-filter.nbhs (ccdf (P:=P) X x) t ->
+nbhs (ccdf (P:=P) X x) t ->
 exists2 i : R,
   [set e | (0 < e)%R]%classic i &
   (ball_ [eta normr] x i
@@ -3524,7 +3520,7 @@ library mathcomp.analysis.probability_theory.random_variable, line 1144, charact
 forall {d d' : measure_display} {T : measurableType d}
   {T' : measurableType d'} {R : realType} [P : probability T R],
 {dRV P >-> T'} ->
-nat -> ereal.constructive_ereal_extended__canonical__classical_sets_Pointed R
+nat -> constructive_ereal_extended__canonical__classical_sets_Pointed R
 
 enum_prob is not universe polymorphic
 Arguments enum_prob {d d'}%_measure_display_scope {T T' R} [P] X u%_nat_scope
