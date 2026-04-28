@@ -1943,7 +1943,7 @@ trivIset
 'measurable%classic (\bigcup_n F n) ->
 forall
   [t : set constructive_ereal_extended__canonical__Algebra_BaseAddUMagma],
-nbhs (elebesgue_measure (R:=R) (\bigcup_n F n)) t ->
+filter.nbhs (elebesgue_measure (R:=R) (\bigcup_n F n)) t ->
 exists2 i : nat,
   [set: nat]%classic i &
   ((fun N : nat => [set n | N <= n]) i
@@ -2451,9 +2451,10 @@ forall {R : realType} (A : set R) [e : R],
 (0 < e)%R ->
 exists
   U : set
-        (numFieldTopology.Real_sort__canonical__topology_structure_Topological
-           R),
-  [/\ open U, (A `<=` U)%classic
+        (topology_structure.Topological.sort
+           (numFieldTopology.Real_sort__canonical__topology_structure_Topological
+              R)),
+  [/\ topology_structure.open U, (A `<=` U)%classic
     & (lebesgue_measure U <= (wlength idfun)^*%mu A + e%:E)%E]
 
 outer_measure_open_le is not universe polymorphic
@@ -2490,8 +2491,9 @@ Qed.</div></details>
 <span class="vernacular">Lemma</span><span class="id"> </span><span id="outer_measure_open" class="id"><a name="outer_measure_open" class="" title="outer_measure_open :
 forall {R : realType} (A : set R),
 (wlength idfun)^*%mu A =
-ereal_inf (R:=R)
-  [set (wlength idfun)^*%mu U | U in [set U | open U /\ (A `<=` U)%classic]]
+ereal.ereal_inf (R:=R)
+  [set (wlength idfun)^*%mu U
+     | U in [set U | topology_structure.open U /\ (A `<=` U)%classic]]
 
 outer_measure_open is not universe polymorphic
 Arguments outer_measure_open {R} A%_classical_set_scope
@@ -2514,7 +2516,8 @@ Qed.</div></details>
 <span class="vernacular">Lemma</span><span class="id"> </span><span id="outer_measure_Gdelta" class="id"><a name="outer_measure_Gdelta" class="" title="outer_measure_Gdelta :
 forall {R : realType} (A : set R),
 exists G : (set R) ^nat,
-  [/\ forall i : nat, open (G i), (A `<=` \bigcap_i G i)%classic
+  [/\ forall i : nat, topology_structure.open (G i),
+      (A `<=` \bigcap_i G i)%classic
     & lebesgue_measure (\bigcap_i G i) = (wlength idfun)^*%mu A]
 
 outer_measure_Gdelta is not universe polymorphic
@@ -2584,7 +2587,7 @@ forall {R : realType} [D : set R] [eps : R],
 (lebesgue_measure D < +oo)%E ->
 (0 < eps)%R ->
 exists U : set R,
-  [/\ open U, (D `<=` U)%classic
+  [/\ topology_structure.open U, (D `<=` U)%classic
     & (lebesgue_measure (U `\` D)%classic < eps%:E)%E]
 
 lebesgue_regularity_outer is not universe polymorphic
@@ -2793,7 +2796,7 @@ Qed.</div></details>
 forall {R : realType} [D : set R],
 'measurable%classic D ->
 lebesgue_measure D =
-ereal_sup (R:=R)
+ereal.ereal_sup (R:=R)
   [set lebesgue_measure K | K in [set K | compact K /\ (K `<=` D)%classic]]
 
 lebesgue_regularity_inner_sup is not universe polymorphic
@@ -2867,10 +2870,13 @@ vitali_cover A B V ->
 exists D : set nat,
   [/\ countable (T:=nat) D, (D `<=` V)%classic,
       trivIset
-        (T:=numFieldTopology.Real_sort__canonical__topology_structure_Topological
-              R)
-        D (closure \o B)
-    & lebesgue_measure (A `\` \bigcup_(k in D) closure (B k)) = 0%R]
+        (T:=topology_structure.Topological.sort
+              (numFieldTopology.Real_sort__canonical__topology_structure_Topological
+                 R))
+        D (topology_structure.closure \o B)
+    & lebesgue_measure
+        (A `\` \bigcup_(k in D) topology_structure.closure (B k)) =
+      0%R]
 
 vitali_theorem is not universe polymorphic
 Arguments vitali_theorem {R} [A]%_classical_set_scope 
@@ -3140,7 +3146,7 @@ Qed.</div></details>
 <span class="vernacular">Lemma</span><span class="id"> </span><span id="vitali_coverS" class="id"><a name="vitali_coverS" class="" title="vitali_coverS :
 forall {R : realFieldType} [A : set R] [B : nat -> set R] 
   [F : set nat] [O : set R],
-open O ->
+topology_structure.open O ->
 (A `<=` O)%classic ->
 vitali_cover A B F -> vitali_cover A B (F `&` [set k | (B k `<=` O)%classic])
 
@@ -3237,10 +3243,12 @@ forall
 exists G' : {fset nat},
   [/\ ([set` G'] `<=` F)%classic,
       trivIset
-        (T:=numFieldTopology.Real_sort__canonical__topology_structure_Topological
-              R)
-        [set` G'] (closure \o B)
-    & ((wlength idfun)^*%mu (A `\` \big[setU/set0]_(k <- G') closure (B k)) <
+        (T:=topology_structure.Topological.sort
+              (numFieldTopology.Real_sort__canonical__topology_structure_Topological
+                 R))
+        [set` G'] (topology_structure.closure \o B)
+    & ((wlength idfun)^*%mu
+         (A `\` \big[setU/set0]_(k <- G') topology_structure.closure (B k)) <
        e%:E)%E]
 
 vitali_theorem_corollary is not universe polymorphic

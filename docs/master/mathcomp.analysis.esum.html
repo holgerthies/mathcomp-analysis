@@ -289,7 +289,8 @@ Declared in library mathcomp.analysis.esum, line 44, characters 6-16
 <span class="gallina-kwd"> by</span><span class="id"> split</span>. Qed.</div></details>
 <br/>
 <span class="vernacular">Lemma</span><span class="id"> </span><span id="fsets_self" class="id"><a name="fsets_self" class="" title="fsets_self :
-forall [T : choiceType] [F : set T], finite_set F -> fsets (T:=T) F F
+forall [T : choiceType] [F : set T],
+cardinality.finite_set F -> fsets (T:=T) F F
 
 fsets_self is not universe polymorphic
 Arguments fsets_self [T] [F]%_classical_set_scope _
@@ -384,9 +385,10 @@ Qed.</div></details>
 <br/>
 <span class="vernacular">Lemma</span><span class="id"> </span><span id="esum_fset" class="id"><a name="esum_fset" class="" title="esum_fset :
 forall [R : realType] [T : choiceType] [F : set T] [a : T -> \bar R],
-finite_set F ->
+cardinality.finite_set F ->
 (forall i : T, i \in F -> (0%R <= a i)%E) ->
-(\esum_(i in F) a i)%R = (\sum_(i \in F) a i)%R
+(\esum_(i in F) a i)%R =
+(\sum_(i <- fsbigop.finite_support 0 F [eta a]) a i)%R
 
 esum_fset is not universe polymorphic
 Arguments esum_fset [R T] [F]%_classical_set_scope 
@@ -449,7 +451,9 @@ Qed.</div></details>
 <span class="vernacular">Lemma</span><span class="id"> </span><span id="esum_ge" class="id"><a name="esum_ge" class="" title="esum_ge :
 forall [R : realType] [T : choiceType] [I : set T] 
   [a : T -> \bar R] [x : \bar R],
-(exists2 X : set T, fsets (T:=T) I X & (x <= (\sum_(i \in X) a i)%R)%E) ->
+(exists2 X : set T,
+   fsets (T:=T) I X &
+   (x <= (\sum_(i <- fsbigop.finite_support 0 X [eta a]) a i)%R)%E) ->
 (x <= (\esum_(i in I) a i)%R)%E
 
 esum_ge is not universe polymorphic
@@ -750,8 +754,8 @@ Declared in library mathcomp.analysis.esum, line 223, characters 6-15
 Qed.</div></details>
 <br/>
 <span class="vernacular">Lemma</span><span class="id"> </span><span id="lee_sum_fset_nat" class="id"><a name="lee_sum_fset_nat" class="" title="lee_sum_fset_nat :
-forall {R : realDomainType} {f : (\bar R) ^nat} (F : {fset nat}) 
-  (n : nat) (P : pred nat),
+forall {R : realDomainType} {f : sequences.sequence \bar R} 
+  (F : {fset nat}) (n : nat) (P : pred nat),
 (forall i : nat, P i -> (0%R <= f i)%E) ->
 ([set` F] `<=` `I_n)%classic ->
 ((\sum_(i <- F | P i) f i)%R <= (\sum_(0 <= i < n | P i) f i)%R)%E
@@ -781,9 +785,13 @@ Qed.</div></details>
 <span class="vernacular">Arguments</span><span class="id"> </span><span class="id"><a href="mathcomp.analysis.esum.html#lee_sum_fset_nat">lee_sum_fset_nat</a></span><span class="id"> {R</span><span class="id"> f}</span><span class="id"> F</span><span class="id"> n</span><span class="id"> P</span>.<br/>
 <br/>
 <span class="vernacular">Lemma</span><span class="id"> </span><span id="lee_sum_fset_lim" class="id"><a name="lee_sum_fset_lim" class="" title="lee_sum_fset_lim :
-forall {R : realType} {f : (\bar R) ^nat} (F : {fset nat}) (P : pred nat),
+forall {R : realType} {f : sequences.sequence \bar R} 
+  (F : {fset nat}) (P : pred nat),
 (forall i : nat, P i -> (0%R <= f i)%E) ->
-((\sum_(i <- F | P i) f i)%R <= \big[+%E/0%R]_(0 <= i <oo | P i) f i)%E
+((\sum_(i <- F | P i) f i)%R <=
+ filter.lim
+   (filter.fmap (fun n : nat => (\sum_(0 <= i < n | P i) f i)%R)
+      (filter.nbhs filter.eventually)))%E
 
 lee_sum_fset_lim is not universe polymorphic
 Arguments lee_sum_fset_lim {R f} F P _%_function_scope
@@ -808,7 +816,10 @@ Qed.</div></details>
 <span class="vernacular">Lemma</span><span class="id"> </span><span id="nneseries_esum" class="id"><a name="nneseries_esum" class="" title="nneseries_esum :
 forall [R : realType] [a : nat -> \bar R] [P : pred nat],
 (forall n : nat, P n -> (0%R <= a n)%E) ->
-\big[+%E/0%R]_(0 <= i <oo | P i) a i = (\esum_(i in [set x | P x]) a i)%R
+filter.lim
+  (filter.fmap (fun n : nat => (\sum_(0 <= i < n | P i) a i)%R)
+     (filter.nbhs filter.eventually)) =
+(\esum_(i in [set x | P x]) a i)%R
 
 nneseries_esum is not universe polymorphic
 Arguments nneseries_esum [R] [a]%_function_scope [P] _%_function_scope
@@ -837,7 +848,10 @@ Qed.</div></details>
 <span class="vernacular">Lemma</span><span class="id"> </span><span id="nneseries_esumT" class="id"><a name="nneseries_esumT" class="" title="nneseries_esumT :
 forall {R : realType} [a : nat -> \bar R],
 (forall n : nat, (0%R <= a n)%E) ->
-\big[+%E/0%R]_(0 <= i <oo) a i = (\esum_(i in [set: nat]) a i)%R
+filter.lim
+  (filter.fmap (fun n : nat => (\sum_(0 <= i < n) a i)%R)
+     (filter.nbhs filter.eventually)) =
+(\esum_(i in [set: nat]) a i)%R
 
 nneseries_esumT is not universe polymorphic
 Arguments nneseries_esumT {R} [a]%_function_scope _%_function_scope
@@ -910,8 +924,22 @@ Qed.</div></details>
 <span class="vernacular">Lemma</span><span class="id"> </span><span id="nneseries_interchange" class="id"><a name="nneseries_interchange" class="" title="nneseries_interchange :
 forall [R : realType] [a : nat -> nat -> \bar R] (P Q : pred nat),
 (forall i j : nat, (0%R <= a i j)%E) ->
-\big[+%E/0%R]_(0 <= i <oo | P i) \big[+%E/0%R]_(0 <= j <oo | Q j) a i j =
-\big[+%E/0%R]_(0 <= j <oo | Q j) \big[+%E/0%R]_(0 <= i <oo | P i) a i j
+filter.lim
+  (filter.fmap
+     (fun n : nat =>
+      (\sum_(0 <= i < n | P i)
+          filter.lim
+            (filter.fmap (fun n0 : nat => \sum_(0 <= j < n0 | Q j) a i j)
+               (filter.nbhs filter.eventually)))%R)
+     (filter.nbhs filter.eventually)) =
+filter.lim
+  (filter.fmap
+     (fun n : nat =>
+      (\sum_(0 <= j < n | Q j)
+          filter.lim
+            (filter.fmap (fun n0 : nat => \sum_(0 <= i < n0 | P i) a i j)
+               (filter.nbhs filter.eventually)))%R)
+     (filter.nbhs filter.eventually))
 
 nneseries_interchange is not universe polymorphic
 Arguments nneseries_interchange [R] [a]%_function_scope P Q _%_function_scope
@@ -961,7 +989,9 @@ forall {R : realType} {T : choiceType} (a : T -> \bar R)
 (forall n : nat, P n -> (0%R <= a (e n))%E) ->
 set_inj (fun x : nat => P x) e ->
 (\esum_(i in [set e x | x in fun x : nat => P x]) a i)%R =
-\big[+%E/0%R]_(0 <= i <oo | P i) a (e i)
+filter.lim
+  (filter.fmap (fun n : nat => (\sum_(0 <= i < n | P i) a (e i))%R)
+     (filter.nbhs filter.eventually))
 
 esum_pred_image is not universe polymorphic
 Arguments esum_pred_image {R T} (a e)%_function_scope P _%_function_scope _
@@ -985,7 +1015,9 @@ forall {R : realType} {T : choiceType} (a : T -> \bar R)
 (forall n : nat, P n -> (0%R <= a (e n))%E) ->
 set_inj P e ->
 (\esum_(i in [set e x | x in P]) a i)%R =
-\big[+%E/0%R]_(0 <= i <oo | i \in P) a (e i)
+filter.lim
+  (filter.fmap (fun n : nat => (\sum_(0 <= i < n | i \in P) a (e i))%R)
+     (filter.nbhs filter.eventually))
 
 esum_set_image is not universe polymorphic
 Arguments esum_set_image {R T} (a e)%_function_scope 
@@ -1091,11 +1123,14 @@ Qed.</div></details>
 <span class="vernacular">Arguments</span><span class="id"> </span><span class="id"><a href="mathcomp.analysis.esum.html#esum_bigcup">esum_bigcup</a></span><span class="id"> {R</span><span class="id"> T</span><span class="id"> K}</span><span class="id"> J</span><span class="id"> a</span>.<br/>
 <br/>
 <span class="vernacular">Lemma</span><span class="id"> </span><span id="nneseries_sum_bigcup" class="id"><a name="nneseries_sum_bigcup" class="" title="nneseries_sum_bigcup :
-forall {R : realType} [T : choiceType] [F : (set T) ^nat] [f : T -> \bar R],
+forall {R : realType} [T : choiceType] [F : sequences.sequence (set T)]
+  [f : T -> \bar R],
 trivIset (T:=T) [set: nat] F ->
 (forall i : T, (0%R <= f i)%E) ->
 (\esum_(i in \bigcup_n F n) f i)%R =
-\big[+%E/0%R]_(0 <= i <oo) (\esum_(j in F i) f j)%R
+filter.lim
+  (filter.fmap (fun n : nat => (\sum_(0 <= i < n) \esum_(j in F i) f j)%R)
+     (filter.nbhs filter.eventually))
 
 nneseries_sum_bigcup is not universe polymorphic
 Arguments nneseries_sum_bigcup {R} [T F] [f]%_function_scope 
@@ -1286,21 +1321,32 @@ Declared in library mathcomp.analysis.esum, line 529, characters 6-23
 Qed.</div></details>
 <br/>
 <span class="vernacular">Lemma</span><span class="id"> </span><span id="summable_cvg" class="id"><a name="summable_cvg" class="" title="summable_cvg :
-forall [R : realType] [P : pred nat] [f : (\bar R) ^nat],
+forall [R : realType] [P : pred nat] [f : sequences.sequence \bar R],
 (forall i : nat, P i -> (0%R <= f i)%E) ->
 summable (T:=Datatypes_nat__canonical__choice_Choice) (R:=R)
   (fun x : Datatypes_nat__canonical__choice_Choice => P x) f ->
-cvgn (fun n : nat => (\sum_(0 <= k < n | P k) fine (f k))%R)
+filter.cvg_to
+  (filter.nbhs
+     (filter.fmap (fun n : nat => (\sum_(0 <= k < n | P k) fine (f k))%R)
+        (filter.nbhs filter.eventually)))
+  (filter.nbhs
+     (filter.lim
+        (filter.fmap (fun n : nat => (\sum_(0 <= k < n | P k) fine (f k))%R)
+           (filter.nbhs filter.eventually))))
 
 summable_cvg is not universe polymorphic
 Expanded type for implicit arguments
 summable_cvg :
-forall [R : realType] [P : pred nat] [f : (\bar R) ^nat],
+forall [R : realType] [P : pred nat] [f : sequences.sequence \bar R],
 (forall i : nat, P i -> (0%R <= f i)%E) ->
 summable (T:=Datatypes_nat__canonical__choice_Choice) (R:=R)
   (fun x : Datatypes_nat__canonical__choice_Choice => P x) f ->
 forall [t : set R],
-nbhs (\big[+%R/0%R]_(0 <= k <oo | P k) fine (f k)) t ->
+filter.nbhs
+  (filter.lim
+     (filter.fmap (fun n : nat => (\sum_(0 <= k < n | P k) fine (f k))%R)
+        (filter.nbhs filter.eventually)))
+  t ->
 exists2 i : nat,
   [set: nat]%classic i &
   ((fun N : nat => [set n | N <= n]) i
@@ -1330,12 +1376,16 @@ Declared in library mathcomp.analysis.esum, line 540, characters 6-18
 Qed.</div></details>
 <br/>
 <span class="vernacular">Lemma</span><span class="id"> </span><span id="summable_nneseries_lim" class="id"><a name="summable_nneseries_lim" class="" title="summable_nneseries_lim :
-forall [R : realType] [P : pred nat] [f : (\bar R) ^nat],
+forall [R : realType] [P : pred nat] [f : sequences.sequence \bar R],
 (forall i : nat, P i -> (0%R <= f i)%E) ->
 summable (T:=Datatypes_nat__canonical__choice_Choice) (R:=R)
   (fun x : Datatypes_nat__canonical__choice_Choice => P x) f ->
-\big[+%E/0%R]_(0 <= i <oo | P i) f i =
-(\big[+%R/0]_(0 <= k <oo | P k) fine (f k))%:E
+filter.lim
+  (filter.fmap (fun n : nat => (\sum_(0 <= i < n | P i) f i)%R)
+     (filter.nbhs filter.eventually)) =
+(filter.lim
+   (filter.fmap (fun n : nat => \sum_(0 <= k < n | P k) fine (f k))
+      (filter.nbhs filter.eventually)))%:E
 
 summable_nneseries_lim is not universe polymorphic
 Arguments summable_nneseries_lim [R P f] _%_function_scope _
@@ -1361,9 +1411,15 @@ Qed.</div></details>
 forall [R : realType] [f : nat -> \bar R] [P : pred nat],
 summable (T:=Datatypes_nat__canonical__choice_Choice) (R:=R)
   (fun x : Datatypes_nat__canonical__choice_Choice => P x) f ->
-\big[+%E/0%R]_(0 <= i <oo | P i) f i =
-(\big[+%E/0%R]_(0 <= i <oo | P i) f^\+ i -
- \big[+%E/0%R]_(0 <= i <oo | P i) f^\- i)%E
+filter.lim
+  (filter.fmap (fun n : nat => (\sum_(0 <= i < n | P i) f i)%R)
+     (filter.nbhs filter.eventually)) =
+(filter.lim
+   (filter.fmap (fun n : nat => (\sum_(0 <= i < n | P i) f^\+ i)%R)
+      (filter.nbhs filter.eventually)) -
+ filter.lim
+   (filter.fmap (fun n : nat => (\sum_(0 <= i < n | P i) f^\- i)%R)
+      (filter.nbhs filter.eventually)))%E
 
 summable_eseries is not universe polymorphic
 Arguments summable_eseries [R] [f]%_function_scope [P] _
@@ -1412,7 +1468,9 @@ Declared in library mathcomp.analysis.esum, line 570, characters 6-22
 forall [R : realType] [f : nat -> \bar R] [P : pred nat],
 summable (T:=Datatypes_nat__canonical__choice_Choice) (R:=R)
   (fun x : Datatypes_nat__canonical__choice_Choice => P x) f ->
-\big[+%E/0%R]_(0 <= i <oo | P i) f i =
+filter.lim
+  (filter.fmap (fun n : nat => (\sum_(0 <= i < n | P i) f i)%R)
+     (filter.nbhs filter.eventually)) =
 ((\esum_(i in fun x : Datatypes_nat__canonical__choice_Choice => P x) f^\+ i)%R -
  (\esum_(i in fun x : Datatypes_nat__canonical__choice_Choice => P x) f^\- i)%R)%E
 
