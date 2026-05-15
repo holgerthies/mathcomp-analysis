@@ -958,7 +958,7 @@ library mathcomp.analysis.topology_theory.product_topology, line 220, characters
 <span class="gallina-kwd">by</span><span class="id"> apply:</span> (<span class="id">ngPr</span> (<span class="id">b</span><span class="id"><a href="https://rocq-prover.org/corelib/Corelib.Init.Datatypes.html#e6756e10c36f149b18b4a8741ed83079">,</a></span><span class="id"><a href="https://rocq-prover.org/corelib/Corelib.Init.Datatypes.html#e6756e10c36f149b18b4a8741ed83079"> </a></span><span class="id">a</span><span class="id"><a href="https://rocq-prover.org/corelib/Corelib.Init.Datatypes.html#e6756e10c36f149b18b4a8741ed83079">,</a></span><span class="id"><a href="https://rocq-prover.org/corelib/Corelib.Init.Datatypes.html#e6756e10c36f149b18b4a8741ed83079"> </a></span><span class="id">i</span>))<span class="id">;</span><span class="id"> split</span><span class="id"> =&gt;</span><span class="id"> //;</span><span class="id"> exact:</span><span class="id"> N1N2N</span>.<br/>
 <span class="id">Unshelve</span>. <span class="id">all:</span><span class="gallina-kwd"> by</span><span class="id"> end_near</span>. Qed.</div></details>
 <br/>
-<span class="vernacular">Lemma</span><span class="id"> </span><span id="swap_continuous" class="id"><a name="swap_continuous" class="" title="swap_continuous : forall {X Y : topologicalType}, continuous swap
+<span class="vernacular">Lemma</span><span class="id"> </span><span id="swap_continuous" class="id"><a name="swap_continuous" class="" title="swap_continuous : forall {X Y : topologicalType}, continuous unstable.swap
 
 swap_continuous is not universe polymorphic
 Expanded type for implicit arguments
@@ -966,10 +966,10 @@ swap_continuous :
 forall {X Y : topologicalType}
   [x : Datatypes_prod__canonical__filter_Nbhs X Y]
   [t : set (Datatypes_prod__canonical__filter_Nbhs Y X)],
-nbhs (swap x) t ->
+nbhs (unstable.swap x) t ->
 exists2 i : set X * set Y,
   (fun P : set X * set Y => nbhs x.1 P.1 /\ nbhs x.2 P.2) i &
-  ((fun P : set X * set Y => P.1 `*` P.2) i `<=` swap @^-1` t)%classic
+  ((fun P : set X * set Y => P.1 `*` P.2) i `<=` unstable.swap @^-1` t)%classic
 
 Arguments swap_continuous {X Y} [x t] _
 swap_continuous is opaque
@@ -988,7 +988,8 @@ Qed.</div></details>
 <span class="vernacular">Section</span><span class="id"> reassociate_continuous</span>.<br/>
 <span class="vernacular">Context</span><span class="id"> {</span><span id="reassociate_continuous.X" class="id"><a name="reassociate_continuous.X" class="">X</a></span><span class="id"> </span><span id="reassociate_continuous.Y" class="id"><a name="reassociate_continuous.Y" class="">Y</a></span><span class="id"> </span><span id="reassociate_continuous.Z" class="id"><a name="reassociate_continuous.Z" class="">Z</a></span><span class="id"> :</span><span class="id"> </span><span class="id"><a href="mathcomp.analysis.topology_theory.topology_structure.html#Topological.Exports.topologicalType">topologicalType</a></span><span class="id">}</span>.<br/>
 <br/>
-<span class="vernacular">Lemma</span><span class="id"> </span><span id="prodA_continuous" class="id"><a name="prodA_continuous" class="" title="prodA_continuous : forall {X Y Z : topologicalType}, continuous prodA
+<span class="vernacular">Lemma</span><span class="id"> </span><span id="prodA_continuous" class="id"><a name="prodA_continuous" class="" title="prodA_continuous :
+forall {X Y Z : topologicalType}, continuous unstable.prodA
 
 prodA_continuous is not universe polymorphic
 Expanded type for implicit arguments
@@ -999,13 +1000,13 @@ forall {X Y Z : topologicalType}
   [t : set
          (Datatypes_prod__canonical__filter_Nbhs X
             (Datatypes_prod__canonical__filter_Nbhs Y Z))],
-nbhs (prodA x) t ->
+nbhs (unstable.prodA x) t ->
 exists2 i : set (Datatypes_prod__canonical__filter_Nbhs X Y) * set Z,
   (fun P : set (Datatypes_prod__canonical__filter_Nbhs X Y) * set Z =>
    nbhs x.1 P.1 /\ nbhs x.2 P.2) i &
   ((fun P : set (Datatypes_prod__canonical__filter_Nbhs X Y) * set Z =>
     P.1 `*` P.2) i
-   `<=` prodA @^-1` t)%classic
+   `<=` unstable.prodA @^-1` t)%classic
 
 Arguments prodA_continuous {X Y Z} [x t] _
 prodA_continuous is opaque
@@ -1025,7 +1026,8 @@ library mathcomp.analysis.topology_theory.product_topology, line 243, characters
 <span class="id">-</span><span class="gallina-kwd"> by</span><span class="id"> move=&gt;</span><span class="id"> [[x</span><span class="id"> y]</span><span class="id"> z]</span><span class="id"> []</span><span class="id"> []</span><span class="id"> ?</span><span class="id"> ?</span><span class="id"> ?;</span><span class="id"> apply:</span><span class="id"> PVU;</span><span class="id"> split</span><span class="id"> =&gt;</span><span class="id"> //;</span><span class="id"> exact:</span><span class="id"> QRV</span>.<br/>
 Qed.</div></details>
 <br/>
-<span class="vernacular">Lemma</span><span class="id"> </span><span id="prodAr_continuous" class="id"><a name="prodAr_continuous" class="" title="prodAr_continuous : forall {X Y Z : topologicalType}, continuous prodAr
+<span class="vernacular">Lemma</span><span class="id"> </span><span id="prodAr_continuous" class="id"><a name="prodAr_continuous" class="" title="prodAr_continuous :
+forall {X Y Z : topologicalType}, continuous unstable.prodAr
 
 prodAr_continuous is not universe polymorphic
 Expanded type for implicit arguments
@@ -1036,13 +1038,13 @@ forall {X Y Z : topologicalType}
   [t : set
          (Datatypes_prod__canonical__filter_Nbhs
             (Datatypes_prod__canonical__filter_Nbhs X Y) Z)],
-nbhs (prodAr x) t ->
+nbhs (unstable.prodAr x) t ->
 exists2 i : set X * set (Datatypes_prod__canonical__filter_Nbhs Y Z),
   (fun P : set X * set (Datatypes_prod__canonical__filter_Nbhs Y Z) =>
    nbhs x.1 P.1 /\ nbhs x.2 P.2) i &
   ((fun P : set X * set (Datatypes_prod__canonical__filter_Nbhs Y Z) =>
     P.1 `*` P.2) i
-   `<=` prodAr @^-1` t)%classic
+   `<=` unstable.prodAr @^-1` t)%classic
 
 Arguments prodAr_continuous {X Y Z} [x t] _
 prodAr_continuous is opaque

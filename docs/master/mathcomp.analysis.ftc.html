@@ -2730,7 +2730,8 @@ forall {R : realType} [G : R -> R] [r : R],
 (0 <= r <= 1)%R ->
 {within `[0%R, r], continuous G}%classic ->
 (\int[lebesgue_measure]_(x in `[0%R, r]) (G x)%:E)%E =
-(\int[lebesgue_measure]_(x in `[r.~%R, 1%R]) (G x.~)%:E)%E
+(\int[lebesgue_measure]_(x in `[unstable.onem r, 1%R])
+    (G (unstable.onem x))%:E)%E
 
 integration_by_substitution_onem is not universe polymorphic
 Arguments integration_by_substitution_onem {R} [G]%_function_scope
@@ -2770,7 +2771,7 @@ forall {R : realType} [G : R -> R] [r : R],
 (0 <= r <= 1)%R ->
 {within `[0%R, r], continuous G}%classic ->
 (\int[lebesgue_measure]_(x in `[0, r]) G x)%R =
-(\int[lebesgue_measure]_(x in `[r.~, 1]) G x.~)%R
+(\int[lebesgue_measure]_(x in `[unstable.onem r, 1]) G (unstable.onem x))%R
 
 Rintegration_by_substitution_onem is not universe polymorphic
 Arguments Rintegration_by_substitution_onem {R} [G]%_function_scope

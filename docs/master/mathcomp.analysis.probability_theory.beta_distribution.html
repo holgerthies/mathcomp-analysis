@@ -274,17 +274,17 @@ the type probability T R (a measure that sums to 1).
 <br/>
 <span class="vernacular">Lemma</span><span class="id"> </span><span id="continuous_onemXn" class="id"><a name="continuous_onemXn" class="" title="continuous_onemXn :
 forall {R : realType} [n : nat] [x : R],
-{for x, continuous (fun y : R => (y.~ ^+ n)%R)}
+{for x, continuous (fun y : R => (unstable.onem y ^+ n)%R)}
 
 continuous_onemXn is not universe polymorphic
 Expanded type for implicit arguments
 continuous_onemXn :
 forall {R : realType} [n : nat] [x : R]
   [t : set (numFieldTopology.Real_sort__canonical__filter_Nbhs R)],
-nbhs ((fun y : R => (y.~ ^+ n)%R) x) t ->
+nbhs ((fun y : R => (unstable.onem y ^+ n)%R) x) t ->
 exists2 i : R,
   [set e | (0 < e)%R]%classic i &
-  (ball_ [eta normr] x i `<=` (fun y : R => (y.~ ^+ n)%R) @^-1` t)%classic
+  (ball_ [eta normr] x i `<=` (fun y : R => (unstable.onem y ^+ n)%R) @^-1` t)%classic
 
 Arguments continuous_onemXn {R} [n]%_nat_scope [x]%_ring_scope [t] _
 continuous_onemXn is opaque
@@ -303,7 +303,7 @@ Qed.</div></details>
 <br/>
 <span class="vernacular">Lemma</span><span class="id"> </span><span id="onemXn_derivable" class="id"><a name="onemXn_derivable" class="" title="onemXn_derivable :
 forall {R : realType} [n : nat] [x : R],
-derivable (fun y : R => (y.~ ^+ n)%R) x 1
+derivable (fun y : R => (unstable.onem y ^+ n)%R) x 1
 
 onemXn_derivable is not universe polymorphic
 Expanded type for implicit arguments
@@ -313,7 +313,8 @@ forall {R : realType} [n : nat] [x : R]
 nbhs
   (lim
      ((h^-1 *:
-       (((fun y : R => y.~ ^+ n) \o shift x) h%:A - (fun y : R => y.~ ^+ n) x))%R @[h --> 
+       (((fun y : R => unstable.onem y ^+ n) \o shift x) h%:A -
+        (fun y : R => unstable.onem y ^+ n) x))%R @[h --> 
       (0%R)^'])%classic)
   t ->
 exists2 i : R,
@@ -330,8 +331,8 @@ exists2 i : R,
           is_true (y != 0%R)) t0 ->
          ((fun h : R =>
            (h^-1 *:
-            (((fun y : R => y.~ ^+ n) \o shift x) h%:A -
-             (fun y : R => y.~ ^+ n) x))%R) @^-1`
+            (((fun y : R => unstable.onem y ^+ n) \o shift x) h%:A -
+             (fun y : R => unstable.onem y ^+ n) x))%R) @^-1`
           t) t0))%classic
 
 Arguments onemXn_derivable {R} [n]%_nat_scope [x]%_ring_scope [t] _
@@ -350,7 +351,7 @@ Qed.</div></details>
 <br/>
 <span class="vernacular">Lemma</span><span class="id"> </span><span id="derivable_oo_LRcontinuous_onemXnMr" class="id"><a name="derivable_oo_LRcontinuous_onemXnMr" class="" title="derivable_oo_LRcontinuous_onemXnMr :
 forall {R : realType} (n : nat) (x : R),
-derivable_oo_LRcontinuous (fun y : R => (y.~ ^+ n * x)%R) 0 1
+derivable_oo_LRcontinuous (fun y : R => (unstable.onem y ^+ n * x)%R) 0 1
 
 derivable_oo_LRcontinuous_onemXnMr is not universe polymorphic
 Arguments derivable_oo_LRcontinuous_onemXnMr {R} n%_nat_scope x%_ring_scope
@@ -378,7 +379,8 @@ Qed.</div></details>
 <br/>
 <span class="vernacular">Lemma</span><span class="id"> </span><span id="derive_onemXn" class="id"><a name="derive_onemXn" class="" title="derive_onemXn :
 forall {R : realType} (n : nat) (x : R),
-(fun y : R => (y.~ ^+ n)%R)^`()%classic x = (1 *- n * x.~ ^+ n.-1)%R
+(fun y : R => (unstable.onem y ^+ n)%R)^`()%classic x =
+(1 *- n * unstable.onem x ^+ n.-1)%R
 
 derive_onemXn is not universe polymorphic
 Arguments derive_onemXn {R} n%_nat_scope x%_ring_scope
@@ -400,7 +402,7 @@ Qed.</div></details>
 <br/>
 <span class="vernacular">Lemma</span><span class="id"> </span><span id="Rintegral_onemXn" class="id"><a name="Rintegral_onemXn" class="" title="Rintegral_onemXn :
 forall {R : realType} (n : nat),
-(\int[lebesgue_measure]_(x in `[0, 1]) x.~ ^+ n)%R = n.+1%:R^-1%R
+(\int[lebesgue_measure]_(x in `[0, 1]) unstable.onem x ^+ n)%R = n.+1%:R^-1%R
 
 Rintegral_onemXn is not universe polymorphic
 Arguments Rintegral_onemXn {R} n%_nat_scope
@@ -482,7 +484,8 @@ library mathcomp.analysis.probability_theory.beta_distribution, line 114, charac
 Qed.</div></details>
 <br/>
 <span class="vernacular">Lemma</span><span class="id"> </span><span id="XMonemX0n" class="id"><a name="XMonemX0n" class="" title="XMonemX0n :
-forall {R : numDomainType} (n : nat) (x : R), XMonemX 0 n x = (x.~ ^+ n)%R
+forall {R : numDomainType} (n : nat) (x : R),
+XMonemX 0 n x = (unstable.onem x ^+ n)%R
 
 XMonemX0n is not universe polymorphic
 Arguments XMonemX0n {R} n%_nat_scope x%_ring_scope
@@ -1843,7 +1846,7 @@ Qed.</div></details>
 <br/>
 <span class="vernacular">Lemma</span><span class="id"> </span><span id="integral_beta_prob_bernoulli_prob_onemX_lty" class="id"><a name="integral_beta_prob_bernoulli_prob_onemX_lty" class="" title="integral_beta_prob_bernoulli_prob_onemX_lty :
 forall {R : realType} (n a b : nat) (U : set bool),
-((\int[beta_prob a b]_x `|bernoulli_prob (x.~ ^+ n) U| : \bar R) <
+((\int[beta_prob a b]_x `|bernoulli_prob (unstable.onem x ^+ n) U| : \bar R) <
  (+oo : \bar R))%E
 
 integral_beta_prob_bernoulli_prob_onemX_lty is not universe polymorphic
@@ -1868,7 +1871,9 @@ Qed.</div></details>
 <br/>
 <span class="vernacular">Lemma</span><span class="id"> </span><span id="integral_beta_prob_bernoulli_prob_onem_lty" class="id"><a name="integral_beta_prob_bernoulli_prob_onem_lty" class="" title="integral_beta_prob_bernoulli_prob_onem_lty :
 forall {R : realType} (n a b : nat) (U : set bool),
-((\int[beta_prob a b]_x `|bernoulli_prob (1 - x.~ ^+ n) U| : \bar R) <
+((\int[beta_prob a b]_x `|bernoulli_prob (1 - unstable.onem x ^+ n) U|
+  :
+  \bar R) <
  (+oo : \bar R))%E
 
 integral_beta_prob_bernoulli_prob_onem_lty is not universe polymorphic
@@ -1925,7 +1930,7 @@ Qed.</div></details>
 <span class="vernacular">Lemma</span><span class="id"> </span><span id="beta_prob_integrable_onem" class="id"><a name="beta_prob_integrable_onem" class="" title="beta_prob_integrable_onem :
 forall {R : realType} (a b a' b' : nat),
 (beta_prob a b).-integrable `[0%R, 1%R]
-  (fun x : measurableTypeR R => ((XMonemX a' b' x).~)%:E)
+  (fun x : measurableTypeR R => (unstable.onem (XMonemX a' b' x))%:E)
 
 beta_prob_integrable_onem is not universe polymorphic
 Arguments beta_prob_integrable_onem {R} (a b a' b')%_nat_scope
@@ -1992,7 +1997,8 @@ Qed.</div></details>
 forall {R : realType} (a b a' b' : nat) (c : bool)
   (U : set Datatypes_bool__canonical__measurable_structure_SigmaRing),
 (beta_prob a b).-integrable `[0%R, 1%R]
-  (fun x : measurableTypeR R => (((XMonemX a' b' x).~)%:E * (\d_c)%R U)%E)
+  (fun x : measurableTypeR R =>
+   ((unstable.onem (XMonemX a' b' x))%:E * (\d_c)%R U)%E)
 
 beta_prob_integrable_onem_dirac is not universe polymorphic
 Arguments beta_prob_integrable_onem_dirac {R} (a b a' b')%_nat_scope

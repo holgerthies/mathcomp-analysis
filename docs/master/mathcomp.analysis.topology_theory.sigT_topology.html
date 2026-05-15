@@ -502,7 +502,7 @@ Qed.</div></details>
 <span class="vernacular">Lemma</span><span class="id"> </span><span id="sigT_continuous" class="id"><a name="sigT_continuous" class="" title="sigT_continuous :
 forall {I : choiceType} {X : I -> topologicalType} 
   {Z : topologicalType} (f : forall i : I, X i -> Z),
-(forall i : I, continuous (f i)) -> continuous (sigT_fun f)
+(forall i : I, continuous (f i)) -> continuous (unstable.sigT_fun f)
 
 sigT_continuous is not universe polymorphic
 Arguments sigT_continuous {I} {X}%_function_scope 

@@ -3339,7 +3339,8 @@ Declared in library mathcomp.analysis.trigo, line 1114, characters 10-22
 ">oneDsqr_inum</a></span><span class="id"> </span><span id="x:280" class="id"><a name="x:280" class="">x</a></span><span class="id"> :</span><span class="id"> </span><span class="id"><a href="https://math-comp.github.io/htmldoc_2_4_0/mathcomp.algebra.interval_inference.html#1d654871949ca8d814504e500b52e67c">{itv</a></span><span class="id"><a href="https://math-comp.github.io/htmldoc_2_4_0/mathcomp.algebra.interval_inference.html#1d654871949ca8d814504e500b52e67c"> </a></span><span class="id"><a href="mathcomp.analysis.trigo.html#oneDsqr.R">R</a></span><span class="id"><a href="https://math-comp.github.io/htmldoc_2_4_0/mathcomp.algebra.interval_inference.html#1d654871949ca8d814504e500b52e67c"> &amp;</a></span><span class="id"><a href="https://math-comp.github.io/htmldoc_2_4_0/mathcomp.algebra.interval_inference.html#1d654871949ca8d814504e500b52e67c"> </a></span><span class="id"><a href="https://math-comp.github.io/htmldoc_2_4_0/mathcomp.algebra.interval.html#c5d1424554ae4f6d783beb7e2b68e8c1">`[</a></span><span class="id">1</span><span class="id"><a href="https://math-comp.github.io/htmldoc_2_4_0/mathcomp.algebra.interval.html#c5d1424554ae4f6d783beb7e2b68e8c1">,</a></span><span class="id"><a href="https://math-comp.github.io/htmldoc_2_4_0/mathcomp.algebra.interval.html#c5d1424554ae4f6d783beb7e2b68e8c1"> +oo[</a></span><span class="id"><a href="https://math-comp.github.io/htmldoc_2_4_0/mathcomp.algebra.interval_inference.html#1d654871949ca8d814504e500b52e67c">}</a></span><span class="id"> :=</span><span class="id"> @</span><span class="id"><a href="https://math-comp.github.io/htmldoc_2_4_0/mathcomp.algebra.interval_inference.html#ItvReal">ItvReal</a></span><span class="id"> </span><span class="id"><a href="mathcomp.analysis.trigo.html#oneDsqr.R">R</a></span> (<span class="id"><a href="mathcomp.analysis.trigo.html#oneDsqr">oneDsqr</a></span><span class="id"> </span><span class="id"><a href="mathcomp.analysis.trigo.html#x:280">x</a></span>)<br/>
 &nbsp;&nbsp;(<span class="id"><a href="https://math-comp.github.io/htmldoc_2_4_0/mathcomp.algebra.interval.html#BLeft">BLeft</a></span><span class="id"> 1%Z</span>) (<span class="id"><a href="https://math-comp.github.io/htmldoc_2_4_0/mathcomp.algebra.interval.html#BInfty">BInfty</a></span><span class="id"> _</span><span class="id"> </span><span class="id"><a href="https://rocq-prover.org/corelib/Corelib.Init.Datatypes.html#false">false</a></span>) (<span class="id"><a href="mathcomp.analysis.trigo.html#oneDsqr_ge1">oneDsqr_ge1</a></span><span class="id"> </span><span class="id"><a href="mathcomp.analysis.trigo.html#x:280">x</a></span>)<span class="id"> </span><span class="id"><a href="https://rocq-prover.org/corelib/Corelib.ssr.ssrfun.html#erefl">erefl</a></span>.<br/>
 <br/>
-<span class="vernacular">Lemma</span><span class="id"> </span><span id="oneDsqrV_le1" class="id"><a name="oneDsqrV_le1" class="" title="oneDsqrV_le1 : forall {R : realType} (x : R), ((oneDsqr\^-1) x <= 1)%R
+<span class="vernacular">Lemma</span><span class="id"> </span><span id="oneDsqrV_le1" class="id"><a name="oneDsqrV_le1" class="" title="oneDsqrV_le1 :
+forall {R : realType} (x : R), (unstable.inv_fun oneDsqr x <= 1)%R
 
 oneDsqrV_le1 is not universe polymorphic
 Arguments oneDsqrV_le1 {R} x%_ring_scope
@@ -3375,7 +3376,8 @@ Declared in library mathcomp.analysis.trigo, line 1119, characters 6-24
 <div class="proofscript">
 <span class="gallina-kwd"> by</span><span class="id"> move=&gt;</span><span class="id"> x;</span><span class="id"> apply:</span><span class="id"> </span><span class="id"><a href="mathcomp.analysis.normedtype_theory.pseudometric_normed_Zmodule.html#cvgD">cvgD</a></span><span class="id">;</span><span class="id"> [exact:</span><span class="id"> </span><span class="id"><a href="mathcomp.analysis.topology_theory.topology_structure.html#cvg_cst">cvg_cst</a></span><span class="id">|exact:</span><span class="id"> </span><span class="id"><a href="mathcomp.analysis.realfun.html#exprn_continuous">exprn_continuous</a></span><span class="id">]</span>. Qed.</div></details>
 <br/>
-<span class="vernacular">Lemma</span><span class="id"> </span><span id="continuous_oneDsqrV" class="id"><a name="continuous_oneDsqrV" class="" title="continuous_oneDsqrV : forall {R : realType}, continuous (oneDsqr\^-1)%R
+<span class="vernacular">Lemma</span><span class="id"> </span><span id="continuous_oneDsqrV" class="id"><a name="continuous_oneDsqrV" class="" title="continuous_oneDsqrV :
+forall {R : realType}, continuous (unstable.inv_fun oneDsqr)
 
 continuous_oneDsqrV is not universe polymorphic
 Expanded type for implicit arguments
@@ -3383,10 +3385,10 @@ continuous_oneDsqrV :
 forall {R : realType}
   [x : numFieldTopology.Real_sort__canonical__filter_Nbhs R]
   [t : set (numFieldTopology.Real_sort__canonical__filter_Nbhs R)],
-nbhs ((oneDsqr\^-1)%R x) t ->
+nbhs (unstable.inv_fun oneDsqr x) t ->
 exists2 i : R,
   [set e | (0 < e)%R]%classic i &
-  (ball_ [eta normr] x i `<=` (oneDsqr\^-1)%R @^-1` t)%classic
+  (ball_ [eta normr] x i `<=` unstable.inv_fun oneDsqr @^-1` t)%classic
 
 Arguments continuous_oneDsqrV {R} [x t] _
 continuous_oneDsqrV is opaque
