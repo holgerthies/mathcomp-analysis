@@ -26029,8 +26029,7 @@ Declared in library mathcomp.classical.functions, line 2726, characters 11-15
 <span class="vernacular">End</span><span class="id"> function_space_lemmas</span>.<br/>
 <br/>
 <span class="vernacular">Lemma</span><span class="id"> </span><span id="inv_funK" class="id"><a name="inv_funK" class="" title="inv_funK :
-forall [T : Type] [R : unitRingType] (f : T -> R),
-unstable.inv_fun (unstable.inv_fun f) = f
+forall [T : Type] [R : unitRingType] (f : T -> R), ((f\^-1)\^-1)%R = f
 
 inv_funK is not universe polymorphic
 Arguments inv_funK [T]%_type_scope [R] f%_function_scope

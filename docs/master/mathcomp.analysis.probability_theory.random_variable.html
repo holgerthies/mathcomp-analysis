@@ -298,8 +298,10 @@ of `Lfun P n` hypotheses instead of the `integrable` predicate from
 <span class="vernacular">Local</span><span class="vernacular"> Open</span><span class="vernacular"> Scope</span><span class="id"> ring_scope</span>.<br/>
 <br/>
 <span class="vernacular">Definition</span><span class="id"> </span><span id="random_variable" class="id"><a name="random_variable" class="" title="random_variable :
-forall [d d' : measure_display] [T : measurableType d],
-measurableType d' -> forall [R : realType], probability T R -> Type
+forall [d d' : measurable_structure.measure_display]
+  [T : measurable_structure.Measurable.type d],
+measurable_structure.Measurable.type d' ->
+forall [R : realType], probability_measure.Probability.type T R -> Type
 
 random_variable is not universe polymorphic
 Arguments random_variable [d d']%_measure_display_scope [T] T' [R] P
@@ -314,10 +316,17 @@ library mathcomp.analysis.probability_theory.random_variable, line 73, character
 <span class="vernacular">Notation</span> <span id="31c5002a151d32a5908113f99aedfaa1" class="id"><a name="31c5002a151d32a5908113f99aedfaa1" class="">&quot;{ 'RV' P &gt;-&gt; T' }&quot;</a></span><span class="id"> :=</span> (<span class="id">@</span><span class="id"><a href="mathcomp.analysis.probability_theory.random_variable.html#random_variable">random_variable</a></span><span class="id"> _</span><span class="id"> _</span><span class="id"> _</span><span class="id"> T'</span><span class="id"> _</span><span class="id"> P</span>)<span class="id"> :</span><span class="id"> form_scope</span>.<br/>
 <br/>
 <span class="vernacular">Lemma</span><span class="id"> </span><span id="notin_range_measure" class="id"><a name="notin_range_measure" class="" title="notin_range_measure :
-forall [d d' : measure_display] [T : measurableType d],
-measurableType d' ->
-forall [R : realType] (P : measure T R) [X : T -> R] [r : R],
-r \notin range X -> P (X @^-1` [set r])%classic = 0%R
+forall [d d' : measurable_structure.measure_display]
+  [T : measurable_structure.Measurable.type d],
+measurable_structure.Measurable.type d' ->
+forall [R : realType]
+  (P : measure_function.Measure.type
+         (measurable_structure.Measurable.Exports.measurable_structure_Measurable__to__measurable_structure_SemiRingOfSets
+            T)
+         R)
+  [X : measurable_structure.Measurable.sort T -> R] 
+  [r : R],
+r \notin range X -> measure_function.Measure.sort P (X @^-1` [set r]) = 0%R
 
 notin_range_measure is not universe polymorphic
 Arguments notin_range_measure [d d']%_measure_display_scope 
@@ -337,10 +346,15 @@ library mathcomp.analysis.probability_theory.random_variable, line 78, character
 <span class="gallina-kwd"> by</span><span class="id"> rewrite</span><span class="id"> </span><span class="id"><a href="mathcomp.classical.classical_sets.html#notin_setE">notin_setE</a></span><span class="id"> =&gt;</span><span class="id"> hr;</span><span class="id"> rewrite</span><span class="id"> </span><span class="id"><a href="mathcomp.classical.classical_sets.html#preimage10">preimage10</a></span>. Qed.</div></details>
 <br/>
 <span class="vernacular">Lemma</span><span class="id"> </span><span id="probability_range" class="id"><a name="probability_range" class="" title="probability_range :
-forall [d d' : measure_display] [T : measurableType d],
-measurableType d' ->
-forall [R : realType] [P : probability T R] (X : {RV P >-> R}),
-P (X @^-1` range X)%classic = 1%E
+forall [d d' : measurable_structure.measure_display]
+  [T : measurable_structure.Measurable.type d],
+measurable_structure.Measurable.type d' ->
+forall [R : realType] [P : probability_measure.Probability.type T R]
+  (X : {RV P >-> R}),
+probability_measure.Probability.sort P
+  (measurable_function.MeasurableFun.sort X @^-1`
+   range (measurable_function.MeasurableFun.sort X)) =
+1%E
 
 probability_range is not universe polymorphic
 Arguments probability_range [d d']%_measure_display_scope [T] T' [R P] X
@@ -358,9 +372,20 @@ library mathcomp.analysis.probability_theory.random_variable, line 83, character
 <span class="gallina-kwd"> by</span><span class="id"> rewrite</span><span class="id"> </span><span class="id"><a href="mathcomp.classical.classical_sets.html#preimage_range">preimage_range</a></span><span class="id"> </span><span class="id"><a href="mathcomp.analysis.measure_theory.probability_measure.html#probability_setT">probability_setT</a></span>. Qed.</div></details>
 <br/>
 <span class="vernacular">Definition</span><span class="id"> </span><span id="distribution" class="id"><a name="distribution" class="" title="distribution :
-forall [d d' : measure_display] [T : measurableType d]
-  [T' : measurableType d'] [R : realType],
-probability T R -> {mfun T >-> T'} -> set T' -> \bar R
+forall [d d' : measurable_structure.measure_display]
+  [T : measurable_structure.Measurable.type d]
+  [T' : measurable_structure.Measurable.type d'] [R : realType],
+probability_measure.Probability.type T R ->
+measurable_function.MeasurableFun.type
+  (measurable_structure.Measurable.Exports.measurable_structure_Measurable__to__measurable_structure_SigmaRing
+     T)
+  (measurable_structure.Measurable.Exports.measurable_structure_Measurable__to__measurable_structure_SigmaRing
+     T') ->
+set
+  (measurable_structure.SigmaRing.sort
+     (measurable_structure.Measurable.Exports.measurable_structure_Measurable__to__measurable_structure_SigmaRing
+        T')) ->
+\bar R
 
 distribution is not universe polymorphic
 Arguments distribution [d d']%_measure_display_scope 
@@ -398,9 +423,20 @@ library mathcomp.analysis.probability_theory.random_variable, line 88, character
 <span class="id"> exact:</span><span class="id"> </span><span class="id"><a href="mathcomp.analysis.measure_theory.measure_function.html#measure_semi_sigma_additive">measure_semi_sigma_additive</a></span>. Qed.</div></details>
 <br/>
 <span id="random_variable_distribution__canonical__measure_function_Measure" class="id"><span id="HB_unnamed_mixin_5" class="id"><span id="random_variable_distribution__canonical__measure_function_Content" class="id"><span id="HB_unnamed_mixin_4" class="id"><span id="measure_function_isMeasure__to__measure_function_isContent" class="id"><span id="measure_function_isMeasure__to__measure_function_Content_isMeasure" class="id"><span id="HB_unnamed_factory_1" class="id"><a name="random_variable_distribution__canonical__measure_function_Measure" class="" title="random_variable_distribution__canonical__measure_function_Measure :
-forall [d d' : measure_display] {T : measurableType d}
-  {T' : measurableType d'} {R : realType},
-probability T R -> {mfun T >-> T'} -> measure T' R
+forall [d d' : measurable_structure.measure_display]
+  {T : measurable_structure.Measurable.type d}
+  {T' : measurable_structure.Measurable.type d'} {R : realType},
+probability_measure.Probability.type T R ->
+measurable_function.MeasurableFun.type
+  (measurable_structure.Measurable.Exports.measurable_structure_Measurable__to__measurable_structure_SigmaRing
+     T)
+  (measurable_structure.Measurable.Exports.measurable_structure_Measurable__to__measurable_structure_SigmaRing
+     T') ->
+measure_function.Measure.type
+  (measurable_structure.SigmaRing.Exports.measurable_structure_SigmaRing__to__measurable_structure_SemiRingOfSets
+     (measurable_structure.Measurable.Exports.measurable_structure_Measurable__to__measurable_structure_SigmaRing
+        T'))
+  R
 
 random_variable_distribution__canonical__measure_function_Measure is not universe polymorphic
 Arguments random_variable_distribution__canonical__measure_function_Measure
@@ -411,9 +447,20 @@ Expands to: Constant
 Declared in
 library mathcomp.analysis.probability_theory.random_variable, line 106, characters 0-130
 ">HB</a></span></span></span></span></span></span></span>.<span id="random_variable_distribution__canonical__measure_function_Measure" class="id"><span id="HB_unnamed_mixin_5" class="id"><span id="random_variable_distribution__canonical__measure_function_Content" class="id"><span id="HB_unnamed_mixin_4" class="id"><span id="measure_function_isMeasure__to__measure_function_isContent" class="id"><span id="measure_function_isMeasure__to__measure_function_Content_isMeasure" class="id"><span id="HB_unnamed_factory_1" class="id"><a name="random_variable_distribution__canonical__measure_function_Measure" class="" title="random_variable_distribution__canonical__measure_function_Measure :
-forall [d d' : measure_display] {T : measurableType d}
-  {T' : measurableType d'} {R : realType},
-probability T R -> {mfun T >-> T'} -> measure T' R
+forall [d d' : measurable_structure.measure_display]
+  {T : measurable_structure.Measurable.type d}
+  {T' : measurable_structure.Measurable.type d'} {R : realType},
+probability_measure.Probability.type T R ->
+measurable_function.MeasurableFun.type
+  (measurable_structure.Measurable.Exports.measurable_structure_Measurable__to__measurable_structure_SigmaRing
+     T)
+  (measurable_structure.Measurable.Exports.measurable_structure_Measurable__to__measurable_structure_SigmaRing
+     T') ->
+measure_function.Measure.type
+  (measurable_structure.SigmaRing.Exports.measurable_structure_SigmaRing__to__measurable_structure_SemiRingOfSets
+     (measurable_structure.Measurable.Exports.measurable_structure_Measurable__to__measurable_structure_SigmaRing
+        T'))
+  R
 
 random_variable_distribution__canonical__measure_function_Measure is not universe polymorphic
 Arguments random_variable_distribution__canonical__measure_function_Measure
@@ -424,9 +471,20 @@ Expands to: Constant
 Declared in
 library mathcomp.analysis.probability_theory.random_variable, line 106, characters 0-130
 ">instance</a></span></span></span></span></span></span></span><span class="vernacular"> Definition</span><span id="random_variable_distribution__canonical__measure_function_Measure" class="id"><span id="HB_unnamed_mixin_5" class="id"><span id="random_variable_distribution__canonical__measure_function_Content" class="id"><span id="HB_unnamed_mixin_4" class="id"><span id="measure_function_isMeasure__to__measure_function_isContent" class="id"><span id="measure_function_isMeasure__to__measure_function_Content_isMeasure" class="id"><span id="HB_unnamed_factory_1" class="id"><a name="random_variable_distribution__canonical__measure_function_Measure" class="" title="random_variable_distribution__canonical__measure_function_Measure :
-forall [d d' : measure_display] {T : measurableType d}
-  {T' : measurableType d'} {R : realType},
-probability T R -> {mfun T >-> T'} -> measure T' R
+forall [d d' : measurable_structure.measure_display]
+  {T : measurable_structure.Measurable.type d}
+  {T' : measurable_structure.Measurable.type d'} {R : realType},
+probability_measure.Probability.type T R ->
+measurable_function.MeasurableFun.type
+  (measurable_structure.Measurable.Exports.measurable_structure_Measurable__to__measurable_structure_SigmaRing
+     T)
+  (measurable_structure.Measurable.Exports.measurable_structure_Measurable__to__measurable_structure_SigmaRing
+     T') ->
+measure_function.Measure.type
+  (measurable_structure.SigmaRing.Exports.measurable_structure_SigmaRing__to__measurable_structure_SemiRingOfSets
+     (measurable_structure.Measurable.Exports.measurable_structure_Measurable__to__measurable_structure_SigmaRing
+        T'))
+  R
 
 random_variable_distribution__canonical__measure_function_Measure is not universe polymorphic
 Arguments random_variable_distribution__canonical__measure_function_Measure
@@ -437,9 +495,20 @@ Expands to: Constant
 Declared in
 library mathcomp.analysis.probability_theory.random_variable, line 106, characters 0-130
 "> _</a></span></span></span></span></span></span></span><span id="random_variable_distribution__canonical__measure_function_Measure" class="id"><span id="HB_unnamed_mixin_5" class="id"><span id="random_variable_distribution__canonical__measure_function_Content" class="id"><span id="HB_unnamed_mixin_4" class="id"><span id="measure_function_isMeasure__to__measure_function_isContent" class="id"><span id="measure_function_isMeasure__to__measure_function_Content_isMeasure" class="id"><span id="HB_unnamed_factory_1" class="id"><a name="random_variable_distribution__canonical__measure_function_Measure" class="" title="random_variable_distribution__canonical__measure_function_Measure :
-forall [d d' : measure_display] {T : measurableType d}
-  {T' : measurableType d'} {R : realType},
-probability T R -> {mfun T >-> T'} -> measure T' R
+forall [d d' : measurable_structure.measure_display]
+  {T : measurable_structure.Measurable.type d}
+  {T' : measurable_structure.Measurable.type d'} {R : realType},
+probability_measure.Probability.type T R ->
+measurable_function.MeasurableFun.type
+  (measurable_structure.Measurable.Exports.measurable_structure_Measurable__to__measurable_structure_SigmaRing
+     T)
+  (measurable_structure.Measurable.Exports.measurable_structure_Measurable__to__measurable_structure_SigmaRing
+     T') ->
+measure_function.Measure.type
+  (measurable_structure.SigmaRing.Exports.measurable_structure_SigmaRing__to__measurable_structure_SemiRingOfSets
+     (measurable_structure.Measurable.Exports.measurable_structure_Measurable__to__measurable_structure_SigmaRing
+        T'))
+  R
 
 random_variable_distribution__canonical__measure_function_Measure is not universe polymorphic
 Arguments random_variable_distribution__canonical__measure_function_Measure
@@ -450,9 +519,20 @@ Expands to: Constant
 Declared in
 library mathcomp.analysis.probability_theory.random_variable, line 106, characters 0-130
 "> :=</a></span></span></span></span></span></span></span><span id="random_variable_distribution__canonical__measure_function_Measure" class="id"><span id="HB_unnamed_mixin_5" class="id"><span id="random_variable_distribution__canonical__measure_function_Content" class="id"><span id="HB_unnamed_mixin_4" class="id"><span id="measure_function_isMeasure__to__measure_function_isContent" class="id"><span id="measure_function_isMeasure__to__measure_function_Content_isMeasure" class="id"><span id="HB_unnamed_factory_1" class="id"><a name="random_variable_distribution__canonical__measure_function_Measure" class="" title="random_variable_distribution__canonical__measure_function_Measure :
-forall [d d' : measure_display] {T : measurableType d}
-  {T' : measurableType d'} {R : realType},
-probability T R -> {mfun T >-> T'} -> measure T' R
+forall [d d' : measurable_structure.measure_display]
+  {T : measurable_structure.Measurable.type d}
+  {T' : measurable_structure.Measurable.type d'} {R : realType},
+probability_measure.Probability.type T R ->
+measurable_function.MeasurableFun.type
+  (measurable_structure.Measurable.Exports.measurable_structure_Measurable__to__measurable_structure_SigmaRing
+     T)
+  (measurable_structure.Measurable.Exports.measurable_structure_Measurable__to__measurable_structure_SigmaRing
+     T') ->
+measure_function.Measure.type
+  (measurable_structure.SigmaRing.Exports.measurable_structure_SigmaRing__to__measurable_structure_SemiRingOfSets
+     (measurable_structure.Measurable.Exports.measurable_structure_Measurable__to__measurable_structure_SigmaRing
+        T'))
+  R
 
 random_variable_distribution__canonical__measure_function_Measure is not universe polymorphic
 Arguments random_variable_distribution__canonical__measure_function_Measure
@@ -473,9 +553,16 @@ library mathcomp.analysis.probability_theory.random_variable, line 106, characte
 Qed.</div></details>
 <br/>
 <span id="random_variable_distribution__canonical__probability_measure_Probability" class="id"><span id="HB_unnamed_mixin_16" class="id"><span id="random_variable_distribution__canonical__probability_measure_SubProbability" class="id"><span id="HB_unnamed_mixin_15" class="id"><span id="random_variable_distribution__canonical__measure_function_FiniteMeasure" class="id"><span id="random_variable_distribution__canonical__measure_function_FinNumFun" class="id"><span id="HB_unnamed_mixin_14" class="id"><span id="random_variable_distribution__canonical__measure_function_SigmaFiniteMeasure" class="id"><span id="random_variable_distribution__canonical__measure_function_SFiniteMeasure" class="id"><span id="HB_unnamed_mixin_13" class="id"><span id="random_variable_distribution__canonical__measure_function_SigmaFiniteContent" class="id"><span id="HB_unnamed_mixin_12" class="id"><span id="probability_measure_Measure_isProbability__to__measure_function_isFinite" class="id"><span id="probability_measure_Measure_isProbability__to__measure_function_isSFinite" class="id"><span id="probability_measure_Measure_isProbability__to__probability_measure_isSubProbability" class="id"><span id="probability_measure_Measure_isProbability__to__measure_function_isSigmaFinite" class="id"><span id="probability_measure_Measure_isProbability__to__probability_measure_isProbability" class="id"><span id="HB_unnamed_factory_6" class="id"><a name="random_variable_distribution__canonical__probability_measure_Probability" class="" title="random_variable_distribution__canonical__probability_measure_Probability :
-forall [d d' : measure_display] {T : measurableType d}
-  {T' : measurableType d'} {R : realType},
-probability T R -> {mfun T >-> T'} -> probability T' R
+forall [d d' : measurable_structure.measure_display]
+  {T : measurable_structure.Measurable.type d}
+  {T' : measurable_structure.Measurable.type d'} {R : realType},
+probability_measure.Probability.type T R ->
+measurable_function.MeasurableFun.type
+  (measurable_structure.Measurable.Exports.measurable_structure_Measurable__to__measurable_structure_SigmaRing
+     T)
+  (measurable_structure.Measurable.Exports.measurable_structure_Measurable__to__measurable_structure_SigmaRing
+     T') ->
+probability_measure.Probability.type T' R
 
 random_variable_distribution__canonical__probability_measure_Probability is not universe polymorphic
 Arguments
@@ -487,9 +574,16 @@ Expands to: Constant
 Declared in
 library mathcomp.analysis.probability_theory.random_variable, line 114, characters 0-111
 ">HB</a></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span>.<span id="random_variable_distribution__canonical__probability_measure_Probability" class="id"><span id="HB_unnamed_mixin_16" class="id"><span id="random_variable_distribution__canonical__probability_measure_SubProbability" class="id"><span id="HB_unnamed_mixin_15" class="id"><span id="random_variable_distribution__canonical__measure_function_FiniteMeasure" class="id"><span id="random_variable_distribution__canonical__measure_function_FinNumFun" class="id"><span id="HB_unnamed_mixin_14" class="id"><span id="random_variable_distribution__canonical__measure_function_SigmaFiniteMeasure" class="id"><span id="random_variable_distribution__canonical__measure_function_SFiniteMeasure" class="id"><span id="HB_unnamed_mixin_13" class="id"><span id="random_variable_distribution__canonical__measure_function_SigmaFiniteContent" class="id"><span id="HB_unnamed_mixin_12" class="id"><span id="probability_measure_Measure_isProbability__to__measure_function_isFinite" class="id"><span id="probability_measure_Measure_isProbability__to__measure_function_isSFinite" class="id"><span id="probability_measure_Measure_isProbability__to__probability_measure_isSubProbability" class="id"><span id="probability_measure_Measure_isProbability__to__measure_function_isSigmaFinite" class="id"><span id="probability_measure_Measure_isProbability__to__probability_measure_isProbability" class="id"><span id="HB_unnamed_factory_6" class="id"><a name="random_variable_distribution__canonical__probability_measure_Probability" class="" title="random_variable_distribution__canonical__probability_measure_Probability :
-forall [d d' : measure_display] {T : measurableType d}
-  {T' : measurableType d'} {R : realType},
-probability T R -> {mfun T >-> T'} -> probability T' R
+forall [d d' : measurable_structure.measure_display]
+  {T : measurable_structure.Measurable.type d}
+  {T' : measurable_structure.Measurable.type d'} {R : realType},
+probability_measure.Probability.type T R ->
+measurable_function.MeasurableFun.type
+  (measurable_structure.Measurable.Exports.measurable_structure_Measurable__to__measurable_structure_SigmaRing
+     T)
+  (measurable_structure.Measurable.Exports.measurable_structure_Measurable__to__measurable_structure_SigmaRing
+     T') ->
+probability_measure.Probability.type T' R
 
 random_variable_distribution__canonical__probability_measure_Probability is not universe polymorphic
 Arguments
@@ -501,9 +595,16 @@ Expands to: Constant
 Declared in
 library mathcomp.analysis.probability_theory.random_variable, line 114, characters 0-111
 ">instance</a></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span><span class="vernacular"> Definition</span><span id="random_variable_distribution__canonical__probability_measure_Probability" class="id"><span id="HB_unnamed_mixin_16" class="id"><span id="random_variable_distribution__canonical__probability_measure_SubProbability" class="id"><span id="HB_unnamed_mixin_15" class="id"><span id="random_variable_distribution__canonical__measure_function_FiniteMeasure" class="id"><span id="random_variable_distribution__canonical__measure_function_FinNumFun" class="id"><span id="HB_unnamed_mixin_14" class="id"><span id="random_variable_distribution__canonical__measure_function_SigmaFiniteMeasure" class="id"><span id="random_variable_distribution__canonical__measure_function_SFiniteMeasure" class="id"><span id="HB_unnamed_mixin_13" class="id"><span id="random_variable_distribution__canonical__measure_function_SigmaFiniteContent" class="id"><span id="HB_unnamed_mixin_12" class="id"><span id="probability_measure_Measure_isProbability__to__measure_function_isFinite" class="id"><span id="probability_measure_Measure_isProbability__to__measure_function_isSFinite" class="id"><span id="probability_measure_Measure_isProbability__to__probability_measure_isSubProbability" class="id"><span id="probability_measure_Measure_isProbability__to__measure_function_isSigmaFinite" class="id"><span id="probability_measure_Measure_isProbability__to__probability_measure_isProbability" class="id"><span id="HB_unnamed_factory_6" class="id"><a name="random_variable_distribution__canonical__probability_measure_Probability" class="" title="random_variable_distribution__canonical__probability_measure_Probability :
-forall [d d' : measure_display] {T : measurableType d}
-  {T' : measurableType d'} {R : realType},
-probability T R -> {mfun T >-> T'} -> probability T' R
+forall [d d' : measurable_structure.measure_display]
+  {T : measurable_structure.Measurable.type d}
+  {T' : measurable_structure.Measurable.type d'} {R : realType},
+probability_measure.Probability.type T R ->
+measurable_function.MeasurableFun.type
+  (measurable_structure.Measurable.Exports.measurable_structure_Measurable__to__measurable_structure_SigmaRing
+     T)
+  (measurable_structure.Measurable.Exports.measurable_structure_Measurable__to__measurable_structure_SigmaRing
+     T') ->
+probability_measure.Probability.type T' R
 
 random_variable_distribution__canonical__probability_measure_Probability is not universe polymorphic
 Arguments
@@ -515,9 +616,16 @@ Expands to: Constant
 Declared in
 library mathcomp.analysis.probability_theory.random_variable, line 114, characters 0-111
 "> _</a></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span><span id="random_variable_distribution__canonical__probability_measure_Probability" class="id"><span id="HB_unnamed_mixin_16" class="id"><span id="random_variable_distribution__canonical__probability_measure_SubProbability" class="id"><span id="HB_unnamed_mixin_15" class="id"><span id="random_variable_distribution__canonical__measure_function_FiniteMeasure" class="id"><span id="random_variable_distribution__canonical__measure_function_FinNumFun" class="id"><span id="HB_unnamed_mixin_14" class="id"><span id="random_variable_distribution__canonical__measure_function_SigmaFiniteMeasure" class="id"><span id="random_variable_distribution__canonical__measure_function_SFiniteMeasure" class="id"><span id="HB_unnamed_mixin_13" class="id"><span id="random_variable_distribution__canonical__measure_function_SigmaFiniteContent" class="id"><span id="HB_unnamed_mixin_12" class="id"><span id="probability_measure_Measure_isProbability__to__measure_function_isFinite" class="id"><span id="probability_measure_Measure_isProbability__to__measure_function_isSFinite" class="id"><span id="probability_measure_Measure_isProbability__to__probability_measure_isSubProbability" class="id"><span id="probability_measure_Measure_isProbability__to__measure_function_isSigmaFinite" class="id"><span id="probability_measure_Measure_isProbability__to__probability_measure_isProbability" class="id"><span id="HB_unnamed_factory_6" class="id"><a name="random_variable_distribution__canonical__probability_measure_Probability" class="" title="random_variable_distribution__canonical__probability_measure_Probability :
-forall [d d' : measure_display] {T : measurableType d}
-  {T' : measurableType d'} {R : realType},
-probability T R -> {mfun T >-> T'} -> probability T' R
+forall [d d' : measurable_structure.measure_display]
+  {T : measurable_structure.Measurable.type d}
+  {T' : measurable_structure.Measurable.type d'} {R : realType},
+probability_measure.Probability.type T R ->
+measurable_function.MeasurableFun.type
+  (measurable_structure.Measurable.Exports.measurable_structure_Measurable__to__measurable_structure_SigmaRing
+     T)
+  (measurable_structure.Measurable.Exports.measurable_structure_Measurable__to__measurable_structure_SigmaRing
+     T') ->
+probability_measure.Probability.type T' R
 
 random_variable_distribution__canonical__probability_measure_Probability is not universe polymorphic
 Arguments
@@ -529,9 +637,16 @@ Expands to: Constant
 Declared in
 library mathcomp.analysis.probability_theory.random_variable, line 114, characters 0-111
 "> :=</a></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span><span id="random_variable_distribution__canonical__probability_measure_Probability" class="id"><span id="HB_unnamed_mixin_16" class="id"><span id="random_variable_distribution__canonical__probability_measure_SubProbability" class="id"><span id="HB_unnamed_mixin_15" class="id"><span id="random_variable_distribution__canonical__measure_function_FiniteMeasure" class="id"><span id="random_variable_distribution__canonical__measure_function_FinNumFun" class="id"><span id="HB_unnamed_mixin_14" class="id"><span id="random_variable_distribution__canonical__measure_function_SigmaFiniteMeasure" class="id"><span id="random_variable_distribution__canonical__measure_function_SFiniteMeasure" class="id"><span id="HB_unnamed_mixin_13" class="id"><span id="random_variable_distribution__canonical__measure_function_SigmaFiniteContent" class="id"><span id="HB_unnamed_mixin_12" class="id"><span id="probability_measure_Measure_isProbability__to__measure_function_isFinite" class="id"><span id="probability_measure_Measure_isProbability__to__measure_function_isSFinite" class="id"><span id="probability_measure_Measure_isProbability__to__probability_measure_isSubProbability" class="id"><span id="probability_measure_Measure_isProbability__to__measure_function_isSigmaFinite" class="id"><span id="probability_measure_Measure_isProbability__to__probability_measure_isProbability" class="id"><span id="HB_unnamed_factory_6" class="id"><a name="random_variable_distribution__canonical__probability_measure_Probability" class="" title="random_variable_distribution__canonical__probability_measure_Probability :
-forall [d d' : measure_display] {T : measurableType d}
-  {T' : measurableType d'} {R : realType},
-probability T R -> {mfun T >-> T'} -> probability T' R
+forall [d d' : measurable_structure.measure_display]
+  {T : measurable_structure.Measurable.type d}
+  {T' : measurable_structure.Measurable.type d'} {R : realType},
+probability_measure.Probability.type T R ->
+measurable_function.MeasurableFun.type
+  (measurable_structure.Measurable.Exports.measurable_structure_Measurable__to__measurable_structure_SigmaRing
+     T)
+  (measurable_structure.Measurable.Exports.measurable_structure_Measurable__to__measurable_structure_SigmaRing
+     T') ->
+probability_measure.Probability.type T' R
 
 random_variable_distribution__canonical__probability_measure_Probability is not universe polymorphic
 Arguments
@@ -553,10 +668,16 @@ library mathcomp.analysis.probability_theory.random_variable, line 114, characte
 &nbsp;&nbsp;(<span id="transfer_probability.P" class="id"><a name="transfer_probability.P" class="">P</a></span><span class="id"> :</span><span class="id"> </span><span class="id"><a href="mathcomp.analysis.measure_theory.probability_measure.html#Probability.Exports.probability">probability</a></span><span class="id"> </span><span class="id"><a href="mathcomp.analysis.probability_theory.random_variable.html#T:40">T</a></span><span class="id"> </span><span class="id"><a href="mathcomp.analysis.probability_theory.random_variable.html#R:42">R</a></span>).<br/>
 <br/>
 <span class="vernacular">Lemma</span><span class="id"> </span><span id="probability_distribution" class="id"><a name="probability_distribution" class="" title="probability_distribution :
-forall [d d' : measure_display] {T : measurableType d}
-  {T' : measurableType d'} {R : realType} [P : probability T R]
-  (X : {RV P >-> T'}) (r : T'),
-P [set x | X x = r]%classic = distribution (T':=T') P X [set r]
+forall [d d' : measurable_structure.measure_display]
+  {T : measurable_structure.Measurable.type d}
+  {T' : measurable_structure.Measurable.type d'} {R : realType}
+  [P : probability_measure.Probability.type T R] (X : {RV P >-> T'})
+  (r : measurable_structure.SigmaRing.sort
+         (measurable_structure.Measurable.Exports.measurable_structure_Measurable__to__measurable_structure_SigmaRing
+            T')),
+probability_measure.Probability.sort P
+  [set x | measurable_function.MeasurableFun.sort X x = r] =
+distribution (T':=T') P X [set r]
 
 probability_distribution is not universe polymorphic
 Arguments probability_distribution [d d']%_measure_display_scope 
@@ -574,15 +695,21 @@ library mathcomp.analysis.probability_theory.random_variable, line 124, characte
 <span class="gallina-kwd"> by</span><span class="id"> []</span>. Qed.</div></details>
 <br/>
 <span class="vernacular">Lemma</span><span class="id"> </span><span id="ge0_integral_distribution" class="id"><a name="ge0_integral_distribution" class="" title="ge0_integral_distribution :
-forall [d d' : measure_display] {T : measurableType d}
-  {T' : measurableType d'} {R : realType} [P : probability T R]
-  (X : {RV P >-> T'}) [f : T' -> \bar R],
-measurable_fun (T:=T')
+forall [d d' : measurable_structure.measure_display]
+  {T : measurable_structure.Measurable.type d}
+  {T' : measurable_structure.Measurable.type d'} {R : realType}
+  [P : probability_measure.Probability.type T R] (X : {RV P >-> T'})
+  [f : measurable_structure.Measurable.sort T' -> \bar R],
+measurable_function.measurable_fun
+  (T:=measurable_structure.Measurable.Exports.measurable_structure_Measurable__to__measurable_structure_SigmaRing
+        T')
   (U:=constructive_ereal_extended__canonical__measurable_structure_SigmaRing
         R)
-  [set: T'] f ->
-(forall y : T', (0%R <= f y)%E) ->
-(\int[distribution (T':=T') P X]_y f y)%E = (\int[P]_x (f \o X) x)%E
+  [set: measurable_structure.Measurable.sort T'] f ->
+(forall y : measurable_structure.Measurable.sort T', (0%R <= f y)%E) ->
+(\int[distribution (T':=T') P X]_y f y)%E =
+(\int[probability_measure.Probability.sort P]_x
+    (f \o measurable_function.MeasurableFun.sort X) x)%E
 
 ge0_integral_distribution is not universe polymorphic
 Arguments ge0_integral_distribution [d d']%_measure_display_scope 
@@ -601,15 +728,23 @@ library mathcomp.analysis.probability_theory.random_variable, line 128, characte
 <span class="gallina-kwd"> by</span><span class="id"> move=&gt;</span><span class="id"> mf</span><span class="id"> f0;</span><span class="id"> rewrite</span><span class="id"> </span><span class="id"><a href="mathcomp.analysis.lebesgue_integral_theory.lebesgue_integral_nonneg.html#ge0_integral_pushforward">ge0_integral_pushforward</a></span>. Qed.</div></details>
 <br/>
 <span class="vernacular">Lemma</span><span class="id"> </span><span id="integral_distribution" class="id"><a name="integral_distribution" class="" title="integral_distribution :
-forall [d d' : measure_display] {T : measurableType d}
-  {T' : measurableType d'} {R : realType} [P : probability T R]
-  [X : {RV P >-> T'}] [f : T' -> \bar R],
-measurable_fun (T:=T')
+forall [d d' : measurable_structure.measure_display]
+  {T : measurable_structure.Measurable.type d}
+  {T' : measurable_structure.Measurable.type d'} {R : realType}
+  [P : probability_measure.Probability.type T R] [X : {RV P >-> T'}]
+  [f : measurable_structure.Measurable.sort T' -> \bar R],
+measurable_function.measurable_fun
+  (T:=measurable_structure.Measurable.Exports.measurable_structure_Measurable__to__measurable_structure_SigmaRing
+        T')
   (U:=constructive_ereal_extended__canonical__measurable_structure_SigmaRing
         R)
-  [set: T'] f ->
-P.-integrable [set: T] (f \o X) ->
-(\int[distribution (T':=T') P X]_y f y)%E = (\int[P]_x (f \o X) x)%E
+  [set: measurable_structure.Measurable.sort T'] f ->
+(probability_measure.Probability.sort P).-integrable
+  [set: measurable_structure.Measurable.sort T]
+  (f \o measurable_function.MeasurableFun.sort X) ->
+(\int[distribution (T':=T') P X]_y f y)%E =
+(\int[probability_measure.Probability.sort P]_x
+    (f \o measurable_function.MeasurableFun.sort X) x)%E
 
 integral_distribution is not universe polymorphic
 Arguments integral_distribution [d d']%_measure_display_scope 
@@ -633,8 +768,9 @@ library mathcomp.analysis.probability_theory.random_variable, line 133, characte
 <span class="vernacular">Context</span><span class="id"> {</span><span id="pmf_definition.d" class="id"><a name="pmf_definition.d" class="">d</a></span><span class="id">}</span><span class="id"> {</span><span id="pmf_definition.T" class="id"><a name="pmf_definition.T" class="">T</a></span><span class="id"> :</span><span class="id"> </span><span class="id"><a href="mathcomp.analysis.measure_theory.measurable_structure.html#Measurable.Exports.measurableType">measurableType</a></span><span class="id"> </span><span class="id"><a href="mathcomp.analysis.probability_theory.random_variable.html#d:56">d</a></span><span class="id">}</span><span class="id"> {</span><span id="pmf_definition.R" class="id"><a name="pmf_definition.R" class="">R</a></span><span class="id"> :</span><span class="id"> </span><span class="id"><a href="mathcomp.reals.reals.html#Real.Exports.realType">realType</a></span><span class="id">}</span> (<span id="pmf_definition.P" class="id"><a name="pmf_definition.P" class="">P</a></span><span class="id"> :</span><span class="id"> </span><span class="id"><a href="mathcomp.analysis.measure_theory.probability_measure.html#Probability.Exports.probability">probability</a></span><span class="id"> </span><span class="id"><a href="mathcomp.analysis.probability_theory.random_variable.html#T:57">T</a></span><span class="id"> </span><span class="id"><a href="mathcomp.analysis.probability_theory.random_variable.html#R:58">R</a></span>).<br/>
 <br/>
 <span class="vernacular">Definition</span><span class="id"> </span><span id="pmf" class="id"><a name="pmf" class="" title="pmf :
-forall {d : measure_display} {T : measurableType d} 
-  {R : realType} [P : probability T R],
+forall {d : measurable_structure.measure_display}
+  {T : measurable_structure.Measurable.type d} {R : realType}
+  [P : probability_measure.Probability.type T R],
 {RV P >-> R} -> R -> R
 
 pmf is not universe polymorphic
@@ -646,8 +782,9 @@ library mathcomp.analysis.probability_theory.random_variable, line 143, characte
 ">pmf</a></span> (<span id="X:60" class="id"><a name="X:60" class="">X</a></span><span class="id"> :</span><span class="id"> </span><span class="id"><a href="mathcomp.analysis.probability_theory.random_variable.html#31c5002a151d32a5908113f99aedfaa1">{RV</a></span><span class="id"><a href="mathcomp.analysis.probability_theory.random_variable.html#31c5002a151d32a5908113f99aedfaa1"> </a></span><span class="id"><a href="mathcomp.analysis.probability_theory.random_variable.html#pmf_definition.P">P</a></span><span class="id"><a href="mathcomp.analysis.probability_theory.random_variable.html#31c5002a151d32a5908113f99aedfaa1"> &gt;-&gt;</a></span><span class="id"><a href="mathcomp.analysis.probability_theory.random_variable.html#31c5002a151d32a5908113f99aedfaa1"> </a></span><span class="id"><a href="mathcomp.analysis.probability_theory.random_variable.html#pmf_definition.R">R</a></span><span class="id"><a href="mathcomp.analysis.probability_theory.random_variable.html#31c5002a151d32a5908113f99aedfaa1">}</a></span>) (<span id="r:61" class="id"><a name="r:61" class="">r</a></span><span class="id"> :</span><span class="id"> </span><span class="id"><a href="mathcomp.analysis.probability_theory.random_variable.html#pmf_definition.R">R</a></span>)<span class="id"> :</span><span class="id"> </span><span class="id"><a href="mathcomp.analysis.probability_theory.random_variable.html#pmf_definition.R">R</a></span><span class="id"> :=</span><span class="id"> </span><span class="id"><a href="mathcomp.reals.constructive_ereal.html#fine">fine</a></span> (<span class="id"><a href="mathcomp.analysis.probability_theory.random_variable.html#pmf_definition.P">P</a></span> (<span class="id"><a href="mathcomp.analysis.probability_theory.random_variable.html#X:60">X</a></span><span class="id"><a href="mathcomp.classical.classical_sets.html#9017aea2311f0e1b346e16db298ca58c"> @^-1`</a></span><span class="id"><a href="mathcomp.classical.classical_sets.html#9017aea2311f0e1b346e16db298ca58c"> </a></span><span class="id"><a href="mathcomp.classical.classical_sets.html#29c78c22490f2dae838b1b504eb858a2">[set</a></span><span class="id"><a href="mathcomp.classical.classical_sets.html#29c78c22490f2dae838b1b504eb858a2"> </a></span><span class="id"><a href="mathcomp.analysis.probability_theory.random_variable.html#r:61">r</a></span><span class="id"><a href="mathcomp.classical.classical_sets.html#29c78c22490f2dae838b1b504eb858a2">]</a></span>)).<br/>
 <br/>
 <span class="vernacular">Lemma</span><span class="id"> </span><span id="pmf_ge0" class="id"><a name="pmf_ge0" class="" title="pmf_ge0 :
-forall {d : measure_display} {T : measurableType d} 
-  {R : realType} [P : probability T R] (X : {RV P >-> R}) 
+forall {d : measurable_structure.measure_display}
+  {T : measurable_structure.Measurable.type d} {R : realType}
+  [P : probability_measure.Probability.type T R] (X : {RV P >-> R}) 
   (r : R),
 (0 <= pmf (P:=P) X r)%R
 
@@ -672,8 +809,9 @@ library mathcomp.analysis.probability_theory.random_variable, line 145, characte
 &nbsp;&nbsp;(<span id="pmf_measurable.P" class="id"><a name="pmf_measurable.P" class="">P</a></span><span class="id"> :</span><span class="id"> </span><span class="id"><a href="mathcomp.analysis.measure_theory.probability_measure.html#Probability.Exports.probability">probability</a></span><span class="id"> </span><span class="id"><a href="mathcomp.analysis.probability_theory.random_variable.html#T:65">T</a></span><span class="id"> </span><span class="id"><a href="mathcomp.analysis.probability_theory.random_variable.html#R:66">R</a></span>) (<span id="pmf_measurable.X" class="id"><a name="pmf_measurable.X" class="">X</a></span><span class="id"> :</span><span class="id"> </span><span class="id"><a href="mathcomp.analysis.probability_theory.random_variable.html#31c5002a151d32a5908113f99aedfaa1">{RV</a></span><span class="id"><a href="mathcomp.analysis.probability_theory.random_variable.html#31c5002a151d32a5908113f99aedfaa1"> </a></span><span class="id"><a href="mathcomp.analysis.probability_theory.random_variable.html#P:67">P</a></span><span class="id"><a href="mathcomp.analysis.probability_theory.random_variable.html#31c5002a151d32a5908113f99aedfaa1"> &gt;-&gt;</a></span><span class="id"><a href="mathcomp.analysis.probability_theory.random_variable.html#31c5002a151d32a5908113f99aedfaa1"> </a></span><span class="id"><a href="mathcomp.analysis.probability_theory.random_variable.html#R:66">R</a></span><span class="id"><a href="mathcomp.analysis.probability_theory.random_variable.html#31c5002a151d32a5908113f99aedfaa1">}</a></span>).<br/>
 <br/>
 <span class="vernacular">Lemma</span><span class="id"> </span><span id="pmf_gt0_countable" class="id"><a name="pmf_gt0_countable" class="" title="pmf_gt0_countable :
-forall [d : measure_display] [T : measurableType d] 
-  [R : realType] [P : probability T R] (X : {RV P >-> R}),
+forall [d : measurable_structure.measure_display]
+  [T : measurable_structure.Measurable.type d] [R : realType]
+  [P : probability_measure.Probability.type T R] (X : {RV P >-> R}),
 countable (T:=R) [set r | (0 < pmf (P:=P) X r)%R]
 
 pmf_gt0_countable is not universe polymorphic
@@ -709,30 +847,37 @@ library mathcomp.analysis.probability_theory.random_variable, line 155, characte
 Qed.</div></details>
 <br/>
 <span class="vernacular">Lemma</span><span class="id"> </span><span id="pmf_measurable" class="id"><a name="pmf_measurable" class="" title="pmf_measurable :
-forall [d : measure_display] [T : measurableType d] 
-  [R : realType] [P : probability T R] (X : {RV P >-> R}),
-measurable_fun (T:=Real_sort__canonical__measurable_structure_SigmaRing R)
+forall [d : measurable_structure.measure_display]
+  [T : measurable_structure.Measurable.type d] [R : realType]
+  [P : probability_measure.Probability.type T R] (X : {RV P >-> R}),
+measurable_function.measurable_fun
+  (T:=Real_sort__canonical__measurable_structure_SigmaRing R)
   (U:=Real_sort__canonical__measurable_structure_SigmaRing R) [set: R]
   (pmf (P:=P) X)
 
 pmf_measurable is not universe polymorphic
 Expanded type for implicit arguments
 pmf_measurable :
-forall [d : measure_display] [T : measurableType d] 
-  [R : realType] [P : probability T R] (X : {RV P >-> R}),
-'measurable%classic [set: R] ->
-forall [Y : set (Real_sort__canonical__measurable_structure_SigmaRing R)],
-'measurable%classic Y ->
+forall [d : measurable_structure.measure_display]
+  [T : measurable_structure.Measurable.type d] [R : realType]
+  [P : probability_measure.Probability.type T R] (X : {RV P >-> R}),
+measurable_structure.measurable [set: R] ->
+forall
+  [Y : set
+         (measurable_structure.SemiRingOfSets.sort
+            (measurable_structure.SigmaRing.Exports.measurable_structure_SigmaRing__to__measurable_structure_SemiRingOfSets
+               (Real_sort__canonical__measurable_structure_SigmaRing R)))],
+measurable_structure.measurable Y ->
 forall
   [i : set
          (set
             (lebesgue_stieltjes_measure_ocitv_type__canonical__classical_sets_Pointed
                R))],
-[set M | sigma_algebra
+[set M | measurable_structure.sigma_algebra
            [set: lebesgue_stieltjes_measure_ocitv_type__canonical__classical_sets_Pointed
                    R]
            M /\
-         (R.-ocitv).-measurable `<=` M]%classic
+         measurable_structure.measurable `<=` M]%classic
   i ->
 i ([set: R] `&` pmf (P:=P) X @^-1` Y)%classic
 
@@ -778,8 +923,9 @@ Qed.</div></details>
 <span class="vernacular">Local</span><span class="vernacular"> Notation</span><span class="id"> </span><span id="mu" class="id"><a name="mu" class="">mu</a></span><span class="id"> :=</span><span class="id"> </span><span class="id"><a href="mathcomp.analysis.lebesgue_measure.html#lebesgue_measure">lebesgue_measure</a></span>.<br/>
 <br/>
 <span class="vernacular">Lemma</span><span class="id"> </span><span id="lebesgue_integral_pmf" class="id"><a name="lebesgue_integral_pmf" class="" title="lebesgue_integral_pmf :
-forall [d : measure_display] [T : measurableType d] 
-  [R : realType] [P : probability T R] (X : {RV P >-> R}),
+forall [d : measurable_structure.measure_display]
+  [T : measurable_structure.Measurable.type d] [R : realType]
+  [P : probability_measure.Probability.type T R] (X : {RV P >-> R}),
 (\int[lebesgue_measure]_r (pmf (P:=P) X r)%:E)%E = 0%R
 
 lebesgue_integral_pmf is not universe polymorphic
@@ -819,8 +965,9 @@ Qed.</div></details>
 <span class="vernacular">End</span><span class="id"> lebesgue_integral_pmf</span>.<br/>
 <br/>
 <span class="vernacular">Definition</span><span class="id"> </span><span id="cdf" class="id"><a name="cdf" class="" title="cdf :
-forall [d : measure_display] [T : measurableType d] 
-  [R : realType] [P : probability T R],
+forall [d : measurable_structure.measure_display]
+  [T : measurable_structure.Measurable.type d] [R : realType]
+  [P : probability_measure.Probability.type T R],
 {RV P >-> R} -> R -> \bar R
 
 cdf is not universe polymorphic
@@ -838,8 +985,9 @@ library mathcomp.analysis.probability_theory.random_variable, line 238, characte
 <span class="vernacular">Local</span><span class="vernacular"> Open</span><span class="vernacular"> Scope</span><span class="id"> ereal_scope</span>.<br/>
 <br/>
 <span class="vernacular">Lemma</span><span class="id"> </span><span id="cdf_ge0" class="id"><a name="cdf_ge0" class="" title="cdf_ge0 :
-forall [d : measure_display] {T : measurableType d} 
-  {R : realType} [P : probability T R] (X : {RV P >-> R}) 
+forall [d : measurable_structure.measure_display]
+  {T : measurable_structure.Measurable.type d} {R : realType}
+  [P : probability_measure.Probability.type T R] (X : {RV P >-> R}) 
   (r : R),
 (0%R <= cdf (P:=P) X r)%E
 
@@ -857,8 +1005,9 @@ library mathcomp.analysis.probability_theory.random_variable, line 246, characte
 <span class="gallina-kwd"> by</span><span class="id"> []</span>. Qed.</div></details>
 <br/>
 <span class="vernacular">Lemma</span><span class="id"> </span><span id="cdf_le1" class="id"><a name="cdf_le1" class="" title="cdf_le1 :
-forall [d : measure_display] {T : measurableType d} 
-  {R : realType} [P : probability T R] (X : {RV P >-> R}) 
+forall [d : measurable_structure.measure_display]
+  {T : measurable_structure.Measurable.type d} {R : realType}
+  [P : probability_measure.Probability.type T R] (X : {RV P >-> R}) 
   (r : R),
 (cdf (P:=P) X r <= 1)%E
 
@@ -876,15 +1025,17 @@ library mathcomp.analysis.probability_theory.random_variable, line 248, characte
 <span class="id"> exact:</span><span class="id"> </span><span class="id"><a href="mathcomp.analysis.measure_theory.probability_measure.html#probability_le1">probability_le1</a></span>. Qed.</div></details>
 <br/>
 <span class="vernacular">Lemma</span><span class="id"> </span><span id="cdf_nondecreasing" class="id"><a name="cdf_nondecreasing" class="" title="cdf_nondecreasing :
-forall [d : measure_display] {T : measurableType d} 
-  {R : realType} [P : probability T R] (X : {RV P >-> R}),
+forall [d : measurable_structure.measure_display]
+  {T : measurable_structure.Measurable.type d} {R : realType}
+  [P : probability_measure.Probability.type T R] (X : {RV P >-> R}),
 {homo cdf (P:=P) X : n m / (n <= m)%R >-> (n <= m)%E}
 
 cdf_nondecreasing is not universe polymorphic
 Expanded type for implicit arguments
 cdf_nondecreasing :
-forall [d : measure_display] {T : measurableType d} 
-  {R : realType} [P : probability T R] (X : {RV P >-> R}) 
+forall [d : measurable_structure.measure_display]
+  {T : measurable_structure.Measurable.type d} {R : realType}
+  [P : probability_measure.Probability.type T R] (X : {RV P >-> R}) 
   [x y : R],
 (fun n m : R => is_true (n <= m)%R) x y ->
 (cdf (P:=P) X x <= cdf (P:=P) X y)%E = true
@@ -902,9 +1053,11 @@ library mathcomp.analysis.probability_theory.random_variable, line 250, characte
 <span class="gallina-kwd"> by</span><span class="id"> move=&gt;</span><span class="id"> r</span><span class="id"> s</span><span class="id"> rs;</span><span class="id"> rewrite</span><span class="id"> </span><span class="id"><a href="mathcomp.analysis.measure_theory.measure_function.html#le_measure">le_measure</a></span><span class="id"> ?</span><span class="id"><a href="mathcomp.classical.classical_sets.html#inE">inE</a></span><span class="id">//;</span><span class="id"> exact:</span><span class="id"> </span><span class="id"><a href="https://math-comp.github.io/htmldoc_2_4_0/mathcomp.algebra.interval.html#subitvPr">subitvPr</a></span>. Qed.</div></details>
 <br/>
 <span class="vernacular">Lemma</span><span class="id"> </span><span id="cdf_measurable" class="id"><a name="cdf_measurable" class="" title="cdf_measurable :
-forall [d : measure_display] {T : measurableType d} 
-  {R : realType} [P : probability T R] (X : {RV P >-> R}),
-measurable_fun (T:=Real_sort__canonical__measurable_structure_SigmaRing R)
+forall [d : measurable_structure.measure_display]
+  {T : measurable_structure.Measurable.type d} {R : realType}
+  [P : probability_measure.Probability.type T R] (X : {RV P >-> R}),
+measurable_function.measurable_fun
+  (T:=Real_sort__canonical__measurable_structure_SigmaRing R)
   (U:=constructive_ereal_extended__canonical__measurable_structure_SigmaRing
         R)
   [set: R] (cdf (P:=P) X)
@@ -912,24 +1065,27 @@ measurable_fun (T:=Real_sort__canonical__measurable_structure_SigmaRing R)
 cdf_measurable is not universe polymorphic
 Expanded type for implicit arguments
 cdf_measurable :
-forall [d : measure_display] {T : measurableType d} 
-  {R : realType} [P : probability T R] (X : {RV P >-> R}),
-'measurable%classic [set: R] ->
+forall [d : measurable_structure.measure_display]
+  {T : measurable_structure.Measurable.type d} {R : realType}
+  [P : probability_measure.Probability.type T R] (X : {RV P >-> R}),
+measurable_structure.measurable [set: R] ->
 forall
   [Y : set
-         (constructive_ereal_extended__canonical__measurable_structure_SigmaRing
-            R)],
-'measurable%classic Y ->
+         (measurable_structure.SemiRingOfSets.sort
+            (measurable_structure.SigmaRing.Exports.measurable_structure_SigmaRing__to__measurable_structure_SemiRingOfSets
+               (constructive_ereal_extended__canonical__measurable_structure_SigmaRing
+                  R)))],
+measurable_structure.measurable Y ->
 forall
   [i : set
          (set
             (lebesgue_stieltjes_measure_ocitv_type__canonical__classical_sets_Pointed
                R))],
-[set M | sigma_algebra
+[set M | measurable_structure.sigma_algebra
            [set: lebesgue_stieltjes_measure_ocitv_type__canonical__classical_sets_Pointed
                    R]
            M /\
-         (R.-ocitv).-measurable `<=` M]%classic
+         measurable_structure.measurable `<=` M]%classic
   i ->
 i ([set: R] `&` cdf (P:=P) X @^-1` Y)%classic
 
@@ -950,17 +1106,20 @@ library mathcomp.analysis.probability_theory.random_variable, line 253, characte
 Qed.</div></details>
 <br/>
 <span class="vernacular">Lemma</span><span class="id"> </span><span id="cvg_cdfy1" class="id"><a name="cvg_cdfy1" class="" title="cvg_cdfy1 :
-forall [d : measure_display] {T : measurableType d} 
-  {R : realType} [P : probability T R] (X : {RV P >-> R}),
-(cdf (P:=P) X x @[x --> +oo%R] --> 1%E)%classic
+forall [d : measurable_structure.measure_display]
+  {T : measurable_structure.Measurable.type d} {R : realType}
+  [P : probability_measure.Probability.type T R] (X : {RV P >-> R}),
+filter.cvg_to (filter.nbhs (filter.fmap (cdf (P:=P) X) (filter.nbhs +oo%R)))
+  (filter.nbhs 1%E)
 
 cvg_cdfy1 is not universe polymorphic
 Expanded type for implicit arguments
 cvg_cdfy1 :
-forall [d : measure_display] {T : measurableType d} 
-  {R : realType} [P : probability T R] (X : {RV P >-> R}) 
+forall [d : measurable_structure.measure_display]
+  {T : measurable_structure.Measurable.type d} {R : realType}
+  [P : probability_measure.Probability.type T R] (X : {RV P >-> R})
   [t : set \bar R],
-nbhs 1%E t ->
+filter.nbhs 1%E t ->
 exists M : R,
   M \is Num.real /\
   (forall x : R, (M < x)%R -> (cdf (P:=P) X @^-1` t)%classic x)
@@ -993,17 +1152,20 @@ library mathcomp.analysis.probability_theory.random_variable, line 261, characte
 Qed.</div></details>
 <br/>
 <span class="vernacular">Lemma</span><span class="id"> </span><span id="cvg_cdfNy0" class="id"><a name="cvg_cdfNy0" class="" title="cvg_cdfNy0 :
-forall [d : measure_display] {T : measurableType d} 
-  {R : realType} [P : probability T R] (X : {RV P >-> R}),
-(cdf (P:=P) X x @[x --> -oo%R] --> 0%R)%classic
+forall [d : measurable_structure.measure_display]
+  {T : measurable_structure.Measurable.type d} {R : realType}
+  [P : probability_measure.Probability.type T R] (X : {RV P >-> R}),
+filter.cvg_to (filter.nbhs (filter.fmap (cdf (P:=P) X) (filter.nbhs -oo%R)))
+  (filter.nbhs 0%R)
 
 cvg_cdfNy0 is not universe polymorphic
 Expanded type for implicit arguments
 cvg_cdfNy0 :
-forall [d : measure_display] {T : measurableType d} 
-  {R : realType} [P : probability T R] (X : {RV P >-> R}) 
+forall [d : measurable_structure.measure_display]
+  {T : measurable_structure.Measurable.type d} {R : realType}
+  [P : probability_measure.Probability.type T R] (X : {RV P >-> R})
   [t : set \bar R],
-nbhs 0%R t ->
+filter.nbhs 0%R t ->
 exists M : R,
   M \is Num.real /\
   (forall x : R, (x < M)%R -> (cdf (P:=P) X @^-1` t)%classic x)
@@ -1041,20 +1203,22 @@ library mathcomp.analysis.probability_theory.random_variable, line 280, characte
 Qed.</div></details>
 <br/>
 <span class="vernacular">Lemma</span><span class="id"> </span><span id="cdf_right_continuous" class="id"><a name="cdf_right_continuous" class="" title="cdf_right_continuous :
-forall [d : measure_display] {T : measurableType d} 
-  {R : realType} [P : probability T R] [X : {RV P >-> R}],
+forall [d : measurable_structure.measure_display]
+  {T : measurable_structure.Measurable.type d} {R : realType}
+  [P : probability_measure.Probability.type T R] [X : {RV P >-> R}],
 right_continuous (cdf (P:=P) X)
 
 cdf_right_continuous is not universe polymorphic
 Expanded type for implicit arguments
 cdf_right_continuous :
-forall [d : measure_display] {T : measurableType d} 
-  {R : realType} [P : probability T R] [X : {RV P >-> R}] 
+forall [d : measurable_structure.measure_display]
+  {T : measurable_structure.Measurable.type d} {R : realType}
+  [P : probability_measure.Probability.type T R] [X : {RV P >-> R}] 
   [x : R] [t : set \bar R],
-nbhs (cdf (P:=P) X x) t ->
+filter.nbhs (cdf (P:=P) X x) t ->
 exists2 i : R,
   [set e | (0 < e)%R]%classic i &
-  (ball_ [eta normr] x i
+  (pseudometric_structure.ball_ [eta normr] x i
    `<=` (fun t0 : R =>
          (fun u : R => is_true (x < u)%R) t0 -> (cdf (P:=P) X @^-1` t) t0))%classic
 
@@ -1098,8 +1262,9 @@ library mathcomp.analysis.probability_theory.random_variable, line 304, characte
 <span class="id">Unshelve</span>. <span class="id">all:</span><span class="gallina-kwd"> by</span><span class="id"> end_near</span>. Qed.</div></details>
 <br/>
 <span id="random_variable_cdf__canonical__lebesgue_stieltjes_measure_Cumulative" class="id"><span id="HB_unnamed_factory_17" class="id"><a name="random_variable_cdf__canonical__lebesgue_stieltjes_measure_Cumulative" class="" title="random_variable_cdf__canonical__lebesgue_stieltjes_measure_Cumulative :
-forall [d : measure_display] {T : measurableType d} 
-  {R : realType} [P : probability T R],
+forall [d : measurable_structure.measure_display]
+  {T : measurable_structure.Measurable.type d} {R : realType}
+  [P : probability_measure.Probability.type T R],
 {RV P >-> R} ->
 cumulative R
   (constructive_ereal_extended__canonical__order_topology_OrderNbhs R)
@@ -1114,8 +1279,9 @@ Expands to: Constant
 Declared in
 library mathcomp.analysis.probability_theory.random_variable, line 334, characters 0-109
 ">HB</a></span></span>.<span id="random_variable_cdf__canonical__lebesgue_stieltjes_measure_Cumulative" class="id"><span id="HB_unnamed_factory_17" class="id"><a name="random_variable_cdf__canonical__lebesgue_stieltjes_measure_Cumulative" class="" title="random_variable_cdf__canonical__lebesgue_stieltjes_measure_Cumulative :
-forall [d : measure_display] {T : measurableType d} 
-  {R : realType} [P : probability T R],
+forall [d : measurable_structure.measure_display]
+  {T : measurable_structure.Measurable.type d} {R : realType}
+  [P : probability_measure.Probability.type T R],
 {RV P >-> R} ->
 cumulative R
   (constructive_ereal_extended__canonical__order_topology_OrderNbhs R)
@@ -1130,8 +1296,9 @@ Expands to: Constant
 Declared in
 library mathcomp.analysis.probability_theory.random_variable, line 334, characters 0-109
 ">instance</a></span></span><span class="vernacular"> Definition</span><span id="random_variable_cdf__canonical__lebesgue_stieltjes_measure_Cumulative" class="id"><span id="HB_unnamed_factory_17" class="id"><a name="random_variable_cdf__canonical__lebesgue_stieltjes_measure_Cumulative" class="" title="random_variable_cdf__canonical__lebesgue_stieltjes_measure_Cumulative :
-forall [d : measure_display] {T : measurableType d} 
-  {R : realType} [P : probability T R],
+forall [d : measurable_structure.measure_display]
+  {T : measurable_structure.Measurable.type d} {R : realType}
+  [P : probability_measure.Probability.type T R],
 {RV P >-> R} ->
 cumulative R
   (constructive_ereal_extended__canonical__order_topology_OrderNbhs R)
@@ -1146,8 +1313,9 @@ Expands to: Constant
 Declared in
 library mathcomp.analysis.probability_theory.random_variable, line 334, characters 0-109
 "> _</a></span></span><span id="random_variable_cdf__canonical__lebesgue_stieltjes_measure_Cumulative" class="id"><span id="HB_unnamed_factory_17" class="id"><a name="random_variable_cdf__canonical__lebesgue_stieltjes_measure_Cumulative" class="" title="random_variable_cdf__canonical__lebesgue_stieltjes_measure_Cumulative :
-forall [d : measure_display] {T : measurableType d} 
-  {R : realType} [P : probability T R],
+forall [d : measurable_structure.measure_display]
+  {T : measurable_structure.Measurable.type d} {R : realType}
+  [P : probability_measure.Probability.type T R],
 {RV P >-> R} ->
 cumulative R
   (constructive_ereal_extended__canonical__order_topology_OrderNbhs R)
@@ -1162,8 +1330,9 @@ Expands to: Constant
 Declared in
 library mathcomp.analysis.probability_theory.random_variable, line 334, characters 0-109
 "> :=</a></span></span><span id="random_variable_cdf__canonical__lebesgue_stieltjes_measure_Cumulative" class="id"><span id="HB_unnamed_factory_17" class="id"><a name="random_variable_cdf__canonical__lebesgue_stieltjes_measure_Cumulative" class="" title="random_variable_cdf__canonical__lebesgue_stieltjes_measure_Cumulative :
-forall [d : measure_display] {T : measurableType d} 
-  {R : realType} [P : probability T R],
+forall [d : measurable_structure.measure_display]
+  {T : measurable_structure.Measurable.type d} {R : realType}
+  [P : probability_measure.Probability.type T R],
 {RV P >-> R} ->
 cumulative R
   (constructive_ereal_extended__canonical__order_topology_OrderNbhs R)
@@ -1190,11 +1359,12 @@ library mathcomp.analysis.probability_theory.random_variable, line 334, characte
 <br/>
 <span id="random_variable_idTR__canonical__measurable_function_MeasurableFun" class="id"><span id="HB_unnamed_factory_19" class="id"><a name="random_variable_idTR__canonical__measurable_function_MeasurableFun" class="" title="random_variable_idTR__canonical__measurable_function_MeasurableFun :
 forall {R : realType},
-{mfun measurable_structure_g_sigma_algebraType__canonical__measurable_structure_SigmaRing
-        (T:=lebesgue_stieltjes_measure_ocitv_type__canonical__classical_sets_Pointed
-              R)
-        (R.-ocitv).-measurable >-> Real_sort__canonical__measurable_structure_SigmaRing
-                                     R}
+measurable_function.MeasurableFun.type
+  (measurable_structure.measurable_structure_g_sigma_algebraType__canonical__measurable_structure_SigmaRing
+     (T:=lebesgue_stieltjes_measure_ocitv_type__canonical__classical_sets_Pointed
+           R)
+     measurable_structure.measurable)
+  (Real_sort__canonical__measurable_structure_SigmaRing R)
 
 random_variable_idTR__canonical__measurable_function_MeasurableFun is not universe polymorphic
 Arguments random_variable_idTR__canonical__measurable_function_MeasurableFun
@@ -1206,11 +1376,12 @@ Declared in
 library mathcomp.analysis.probability_theory.random_variable, line 345, characters 0-101
 ">#[local]</a></span></span><span id="random_variable_idTR__canonical__measurable_function_MeasurableFun" class="id"><span id="HB_unnamed_factory_19" class="id"><a name="random_variable_idTR__canonical__measurable_function_MeasurableFun" class="" title="random_variable_idTR__canonical__measurable_function_MeasurableFun :
 forall {R : realType},
-{mfun measurable_structure_g_sigma_algebraType__canonical__measurable_structure_SigmaRing
-        (T:=lebesgue_stieltjes_measure_ocitv_type__canonical__classical_sets_Pointed
-              R)
-        (R.-ocitv).-measurable >-> Real_sort__canonical__measurable_structure_SigmaRing
-                                     R}
+measurable_function.MeasurableFun.type
+  (measurable_structure.measurable_structure_g_sigma_algebraType__canonical__measurable_structure_SigmaRing
+     (T:=lebesgue_stieltjes_measure_ocitv_type__canonical__classical_sets_Pointed
+           R)
+     measurable_structure.measurable)
+  (Real_sort__canonical__measurable_structure_SigmaRing R)
 
 random_variable_idTR__canonical__measurable_function_MeasurableFun is not universe polymorphic
 Arguments random_variable_idTR__canonical__measurable_function_MeasurableFun
@@ -1222,11 +1393,12 @@ Declared in
 library mathcomp.analysis.probability_theory.random_variable, line 345, characters 0-101
 "> HB</a></span></span>.<span id="random_variable_idTR__canonical__measurable_function_MeasurableFun" class="id"><span id="HB_unnamed_factory_19" class="id"><a name="random_variable_idTR__canonical__measurable_function_MeasurableFun" class="" title="random_variable_idTR__canonical__measurable_function_MeasurableFun :
 forall {R : realType},
-{mfun measurable_structure_g_sigma_algebraType__canonical__measurable_structure_SigmaRing
-        (T:=lebesgue_stieltjes_measure_ocitv_type__canonical__classical_sets_Pointed
-              R)
-        (R.-ocitv).-measurable >-> Real_sort__canonical__measurable_structure_SigmaRing
-                                     R}
+measurable_function.MeasurableFun.type
+  (measurable_structure.measurable_structure_g_sigma_algebraType__canonical__measurable_structure_SigmaRing
+     (T:=lebesgue_stieltjes_measure_ocitv_type__canonical__classical_sets_Pointed
+           R)
+     measurable_structure.measurable)
+  (Real_sort__canonical__measurable_structure_SigmaRing R)
 
 random_variable_idTR__canonical__measurable_function_MeasurableFun is not universe polymorphic
 Arguments random_variable_idTR__canonical__measurable_function_MeasurableFun
@@ -1238,11 +1410,12 @@ Declared in
 library mathcomp.analysis.probability_theory.random_variable, line 345, characters 0-101
 ">instance</a></span></span><span class="vernacular"> Definition</span><span id="random_variable_idTR__canonical__measurable_function_MeasurableFun" class="id"><span id="HB_unnamed_factory_19" class="id"><a name="random_variable_idTR__canonical__measurable_function_MeasurableFun" class="" title="random_variable_idTR__canonical__measurable_function_MeasurableFun :
 forall {R : realType},
-{mfun measurable_structure_g_sigma_algebraType__canonical__measurable_structure_SigmaRing
-        (T:=lebesgue_stieltjes_measure_ocitv_type__canonical__classical_sets_Pointed
-              R)
-        (R.-ocitv).-measurable >-> Real_sort__canonical__measurable_structure_SigmaRing
-                                     R}
+measurable_function.MeasurableFun.type
+  (measurable_structure.measurable_structure_g_sigma_algebraType__canonical__measurable_structure_SigmaRing
+     (T:=lebesgue_stieltjes_measure_ocitv_type__canonical__classical_sets_Pointed
+           R)
+     measurable_structure.measurable)
+  (Real_sort__canonical__measurable_structure_SigmaRing R)
 
 random_variable_idTR__canonical__measurable_function_MeasurableFun is not universe polymorphic
 Arguments random_variable_idTR__canonical__measurable_function_MeasurableFun
@@ -1254,11 +1427,12 @@ Declared in
 library mathcomp.analysis.probability_theory.random_variable, line 345, characters 0-101
 "> _</a></span></span><span id="random_variable_idTR__canonical__measurable_function_MeasurableFun" class="id"><span id="HB_unnamed_factory_19" class="id"><a name="random_variable_idTR__canonical__measurable_function_MeasurableFun" class="" title="random_variable_idTR__canonical__measurable_function_MeasurableFun :
 forall {R : realType},
-{mfun measurable_structure_g_sigma_algebraType__canonical__measurable_structure_SigmaRing
-        (T:=lebesgue_stieltjes_measure_ocitv_type__canonical__classical_sets_Pointed
-              R)
-        (R.-ocitv).-measurable >-> Real_sort__canonical__measurable_structure_SigmaRing
-                                     R}
+measurable_function.MeasurableFun.type
+  (measurable_structure.measurable_structure_g_sigma_algebraType__canonical__measurable_structure_SigmaRing
+     (T:=lebesgue_stieltjes_measure_ocitv_type__canonical__classical_sets_Pointed
+           R)
+     measurable_structure.measurable)
+  (Real_sort__canonical__measurable_structure_SigmaRing R)
 
 random_variable_idTR__canonical__measurable_function_MeasurableFun is not universe polymorphic
 Arguments random_variable_idTR__canonical__measurable_function_MeasurableFun
@@ -1271,11 +1445,12 @@ library mathcomp.analysis.probability_theory.random_variable, line 345, characte
 "> :=</a></span></span><br/>
 &nbsp;&nbsp;<span id="random_variable_idTR__canonical__measurable_function_MeasurableFun" class="id"><span id="HB_unnamed_factory_19" class="id"><a name="random_variable_idTR__canonical__measurable_function_MeasurableFun" class="" title="random_variable_idTR__canonical__measurable_function_MeasurableFun :
 forall {R : realType},
-{mfun measurable_structure_g_sigma_algebraType__canonical__measurable_structure_SigmaRing
-        (T:=lebesgue_stieltjes_measure_ocitv_type__canonical__classical_sets_Pointed
-              R)
-        (R.-ocitv).-measurable >-> Real_sort__canonical__measurable_structure_SigmaRing
-                                     R}
+measurable_function.MeasurableFun.type
+  (measurable_structure.measurable_structure_g_sigma_algebraType__canonical__measurable_structure_SigmaRing
+     (T:=lebesgue_stieltjes_measure_ocitv_type__canonical__classical_sets_Pointed
+           R)
+     measurable_structure.measurable)
+  (Real_sort__canonical__measurable_structure_SigmaRing R)
 
 random_variable_idTR__canonical__measurable_function_MeasurableFun is not universe polymorphic
 Arguments random_variable_idTR__canonical__measurable_function_MeasurableFun
@@ -1333,11 +1508,12 @@ library mathcomp.analysis.probability_theory.random_variable, line 350, characte
 <br/>
 <span id="random_variable_idTR__canonical__measurable_function_MeasurableFun__23" class="id"><span id="HB_unnamed_factory_21" class="id"><a name="random_variable_idTR__canonical__measurable_function_MeasurableFun__23" class="" title="random_variable_idTR__canonical__measurable_function_MeasurableFun__23 :
 forall {R : realType},
-{mfun measurable_structure_g_sigma_algebraType__canonical__measurable_structure_SigmaRing
-        (T:=lebesgue_stieltjes_measure_ocitv_type__canonical__classical_sets_Pointed
-              R)
-        (R.-ocitv).-measurable >-> Real_sort__canonical__measurable_structure_SigmaRing
-                                     R}
+measurable_function.MeasurableFun.type
+  (measurable_structure.measurable_structure_g_sigma_algebraType__canonical__measurable_structure_SigmaRing
+     (T:=lebesgue_stieltjes_measure_ocitv_type__canonical__classical_sets_Pointed
+           R)
+     measurable_structure.measurable)
+  (Real_sort__canonical__measurable_structure_SigmaRing R)
 
 random_variable_idTR__canonical__measurable_function_MeasurableFun__23 is not universe polymorphic
 Arguments
@@ -1350,11 +1526,12 @@ Declared in
 library mathcomp.analysis.probability_theory.random_variable, line 376, characters 0-101
 ">#[local]</a></span></span><span id="random_variable_idTR__canonical__measurable_function_MeasurableFun__23" class="id"><span id="HB_unnamed_factory_21" class="id"><a name="random_variable_idTR__canonical__measurable_function_MeasurableFun__23" class="" title="random_variable_idTR__canonical__measurable_function_MeasurableFun__23 :
 forall {R : realType},
-{mfun measurable_structure_g_sigma_algebraType__canonical__measurable_structure_SigmaRing
-        (T:=lebesgue_stieltjes_measure_ocitv_type__canonical__classical_sets_Pointed
-              R)
-        (R.-ocitv).-measurable >-> Real_sort__canonical__measurable_structure_SigmaRing
-                                     R}
+measurable_function.MeasurableFun.type
+  (measurable_structure.measurable_structure_g_sigma_algebraType__canonical__measurable_structure_SigmaRing
+     (T:=lebesgue_stieltjes_measure_ocitv_type__canonical__classical_sets_Pointed
+           R)
+     measurable_structure.measurable)
+  (Real_sort__canonical__measurable_structure_SigmaRing R)
 
 random_variable_idTR__canonical__measurable_function_MeasurableFun__23 is not universe polymorphic
 Arguments
@@ -1367,11 +1544,12 @@ Declared in
 library mathcomp.analysis.probability_theory.random_variable, line 376, characters 0-101
 "> HB</a></span></span>.<span id="random_variable_idTR__canonical__measurable_function_MeasurableFun__23" class="id"><span id="HB_unnamed_factory_21" class="id"><a name="random_variable_idTR__canonical__measurable_function_MeasurableFun__23" class="" title="random_variable_idTR__canonical__measurable_function_MeasurableFun__23 :
 forall {R : realType},
-{mfun measurable_structure_g_sigma_algebraType__canonical__measurable_structure_SigmaRing
-        (T:=lebesgue_stieltjes_measure_ocitv_type__canonical__classical_sets_Pointed
-              R)
-        (R.-ocitv).-measurable >-> Real_sort__canonical__measurable_structure_SigmaRing
-                                     R}
+measurable_function.MeasurableFun.type
+  (measurable_structure.measurable_structure_g_sigma_algebraType__canonical__measurable_structure_SigmaRing
+     (T:=lebesgue_stieltjes_measure_ocitv_type__canonical__classical_sets_Pointed
+           R)
+     measurable_structure.measurable)
+  (Real_sort__canonical__measurable_structure_SigmaRing R)
 
 random_variable_idTR__canonical__measurable_function_MeasurableFun__23 is not universe polymorphic
 Arguments
@@ -1384,11 +1562,12 @@ Declared in
 library mathcomp.analysis.probability_theory.random_variable, line 376, characters 0-101
 ">instance</a></span></span><span class="vernacular"> Definition</span><span id="random_variable_idTR__canonical__measurable_function_MeasurableFun__23" class="id"><span id="HB_unnamed_factory_21" class="id"><a name="random_variable_idTR__canonical__measurable_function_MeasurableFun__23" class="" title="random_variable_idTR__canonical__measurable_function_MeasurableFun__23 :
 forall {R : realType},
-{mfun measurable_structure_g_sigma_algebraType__canonical__measurable_structure_SigmaRing
-        (T:=lebesgue_stieltjes_measure_ocitv_type__canonical__classical_sets_Pointed
-              R)
-        (R.-ocitv).-measurable >-> Real_sort__canonical__measurable_structure_SigmaRing
-                                     R}
+measurable_function.MeasurableFun.type
+  (measurable_structure.measurable_structure_g_sigma_algebraType__canonical__measurable_structure_SigmaRing
+     (T:=lebesgue_stieltjes_measure_ocitv_type__canonical__classical_sets_Pointed
+           R)
+     measurable_structure.measurable)
+  (Real_sort__canonical__measurable_structure_SigmaRing R)
 
 random_variable_idTR__canonical__measurable_function_MeasurableFun__23 is not universe polymorphic
 Arguments
@@ -1401,11 +1580,12 @@ Declared in
 library mathcomp.analysis.probability_theory.random_variable, line 376, characters 0-101
 "> _</a></span></span><span id="random_variable_idTR__canonical__measurable_function_MeasurableFun__23" class="id"><span id="HB_unnamed_factory_21" class="id"><a name="random_variable_idTR__canonical__measurable_function_MeasurableFun__23" class="" title="random_variable_idTR__canonical__measurable_function_MeasurableFun__23 :
 forall {R : realType},
-{mfun measurable_structure_g_sigma_algebraType__canonical__measurable_structure_SigmaRing
-        (T:=lebesgue_stieltjes_measure_ocitv_type__canonical__classical_sets_Pointed
-              R)
-        (R.-ocitv).-measurable >-> Real_sort__canonical__measurable_structure_SigmaRing
-                                     R}
+measurable_function.MeasurableFun.type
+  (measurable_structure.measurable_structure_g_sigma_algebraType__canonical__measurable_structure_SigmaRing
+     (T:=lebesgue_stieltjes_measure_ocitv_type__canonical__classical_sets_Pointed
+           R)
+     measurable_structure.measurable)
+  (Real_sort__canonical__measurable_structure_SigmaRing R)
 
 random_variable_idTR__canonical__measurable_function_MeasurableFun__23 is not universe polymorphic
 Arguments
@@ -1419,11 +1599,12 @@ library mathcomp.analysis.probability_theory.random_variable, line 376, characte
 "> :=</a></span></span><br/>
 &nbsp;&nbsp;<span id="random_variable_idTR__canonical__measurable_function_MeasurableFun__23" class="id"><span id="HB_unnamed_factory_21" class="id"><a name="random_variable_idTR__canonical__measurable_function_MeasurableFun__23" class="" title="random_variable_idTR__canonical__measurable_function_MeasurableFun__23 :
 forall {R : realType},
-{mfun measurable_structure_g_sigma_algebraType__canonical__measurable_structure_SigmaRing
-        (T:=lebesgue_stieltjes_measure_ocitv_type__canonical__classical_sets_Pointed
-              R)
-        (R.-ocitv).-measurable >-> Real_sort__canonical__measurable_structure_SigmaRing
-                                     R}
+measurable_function.MeasurableFun.type
+  (measurable_structure.measurable_structure_g_sigma_algebraType__canonical__measurable_structure_SigmaRing
+     (T:=lebesgue_stieltjes_measure_ocitv_type__canonical__classical_sets_Pointed
+           R)
+     measurable_structure.measurable)
+  (Real_sort__canonical__measurable_structure_SigmaRing R)
 
 random_variable_idTR__canonical__measurable_function_MeasurableFun__23 is not universe polymorphic
 Arguments
@@ -1455,9 +1636,10 @@ Qed.</div></details>
 <br/>
 <span id="random_variable_fcdf__canonical__lebesgue_stieltjes_measure_Cumulative" class="id"><span id="HB_unnamed_factory_24" class="id"><a name="random_variable_fcdf__canonical__lebesgue_stieltjes_measure_Cumulative" class="" title="random_variable_fcdf__canonical__lebesgue_stieltjes_measure_Cumulative :
 forall {R : realType},
-probability (measurableTypeR R) R ->
+probability_measure.Probability.type (measurableTypeR R) R ->
 cumulative R
-  (numFieldTopology.RealField_sort__canonical__order_topology_OrderNbhs R)
+  (num_topology.numFieldTopology.RealField_sort__canonical__order_topology_OrderNbhs
+     R)
 
 random_variable_fcdf__canonical__lebesgue_stieltjes_measure_Cumulative is not universe polymorphic
 Arguments
@@ -1470,9 +1652,10 @@ Declared in
 library mathcomp.analysis.probability_theory.random_variable, line 392, characters 0-85
 ">#[local]</a></span></span><span id="random_variable_fcdf__canonical__lebesgue_stieltjes_measure_Cumulative" class="id"><span id="HB_unnamed_factory_24" class="id"><a name="random_variable_fcdf__canonical__lebesgue_stieltjes_measure_Cumulative" class="" title="random_variable_fcdf__canonical__lebesgue_stieltjes_measure_Cumulative :
 forall {R : realType},
-probability (measurableTypeR R) R ->
+probability_measure.Probability.type (measurableTypeR R) R ->
 cumulative R
-  (numFieldTopology.RealField_sort__canonical__order_topology_OrderNbhs R)
+  (num_topology.numFieldTopology.RealField_sort__canonical__order_topology_OrderNbhs
+     R)
 
 random_variable_fcdf__canonical__lebesgue_stieltjes_measure_Cumulative is not universe polymorphic
 Arguments
@@ -1485,9 +1668,10 @@ Declared in
 library mathcomp.analysis.probability_theory.random_variable, line 392, characters 0-85
 "> HB</a></span></span>.<span id="random_variable_fcdf__canonical__lebesgue_stieltjes_measure_Cumulative" class="id"><span id="HB_unnamed_factory_24" class="id"><a name="random_variable_fcdf__canonical__lebesgue_stieltjes_measure_Cumulative" class="" title="random_variable_fcdf__canonical__lebesgue_stieltjes_measure_Cumulative :
 forall {R : realType},
-probability (measurableTypeR R) R ->
+probability_measure.Probability.type (measurableTypeR R) R ->
 cumulative R
-  (numFieldTopology.RealField_sort__canonical__order_topology_OrderNbhs R)
+  (num_topology.numFieldTopology.RealField_sort__canonical__order_topology_OrderNbhs
+     R)
 
 random_variable_fcdf__canonical__lebesgue_stieltjes_measure_Cumulative is not universe polymorphic
 Arguments
@@ -1500,9 +1684,10 @@ Declared in
 library mathcomp.analysis.probability_theory.random_variable, line 392, characters 0-85
 ">instance</a></span></span><span class="vernacular"> Definition</span><span id="random_variable_fcdf__canonical__lebesgue_stieltjes_measure_Cumulative" class="id"><span id="HB_unnamed_factory_24" class="id"><a name="random_variable_fcdf__canonical__lebesgue_stieltjes_measure_Cumulative" class="" title="random_variable_fcdf__canonical__lebesgue_stieltjes_measure_Cumulative :
 forall {R : realType},
-probability (measurableTypeR R) R ->
+probability_measure.Probability.type (measurableTypeR R) R ->
 cumulative R
-  (numFieldTopology.RealField_sort__canonical__order_topology_OrderNbhs R)
+  (num_topology.numFieldTopology.RealField_sort__canonical__order_topology_OrderNbhs
+     R)
 
 random_variable_fcdf__canonical__lebesgue_stieltjes_measure_Cumulative is not universe polymorphic
 Arguments
@@ -1515,9 +1700,10 @@ Declared in
 library mathcomp.analysis.probability_theory.random_variable, line 392, characters 0-85
 "> _</a></span></span><span id="random_variable_fcdf__canonical__lebesgue_stieltjes_measure_Cumulative" class="id"><span id="HB_unnamed_factory_24" class="id"><a name="random_variable_fcdf__canonical__lebesgue_stieltjes_measure_Cumulative" class="" title="random_variable_fcdf__canonical__lebesgue_stieltjes_measure_Cumulative :
 forall {R : realType},
-probability (measurableTypeR R) R ->
+probability_measure.Probability.type (measurableTypeR R) R ->
 cumulative R
-  (numFieldTopology.RealField_sort__canonical__order_topology_OrderNbhs R)
+  (num_topology.numFieldTopology.RealField_sort__canonical__order_topology_OrderNbhs
+     R)
 
 random_variable_fcdf__canonical__lebesgue_stieltjes_measure_Cumulative is not universe polymorphic
 Arguments
@@ -1545,7 +1731,8 @@ library mathcomp.analysis.probability_theory.random_variable, line 392, characte
 <br/>
 <span id="random_variable_fcdf__canonical__lebesgue_stieltjes_measure_CumulativeBounded" class="id"><span id="HB_unnamed_factory_26" class="id"><a name="random_variable_fcdf__canonical__lebesgue_stieltjes_measure_CumulativeBounded" class="" title="random_variable_fcdf__canonical__lebesgue_stieltjes_measure_CumulativeBounded :
 forall {R : realType},
-probability (measurableTypeR R) R -> cumulativeBounded (R:=R) 0 1
+probability_measure.Probability.type (measurableTypeR R) R ->
+cumulativeBounded (R:=R) 0 1
 
 random_variable_fcdf__canonical__lebesgue_stieltjes_measure_CumulativeBounded is not universe polymorphic
 Arguments
@@ -1558,7 +1745,8 @@ Declared in
 library mathcomp.analysis.probability_theory.random_variable, line 401, characters 0-93
 ">#[local]</a></span></span><span id="random_variable_fcdf__canonical__lebesgue_stieltjes_measure_CumulativeBounded" class="id"><span id="HB_unnamed_factory_26" class="id"><a name="random_variable_fcdf__canonical__lebesgue_stieltjes_measure_CumulativeBounded" class="" title="random_variable_fcdf__canonical__lebesgue_stieltjes_measure_CumulativeBounded :
 forall {R : realType},
-probability (measurableTypeR R) R -> cumulativeBounded (R:=R) 0 1
+probability_measure.Probability.type (measurableTypeR R) R ->
+cumulativeBounded (R:=R) 0 1
 
 random_variable_fcdf__canonical__lebesgue_stieltjes_measure_CumulativeBounded is not universe polymorphic
 Arguments
@@ -1571,7 +1759,8 @@ Declared in
 library mathcomp.analysis.probability_theory.random_variable, line 401, characters 0-93
 "> HB</a></span></span>.<span id="random_variable_fcdf__canonical__lebesgue_stieltjes_measure_CumulativeBounded" class="id"><span id="HB_unnamed_factory_26" class="id"><a name="random_variable_fcdf__canonical__lebesgue_stieltjes_measure_CumulativeBounded" class="" title="random_variable_fcdf__canonical__lebesgue_stieltjes_measure_CumulativeBounded :
 forall {R : realType},
-probability (measurableTypeR R) R -> cumulativeBounded (R:=R) 0 1
+probability_measure.Probability.type (measurableTypeR R) R ->
+cumulativeBounded (R:=R) 0 1
 
 random_variable_fcdf__canonical__lebesgue_stieltjes_measure_CumulativeBounded is not universe polymorphic
 Arguments
@@ -1584,7 +1773,8 @@ Declared in
 library mathcomp.analysis.probability_theory.random_variable, line 401, characters 0-93
 ">instance</a></span></span><span class="vernacular"> Definition</span><span id="random_variable_fcdf__canonical__lebesgue_stieltjes_measure_CumulativeBounded" class="id"><span id="HB_unnamed_factory_26" class="id"><a name="random_variable_fcdf__canonical__lebesgue_stieltjes_measure_CumulativeBounded" class="" title="random_variable_fcdf__canonical__lebesgue_stieltjes_measure_CumulativeBounded :
 forall {R : realType},
-probability (measurableTypeR R) R -> cumulativeBounded (R:=R) 0 1
+probability_measure.Probability.type (measurableTypeR R) R ->
+cumulativeBounded (R:=R) 0 1
 
 random_variable_fcdf__canonical__lebesgue_stieltjes_measure_CumulativeBounded is not universe polymorphic
 Arguments
@@ -1597,7 +1787,8 @@ Declared in
 library mathcomp.analysis.probability_theory.random_variable, line 401, characters 0-93
 "> _</a></span></span><span id="random_variable_fcdf__canonical__lebesgue_stieltjes_measure_CumulativeBounded" class="id"><span id="HB_unnamed_factory_26" class="id"><a name="random_variable_fcdf__canonical__lebesgue_stieltjes_measure_CumulativeBounded" class="" title="random_variable_fcdf__canonical__lebesgue_stieltjes_measure_CumulativeBounded :
 forall {R : realType},
-probability (measurableTypeR R) R -> cumulativeBounded (R:=R) 0 1
+probability_measure.Probability.type (measurableTypeR R) R ->
+cumulativeBounded (R:=R) 0 1
 
 random_variable_fcdf__canonical__lebesgue_stieltjes_measure_CumulativeBounded is not universe polymorphic
 Arguments
@@ -1614,12 +1805,17 @@ library mathcomp.analysis.probability_theory.random_variable, line 401, characte
 <span class="vernacular">Let</span><span class="id"> </span><span id="lebesgue_stieltjes_measure_of_cdf.lscdf" class="id"><a name="lebesgue_stieltjes_measure_of_cdf.lscdf" class="">lscdf</a></span><span class="id"> :=</span><span class="id"> </span><span class="id"><a href="mathcomp.analysis.lebesgue_stieltjes_measure.html#lebesgue_stieltjes_measure">lebesgue_stieltjes_measure</a></span><span class="id"> </span><span class="id"><a href="mathcomp.analysis.probability_theory.random_variable.html#lebesgue_stieltjes_measure_of_cdf.fcdf">fcdf</a></span>.<br/>
 <br/>
 <span class="vernacular">Lemma</span><span class="id"> </span><span id="lebesgue_stieltjes_cdf_id" class="id"><a name="lebesgue_stieltjes_cdf_id" class="" title="lebesgue_stieltjes_cdf_id :
-forall {R : realType} (P : probability (measurableTypeR R) R)
-  [A : set (g_sigma_algebraType (R.-ocitv).-measurable)],
-(((R.-ocitv).-measurable).-sigma).-measurable%classic A ->
+forall {R : realType}
+  (P : probability_measure.Probability.type (measurableTypeR R) R)
+  [A : set
+         (measurable_structure.SemiRingOfSets.sort
+            (measurable_structure.Measurable.Exports.measurable_structure_Measurable__to__measurable_structure_SemiRingOfSets
+               (measurable_structure.g_sigma_algebraType
+                  measurable_structure.measurable)))],
+measurable_structure.measurable A ->
 lebesgue_stieltjes_measure
   (fun r : R => fine (cdf (P:=P) (idfun : {RV P >-> R}) r)) A =
-P A
+probability_measure.Probability.sort P A
 
 lebesgue_stieltjes_cdf_id is not universe polymorphic
 Arguments lebesgue_stieltjes_cdf_id {R} P [A]%_classical_set_scope mA
@@ -1648,8 +1844,9 @@ Qed.</div></details>
 <span class="vernacular">End</span><span class="id"> lebesgue_stieltjes_measure_of_cdf</span>.<br/>
 <br/>
 <span class="vernacular">Definition</span><span class="id"> </span><span id="ccdf" class="id"><a name="ccdf" class="" title="ccdf :
-forall [d : measure_display] [T : measurableType d] 
-  [R : realType] [P : probability T R],
+forall [d : measurable_structure.measure_display]
+  [T : measurable_structure.Measurable.type d] [R : realType]
+  [P : probability_measure.Probability.type T R],
 {RV P >-> R} -> R -> \bar R
 
 ccdf is not universe polymorphic
@@ -1668,8 +1865,9 @@ library mathcomp.analysis.probability_theory.random_variable, line 423, characte
 <span class="vernacular">Local</span><span class="vernacular"> Open</span><span class="vernacular"> Scope</span><span class="id"> ereal_scope</span>.<br/>
 <br/>
 <span class="vernacular">Lemma</span><span class="id"> </span><span id="cdf_ccdf_1" class="id"><a name="cdf_ccdf_1" class="" title="cdf_ccdf_1 :
-forall [d : measure_display] {T : measurableType d} 
-  {R : realType} [P : probability T R] (X : {RV P >-> R}) 
+forall [d : measurable_structure.measure_display]
+  {T : measurable_structure.Measurable.type d} {R : realType}
+  [P : probability_measure.Probability.type T R] (X : {RV P >-> R}) 
   (r : R),
 (cdf (P:=P) X r + ccdf (P:=P) X r)%E = 1%E
 
@@ -1689,8 +1887,9 @@ library mathcomp.analysis.probability_theory.random_variable, line 431, characte
 Qed.</div></details>
 <br/>
 <span class="vernacular">Corollary</span><span class="id"> </span><span id="ccdf_cdf_1" class="id"><a name="ccdf_cdf_1" class="" title="ccdf_cdf_1 :
-forall [d : measure_display] {T : measurableType d} 
-  {R : realType} [P : probability T R] (X : {RV P >-> R}) 
+forall [d : measurable_structure.measure_display]
+  {T : measurable_structure.Measurable.type d} {R : realType}
+  [P : probability_measure.Probability.type T R] (X : {RV P >-> R}) 
   (r : R),
 (ccdf (P:=P) X r + cdf (P:=P) X r)%E = 1%E
 
@@ -1708,8 +1907,9 @@ library mathcomp.analysis.probability_theory.random_variable, line 437, characte
 <span class="gallina-kwd"> by</span><span class="id"> rewrite</span><span class="id"> -</span>(<span class="id"><a href="mathcomp.analysis.probability_theory.random_variable.html#cdf_ccdf_1">cdf_ccdf_1</a></span><span class="id"> r</span>)<span class="id"> </span><span class="id"><a href="mathcomp.reals.constructive_ereal.html#addeC">addeC</a></span>. Qed.</div></details>
 <br/>
 <span class="vernacular">Corollary</span><span class="id"> </span><span id="ccdf_1_cdf" class="id"><a name="ccdf_1_cdf" class="" title="ccdf_1_cdf :
-forall [d : measure_display] {T : measurableType d} 
-  {R : realType} [P : probability T R] (X : {RV P >-> R}) 
+forall [d : measurable_structure.measure_display]
+  {T : measurable_structure.Measurable.type d} {R : realType}
+  [P : probability_measure.Probability.type T R] (X : {RV P >-> R}) 
   (r : R),
 ccdf (P:=P) X r = (1 - cdf (P:=P) X r)%E
 
@@ -1727,8 +1927,9 @@ library mathcomp.analysis.probability_theory.random_variable, line 440, characte
 <span class="gallina-kwd"> by</span><span class="id"> rewrite</span><span class="id"> -</span>(<span class="id"><a href="mathcomp.analysis.probability_theory.random_variable.html#ccdf_cdf_1">ccdf_cdf_1</a></span><span class="id"> r</span>)<span class="id"> </span><span class="id"><a href="mathcomp.reals.constructive_ereal.html#addeK">addeK</a></span><span class="id"> ?</span><span class="id"><a href="mathcomp.analysis.measure_theory.measure_function.html#fin_num_measure">fin_num_measure</a></span>. Qed.</div></details>
 <br/>
 <span class="vernacular">Corollary</span><span class="id"> </span><span id="cdf_1_ccdf" class="id"><a name="cdf_1_ccdf" class="" title="cdf_1_ccdf :
-forall [d : measure_display] {T : measurableType d} 
-  {R : realType} [P : probability T R] (X : {RV P >-> R}) 
+forall [d : measurable_structure.measure_display]
+  {T : measurable_structure.Measurable.type d} {R : realType}
+  [P : probability_measure.Probability.type T R] (X : {RV P >-> R}) 
   (r : R),
 cdf (P:=P) X r = (1 - ccdf (P:=P) X r)%E
 
@@ -1746,15 +1947,17 @@ library mathcomp.analysis.probability_theory.random_variable, line 443, characte
 <span class="gallina-kwd"> by</span><span class="id"> rewrite</span><span class="id"> -</span>(<span class="id"><a href="mathcomp.analysis.probability_theory.random_variable.html#cdf_ccdf_1">cdf_ccdf_1</a></span><span class="id"> r</span>)<span class="id"> </span><span class="id"><a href="mathcomp.reals.constructive_ereal.html#addeK">addeK</a></span><span class="id"> ?</span><span class="id"><a href="mathcomp.analysis.measure_theory.measure_function.html#fin_num_measure">fin_num_measure</a></span>. Qed.</div></details>
 <br/>
 <span class="vernacular">Lemma</span><span class="id"> </span><span id="ccdf_nonincreasing" class="id"><a name="ccdf_nonincreasing" class="" title="ccdf_nonincreasing :
-forall [d : measure_display] {T : measurableType d} 
-  {R : realType} [P : probability T R] (X : {RV P >-> R}),
+forall [d : measurable_structure.measure_display]
+  {T : measurable_structure.Measurable.type d} {R : realType}
+  [P : probability_measure.Probability.type T R] (X : {RV P >-> R}),
 {homo ccdf (P:=P) X : n m / (n <= m)%R >-> (m <= n)%E}
 
 ccdf_nonincreasing is not universe polymorphic
 Expanded type for implicit arguments
 ccdf_nonincreasing :
-forall [d : measure_display] {T : measurableType d} 
-  {R : realType} [P : probability T R] (X : {RV P >-> R}) 
+forall [d : measurable_structure.measure_display]
+  {T : measurable_structure.Measurable.type d} {R : realType}
+  [P : probability_measure.Probability.type T R] (X : {RV P >-> R}) 
   [x y : R],
 (fun n m : R => is_true (n <= m)%R) x y ->
 (ccdf (P:=P) X y <= ccdf (P:=P) X x)%E = true
@@ -1772,9 +1975,11 @@ library mathcomp.analysis.probability_theory.random_variable, line 446, characte
 <span class="gallina-kwd"> by</span><span class="id"> move=&gt;</span><span class="id"> r</span><span class="id"> s</span><span class="id"> rs;</span><span class="id"> rewrite</span><span class="id"> </span><span class="id"><a href="mathcomp.analysis.measure_theory.measure_function.html#le_measure">le_measure</a></span><span class="id"> ?</span><span class="id"><a href="mathcomp.classical.classical_sets.html#inE">inE</a></span><span class="id">//;</span><span class="id"> exact:</span><span class="id"> </span><span class="id"><a href="https://math-comp.github.io/htmldoc_2_4_0/mathcomp.algebra.interval.html#subitvPl">subitvPl</a></span>. Qed.</div></details>
 <br/>
 <span class="vernacular">Lemma</span><span class="id"> </span><span id="ccdf_measurable" class="id"><a name="ccdf_measurable" class="" title="ccdf_measurable :
-forall [d : measure_display] {T : measurableType d} 
-  {R : realType} [P : probability T R] (X : {RV P >-> R}),
-measurable_fun (T:=Real_sort__canonical__measurable_structure_SigmaRing R)
+forall [d : measurable_structure.measure_display]
+  {T : measurable_structure.Measurable.type d} {R : realType}
+  [P : probability_measure.Probability.type T R] (X : {RV P >-> R}),
+measurable_function.measurable_fun
+  (T:=Real_sort__canonical__measurable_structure_SigmaRing R)
   (U:=constructive_ereal_extended__canonical__measurable_structure_SigmaRing
         R)
   [set: R] (ccdf (P:=P) X)
@@ -1782,24 +1987,27 @@ measurable_fun (T:=Real_sort__canonical__measurable_structure_SigmaRing R)
 ccdf_measurable is not universe polymorphic
 Expanded type for implicit arguments
 ccdf_measurable :
-forall [d : measure_display] {T : measurableType d} 
-  {R : realType} [P : probability T R] (X : {RV P >-> R}),
-'measurable%classic [set: R] ->
+forall [d : measurable_structure.measure_display]
+  {T : measurable_structure.Measurable.type d} {R : realType}
+  [P : probability_measure.Probability.type T R] (X : {RV P >-> R}),
+measurable_structure.measurable [set: R] ->
 forall
   [Y : set
-         (constructive_ereal_extended__canonical__measurable_structure_SigmaRing
-            R)],
-'measurable%classic Y ->
+         (measurable_structure.SemiRingOfSets.sort
+            (measurable_structure.SigmaRing.Exports.measurable_structure_SigmaRing__to__measurable_structure_SemiRingOfSets
+               (constructive_ereal_extended__canonical__measurable_structure_SigmaRing
+                  R)))],
+measurable_structure.measurable Y ->
 forall
   [i : set
          (set
             (lebesgue_stieltjes_measure_ocitv_type__canonical__classical_sets_Pointed
                R))],
-[set M | sigma_algebra
+[set M | measurable_structure.sigma_algebra
            [set: lebesgue_stieltjes_measure_ocitv_type__canonical__classical_sets_Pointed
                    R]
            M /\
-         (R.-ocitv).-measurable `<=` M]%classic
+         measurable_structure.measurable `<=` M]%classic
   i ->
 i ([set: R] `&` ccdf (P:=P) X @^-1` Y)%classic
 
@@ -1820,17 +2028,20 @@ library mathcomp.analysis.probability_theory.random_variable, line 449, characte
 Qed.</div></details>
 <br/>
 <span class="vernacular">Lemma</span><span class="id"> </span><span id="cvg_ccdfy0" class="id"><a name="cvg_ccdfy0" class="" title="cvg_ccdfy0 :
-forall [d : measure_display] {T : measurableType d} 
-  {R : realType} [P : probability T R] (X : {RV P >-> R}),
-(ccdf (P:=P) X x @[x --> +oo%R] --> 0%R)%classic
+forall [d : measurable_structure.measure_display]
+  {T : measurable_structure.Measurable.type d} {R : realType}
+  [P : probability_measure.Probability.type T R] (X : {RV P >-> R}),
+filter.cvg_to (filter.nbhs (filter.fmap (ccdf (P:=P) X) (filter.nbhs +oo%R)))
+  (filter.nbhs 0%R)
 
 cvg_ccdfy0 is not universe polymorphic
 Expanded type for implicit arguments
 cvg_ccdfy0 :
-forall [d : measure_display] {T : measurableType d} 
-  {R : realType} [P : probability T R] (X : {RV P >-> R}) 
+forall [d : measurable_structure.measure_display]
+  {T : measurable_structure.Measurable.type d} {R : realType}
+  [P : probability_measure.Probability.type T R] (X : {RV P >-> R})
   [t : set \bar R],
-nbhs 0%R t ->
+filter.nbhs 0%R t ->
 exists M : R,
   M \is Num.real /\
   (forall x : R, (M < x)%R -> (ccdf (P:=P) X @^-1` t)%classic x)
@@ -1851,17 +2062,20 @@ library mathcomp.analysis.probability_theory.random_variable, line 456, characte
 Qed.</div></details>
 <br/>
 <span class="vernacular">Lemma</span><span class="id"> </span><span id="cvg_ccdfNy1" class="id"><a name="cvg_ccdfNy1" class="" title="cvg_ccdfNy1 :
-forall [d : measure_display] {T : measurableType d} 
-  {R : realType} [P : probability T R] (X : {RV P >-> R}),
-(ccdf (P:=P) X x @[x --> -oo%R] --> 1%E)%classic
+forall [d : measurable_structure.measure_display]
+  {T : measurable_structure.Measurable.type d} {R : realType}
+  [P : probability_measure.Probability.type T R] (X : {RV P >-> R}),
+filter.cvg_to (filter.nbhs (filter.fmap (ccdf (P:=P) X) (filter.nbhs -oo%R)))
+  (filter.nbhs 1%E)
 
 cvg_ccdfNy1 is not universe polymorphic
 Expanded type for implicit arguments
 cvg_ccdfNy1 :
-forall [d : measure_display] {T : measurableType d} 
-  {R : realType} [P : probability T R] (X : {RV P >-> R}) 
+forall [d : measurable_structure.measure_display]
+  {T : measurable_structure.Measurable.type d} {R : realType}
+  [P : probability_measure.Probability.type T R] (X : {RV P >-> R})
   [t : set \bar R],
-nbhs 1%E t ->
+filter.nbhs 1%E t ->
 exists M : R,
   M \is Num.real /\
   (forall x : R, (x < M)%R -> (ccdf (P:=P) X @^-1` t)%classic x)
@@ -1882,20 +2096,22 @@ library mathcomp.analysis.probability_theory.random_variable, line 463, characte
 Qed.</div></details>
 <br/>
 <span class="vernacular">Lemma</span><span class="id"> </span><span id="ccdf_right_continuous" class="id"><a name="ccdf_right_continuous" class="" title="ccdf_right_continuous :
-forall [d : measure_display] {T : measurableType d} 
-  {R : realType} [P : probability T R] [X : {RV P >-> R}],
+forall [d : measurable_structure.measure_display]
+  {T : measurable_structure.Measurable.type d} {R : realType}
+  [P : probability_measure.Probability.type T R] [X : {RV P >-> R}],
 right_continuous (ccdf (P:=P) X)
 
 ccdf_right_continuous is not universe polymorphic
 Expanded type for implicit arguments
 ccdf_right_continuous :
-forall [d : measure_display] {T : measurableType d} 
-  {R : realType} [P : probability T R] [X : {RV P >-> R}] 
+forall [d : measurable_structure.measure_display]
+  {T : measurable_structure.Measurable.type d} {R : realType}
+  [P : probability_measure.Probability.type T R] [X : {RV P >-> R}] 
   [x : R] [t : set \bar R],
-nbhs (ccdf (P:=P) X x) t ->
+filter.nbhs (ccdf (P:=P) X x) t ->
 exists2 i : R,
   [set e | (0 < e)%R]%classic i &
-  (ball_ [eta normr] x i
+  (pseudometric_structure.ball_ [eta normr] x i
    `<=` (fun t0 : R =>
          (fun u : R => is_true (x < u)%R) t0 -> (ccdf (P:=P) X @^-1` t) t0))%classic
 
@@ -1920,9 +2136,11 @@ Qed.</div></details>
 <br/>
 <span id="expectation_unlock_subterm" class="id"><span id="expectation" class="id"><span id="expectation.unlock" class="id"><span id="expectation.body" class="id"><span id="expectation" class="id"><span id="expectation_Locked.unlock" class="id"><span id="expectation_Locked.body" class="id"><span id="expectation_Locked" class="id"><a name="expectation_unlock_subterm" class="" title="expectation_unlock_subterm :
 unlockable
-  (fun (d : measure_display) (T : measurableType d) 
-     (R : realType) (P : probability T R) (X : T -> R) =>
-   (\int[P]_w (X w)%:E)%E)
+  (fun (d : measurable_structure.measure_display)
+     (T : measurable_structure.Measurable.type d) 
+     (R : realType) (P : probability_measure.Probability.type T R)
+     (X : measurable_structure.Measurable.sort T -> R) =>
+   (\int[probability_measure.Probability.sort P]_w (X w)%:E)%E)
 
 expectation_unlock_subterm is not universe polymorphic
 expectation_unlock_subterm is transparent
@@ -1932,9 +2150,11 @@ Declared in
 library mathcomp.analysis.probability_theory.random_variable, line 480, characters 0-136
 ">HB</a></span></span></span></span></span></span></span></span>.<span id="expectation_unlock_subterm" class="id"><span id="expectation" class="id"><span id="expectation.unlock" class="id"><span id="expectation.body" class="id"><span id="expectation" class="id"><span id="expectation_Locked.unlock" class="id"><span id="expectation_Locked.body" class="id"><span id="expectation_Locked" class="id"><a name="expectation_unlock_subterm" class="" title="expectation_unlock_subterm :
 unlockable
-  (fun (d : measure_display) (T : measurableType d) 
-     (R : realType) (P : probability T R) (X : T -> R) =>
-   (\int[P]_w (X w)%:E)%E)
+  (fun (d : measurable_structure.measure_display)
+     (T : measurable_structure.Measurable.type d) 
+     (R : realType) (P : probability_measure.Probability.type T R)
+     (X : measurable_structure.Measurable.sort T -> R) =>
+   (\int[probability_measure.Probability.sort P]_w (X w)%:E)%E)
 
 expectation_unlock_subterm is not universe polymorphic
 expectation_unlock_subterm is transparent
@@ -1944,9 +2164,11 @@ Declared in
 library mathcomp.analysis.probability_theory.random_variable, line 480, characters 0-136
 ">lock</a></span></span></span></span></span></span></span></span><span class="vernacular"> Definition</span><span id="expectation_unlock_subterm" class="id"><span id="expectation" class="id"><span id="expectation.unlock" class="id"><span id="expectation.body" class="id"><span id="expectation" class="id"><span id="expectation_Locked.unlock" class="id"><span id="expectation_Locked.body" class="id"><span id="expectation_Locked" class="id"><a name="expectation_unlock_subterm" class="" title="expectation_unlock_subterm :
 unlockable
-  (fun (d : measure_display) (T : measurableType d) 
-     (R : realType) (P : probability T R) (X : T -> R) =>
-   (\int[P]_w (X w)%:E)%E)
+  (fun (d : measurable_structure.measure_display)
+     (T : measurable_structure.Measurable.type d) 
+     (R : realType) (P : probability_measure.Probability.type T R)
+     (X : measurable_structure.Measurable.sort T -> R) =>
+   (\int[probability_measure.Probability.sort P]_w (X w)%:E)%E)
 
 expectation_unlock_subterm is not universe polymorphic
 expectation_unlock_subterm is transparent
@@ -1956,9 +2178,11 @@ Declared in
 library mathcomp.analysis.probability_theory.random_variable, line 480, characters 0-136
 "> expectation</a></span></span></span></span></span></span></span></span><span id="expectation_unlock_subterm" class="id"><span id="expectation" class="id"><span id="expectation.unlock" class="id"><span id="expectation.body" class="id"><span id="expectation" class="id"><span id="expectation_Locked.unlock" class="id"><span id="expectation_Locked.body" class="id"><span id="expectation_Locked" class="id"><a name="expectation_unlock_subterm" class="" title="expectation_unlock_subterm :
 unlockable
-  (fun (d : measure_display) (T : measurableType d) 
-     (R : realType) (P : probability T R) (X : T -> R) =>
-   (\int[P]_w (X w)%:E)%E)
+  (fun (d : measurable_structure.measure_display)
+     (T : measurable_structure.Measurable.type d) 
+     (R : realType) (P : probability_measure.Probability.type T R)
+     (X : measurable_structure.Measurable.sort T -> R) =>
+   (\int[probability_measure.Probability.sort P]_w (X w)%:E)%E)
 
 expectation_unlock_subterm is not universe polymorphic
 expectation_unlock_subterm is transparent
@@ -1970,9 +2194,11 @@ library mathcomp.analysis.probability_theory.random_variable, line 480, characte
 &nbsp;&nbsp;(<span id="P:190" class="id"><a name="P:190" class="">P</a></span><span class="id"> :</span><span class="id"> </span><span class="id"><a href="mathcomp.analysis.measure_theory.probability_measure.html#Probability.Exports.probability">probability</a></span><span class="id"> </span><span class="id"><a href="mathcomp.analysis.probability_theory.random_variable.html#T:188">T</a></span><span class="id"> </span><span class="id"><a href="mathcomp.analysis.probability_theory.random_variable.html#R:189">R</a></span>) (<span id="X:191" class="id"><a name="X:191" class="">X</a></span><span class="id"> :</span><span class="id"> </span><span class="id"><a href="mathcomp.analysis.probability_theory.random_variable.html#T:188">T</a></span><span class="id"><a href="https://rocq-prover.org/corelib/Corelib.Init.Logic.html#::type_scope:x_'-&gt;'_x"> -&gt;</a></span><span class="id"><a href="https://rocq-prover.org/corelib/Corelib.Init.Logic.html#::type_scope:x_'-&gt;'_x"> </a></span><span class="id"><a href="mathcomp.analysis.probability_theory.random_variable.html#R:189">R</a></span>)<span class="id"> :=</span> (<span class="id"><a href="mathcomp.analysis.lebesgue_integral_theory.lebesgue_integral_definition.html#3e4826d90e3d691004f544dc3de2d121">\int[</a></span><span class="id"><a href="mathcomp.analysis.probability_theory.random_variable.html#P:190">P</a></span><span class="id"><a href="mathcomp.analysis.lebesgue_integral_theory.lebesgue_integral_definition.html#3e4826d90e3d691004f544dc3de2d121">]_</a></span><span id="w:192" class="id"><a name="w:192" class="">w</a></span> (<span class="id"><a href="mathcomp.analysis.probability_theory.random_variable.html#X:191">X</a></span><span class="id"> </span><span class="id"><a href="mathcomp.analysis.probability_theory.random_variable.html#w:192">w</a></span>)<span class="id"><a href="mathcomp.reals.constructive_ereal.html#bc34d0712444fb7fddc80987d6cdcb61">%:E</a></span>)<span class="id">%E</span>.<br/>
 <span class="vernacular">Canonical</span><span class="id"> </span><span id="expectation_unlockable" class="id"><a name="expectation_unlockable" class="" title="expectation_unlockable :
 unlockable
-  (fun (d : measure_display) (T : measurableType d) 
-     (R : realType) (P : probability T R) (X : T -> R) =>
-   (\int[P]_w (X w)%:E)%E)
+  (fun (d : measurable_structure.measure_display)
+     (T : measurable_structure.Measurable.type d) 
+     (R : realType) (P : probability_measure.Probability.type T R)
+     (X : measurable_structure.Measurable.sort T -> R) =>
+   (\int[probability_measure.Probability.sort P]_w (X w)%:E)%E)
 
 expectation_unlockable is not universe polymorphic
 expectation_unlockable is transparent
@@ -1989,9 +2215,12 @@ library mathcomp.analysis.probability_theory.random_variable, line 482, characte
 <span class="vernacular">Context</span><span class="id"> </span><span id="expectation_lemmas.d" class="id"><a name="expectation_lemmas.d" class="">d</a></span> (<span id="expectation_lemmas.T" class="id"><a name="expectation_lemmas.T" class="">T</a></span><span class="id"> :</span><span class="id"> </span><span class="id"><a href="mathcomp.analysis.measure_theory.measurable_structure.html#Measurable.Exports.measurableType">measurableType</a></span><span class="id"> </span><span class="id"><a href="mathcomp.analysis.probability_theory.random_variable.html#d:198">d</a></span>) (<span id="expectation_lemmas.R" class="id"><a name="expectation_lemmas.R" class="">R</a></span><span class="id"> :</span><span class="id"> </span><span class="id"><a href="mathcomp.reals.reals.html#Real.Exports.realType">realType</a></span>) (<span id="expectation_lemmas.P" class="id"><a name="expectation_lemmas.P" class="">P</a></span><span class="id"> :</span><span class="id"> </span><span class="id"><a href="mathcomp.analysis.measure_theory.probability_measure.html#Probability.Exports.probability">probability</a></span><span class="id"> </span><span class="id"><a href="mathcomp.analysis.probability_theory.random_variable.html#T:199">T</a></span><span class="id"> </span><span class="id"><a href="mathcomp.analysis.probability_theory.random_variable.html#R:200">R</a></span>).<br/>
 <br/>
 <span class="vernacular">Lemma</span><span class="id"> </span><span id="expectation_def" class="id"><a name="expectation_def" class="" title="expectation_def :
-forall [d : measure_display] [T : measurableType d] 
-  [R : realType] [P : probability T R] (X : {RV P >-> R}),
-('E_P[X])%E = (\int[P]_w (X w)%:E)%E
+forall [d : measurable_structure.measure_display]
+  [T : measurable_structure.Measurable.type d] [R : realType]
+  [P : probability_measure.Probability.type T R] (X : {RV P >-> R}),
+('E_P[(measurable_function.MeasurableFun.sort X)])%E =
+(\int[probability_measure.Probability.sort P]_w
+    (measurable_function.MeasurableFun.sort X w)%:E)%E
 
 expectation_def is not universe polymorphic
 Arguments expectation_def [d]%_measure_display_scope [T R P] X
@@ -2007,9 +2236,16 @@ library mathcomp.analysis.probability_theory.random_variable, line 490, characte
 <span class="gallina-kwd"> by</span><span class="id"> rewrite</span><span class="id"> </span><span class="id"><a href="https://rocq-prover.org/corelib/Corelib.ssr.ssreflect.html#unlock">unlock</a></span>. Qed.</div></details>
 <br/>
 <span class="vernacular">Lemma</span><span class="id"> </span><span id="expectation_fin_num" class="id"><a name="expectation_fin_num" class="" title="expectation_fin_num :
-forall [d : measure_display] [T : measurableType d] 
-  [R : realType] [P : probability T R] [X : T -> R],
-X \in Lfun (T:=T) (R:=R) P 1 -> ('E_P[X])%E \is a fin_num
+forall [d : measurable_structure.measure_display]
+  [T : measurable_structure.Measurable.type d] [R : realType]
+  [P : probability_measure.Probability.type T R]
+  [X : measurable_structure.Measurable.sort T -> R],
+X
+  \in Lfun (T:=T) (R:=R)
+        (probability_measure.Probability.Exports.probability_measure_Probability__to__measure_function_Measure
+           P)
+        1 ->
+('E_P[X])%E \is a fin_num
 
 expectation_fin_num is not universe polymorphic
 Arguments expectation_fin_num [d]%_measure_display_scope 
@@ -2028,8 +2264,9 @@ library mathcomp.analysis.probability_theory.random_variable, line 493, characte
 Qed.</div></details>
 <br/>
 <span class="vernacular">Lemma</span><span class="id"> </span><span id="expectation_cst" class="id"><a name="expectation_cst" class="" title="expectation_cst :
-forall [d : measure_display] [T : measurableType d] 
-  [R : realType] (P : probability T R) (r : R),
+forall [d : measurable_structure.measure_display]
+  [T : measurable_structure.Measurable.type d] [R : realType]
+  (P : probability_measure.Probability.type T R) (r : R),
 ('E_P[(cst r)])%E = r%:E
 
 expectation_cst is not universe polymorphic
@@ -2046,9 +2283,12 @@ library mathcomp.analysis.probability_theory.random_variable, line 499, characte
 <span class="gallina-kwd"> by</span><span class="id"> rewrite</span><span class="id"> </span><span class="id"><a href="https://rocq-prover.org/corelib/Corelib.ssr.ssreflect.html#unlock">unlock</a></span><span class="id">/=</span><span class="id"> </span><span class="id"><a href="mathcomp.analysis.lebesgue_integral_theory.lebesgue_integral_nonneg.html#integral_cst">integral_cst</a></span><span class="id">//=</span><span class="id"> </span><span class="id"><a href="mathcomp.analysis.measure_theory.probability_measure.html#probability_setT">probability_setT</a></span><span class="id"> </span><span class="id"><a href="mathcomp.reals.constructive_ereal.html#mule1">mule1</a></span>. Qed.</div></details>
 <br/>
 <span class="vernacular">Lemma</span><span class="id"> </span><span id="expectation_indic" class="id"><a name="expectation_indic" class="" title="expectation_indic :
-forall [d : measure_display] [T : measurableType d] 
-  [R : realType] (P : probability T R) [A : set T],
-d.-measurable%classic A -> ('E_P[(\1_A)])%E = P A
+forall [d : measurable_structure.measure_display]
+  [T : measurable_structure.Measurable.type d] [R : realType]
+  (P : probability_measure.Probability.type T R)
+  [A : set (measurable_structure.Measurable.sort T)],
+measurable_structure.measurable A ->
+('E_P[(\1_A)])%E = probability_measure.Probability.sort P A
 
 expectation_indic is not universe polymorphic
 Arguments expectation_indic [d]%_measure_display_scope 
@@ -2065,9 +2305,17 @@ library mathcomp.analysis.probability_theory.random_variable, line 502, characte
 <span class="gallina-kwd"> by</span><span class="id"> rewrite</span><span class="id"> </span><span class="id"><a href="https://rocq-prover.org/corelib/Corelib.ssr.ssreflect.html#unlock">unlock</a></span><span class="id"> </span><span class="id"><a href="mathcomp.analysis.lebesgue_integral_theory.lebesgue_integral_definition.html#integral_indic">integral_indic</a></span><span class="id">//</span><span class="id"> </span><span class="id"><a href="mathcomp.classical.classical_sets.html#setIT">setIT</a></span>. Qed.</div></details>
 <br/>
 <span class="vernacular">Lemma</span><span class="id"> </span><span id="integrable_expectation" class="id"><a name="integrable_expectation" class="" title="integrable_expectation :
-forall [d : measure_display] [T : measurableType d] 
-  [R : realType] [P : probability T R] [X : {RV P >-> R}],
-(X : T -> R) \in Lfun (T:=T) (R:=R) P 1 -> (`|'E_P[X]| < +oo)%E
+forall [d : measurable_structure.measure_display]
+  [T : measurable_structure.Measurable.type d] [R : realType]
+  [P : probability_measure.Probability.type T R] [X : {RV P >-> R}],
+(measurable_function.MeasurableFun.sort X
+ :
+ measurable_structure.Measurable.sort T -> R)
+  \in Lfun (T:=T) (R:=R)
+        (probability_measure.Probability.Exports.probability_measure_Probability__to__measure_function_Measure
+           P)
+        1 ->
+(`|'E_P[(measurable_function.MeasurableFun.sort X)]| < +oo)%E
 
 integrable_expectation is not universe polymorphic
 Arguments integrable_expectation [d]%_measure_display_scope [T R P X] _
@@ -2086,10 +2334,17 @@ library mathcomp.analysis.probability_theory.random_variable, line 505, characte
 Qed.</div></details>
 <br/>
 <span class="vernacular">Lemma</span><span class="id"> </span><span id="expectationZl" class="id"><a name="expectationZl" class="" title="expectationZl :
-forall [d : measure_display] [T : measurableType d] 
-  [R : realType] [P : probability T R] [X : T -> R] 
+forall [d : measurable_structure.measure_display]
+  [T : measurable_structure.Measurable.type d] [R : realType]
+  [P : probability_measure.Probability.type T R]
+  [X : measurable_structure.Measurable.sort T -> R] 
   (k : R),
-X \in Lfun (T:=T) (R:=R) P 1 -> ('E_P[(k \o* X)])%E = (k%:E * 'E_P[X])%E
+X
+  \in Lfun (T:=T) (R:=R)
+        (probability_measure.Probability.Exports.probability_measure_Probability__to__measure_function_Measure
+           P)
+        1 ->
+('E_P[(k \o* X)])%E = (k%:E * 'E_P[X])%E
 
 expectationZl is not universe polymorphic
 Arguments expectationZl [d]%_measure_display_scope 
@@ -2108,9 +2363,12 @@ library mathcomp.analysis.probability_theory.random_variable, line 512, characte
 Qed.</div></details>
 <br/>
 <span class="vernacular">Lemma</span><span class="id"> </span><span id="expectation_ge0" class="id"><a name="expectation_ge0" class="" title="expectation_ge0 :
-forall [d : measure_display] [T : measurableType d] 
-  [R : realType] (P : probability T R) [X : T -> R],
-(forall x : T, (0 <= X x)%R) -> (0%R <= 'E_P[X])%E
+forall [d : measurable_structure.measure_display]
+  [T : measurable_structure.Measurable.type d] [R : realType]
+  (P : probability_measure.Probability.type T R)
+  [X : measurable_structure.Measurable.sort T -> R],
+(forall x : measurable_structure.Measurable.sort T, (0 <= X x)%R) ->
+(0%R <= 'E_P[X])%E
 
 expectation_ge0 is not universe polymorphic
 Arguments expectation_ge0 [d]%_measure_display_scope 
@@ -2129,15 +2387,32 @@ library mathcomp.analysis.probability_theory.random_variable, line 518, characte
 Qed.</div></details>
 <br/>
 <span class="vernacular">Lemma</span><span class="id"> </span><span id="expectation_le" class="id"><a name="expectation_le" class="" title="expectation_le :
-forall [d : measure_display] [T : measurableType d] 
-  [R : realType] [P : probability T R] [X Y : T -> R],
-measurable_fun (T:=T)
-  (U:=Real_sort__canonical__measurable_structure_SigmaRing R) [set: T] X ->
-measurable_fun (T:=T)
-  (U:=Real_sort__canonical__measurable_structure_SigmaRing R) [set: T] Y ->
-(forall x : T, (0 <= X x)%R) ->
-(forall x : T, (0 <= Y x)%R) ->
-(\forall x \ae P, (X x <= Y x)%R) -> ('E_P[X] <= 'E_P[Y])%E
+forall [d : measurable_structure.measure_display]
+  [T : measurable_structure.Measurable.type d] [R : realType]
+  [P : probability_measure.Probability.type T R]
+  [X Y : measurable_structure.Measurable.sort T -> R],
+measurable_function.measurable_fun
+  (T:=measurable_structure.Measurable.Exports.measurable_structure_Measurable__to__measurable_structure_SigmaRing
+        T)
+  (U:=Real_sort__canonical__measurable_structure_SigmaRing R)
+  [set: measurable_structure.Measurable.sort T] X ->
+measurable_function.measurable_fun
+  (T:=measurable_structure.Measurable.Exports.measurable_structure_Measurable__to__measurable_structure_SigmaRing
+        T)
+  (U:=Real_sort__canonical__measurable_structure_SigmaRing R)
+  [set: measurable_structure.Measurable.sort T] Y ->
+(forall x : measurable_structure.Measurable.sort T, (0 <= X x)%R) ->
+(forall x : measurable_structure.Measurable.sort T, (0 <= Y x)%R) ->
+filter.prop_near1
+  (measure_negligible.almost_everywhere
+     (T:=measurable_structure.SigmaRing.Exports.measurable_structure_SigmaRing__to__measurable_structure_SemiRingOfSets
+           (measurable_structure.Measurable.Exports.measurable_structure_Measurable__to__measurable_structure_SigmaRing
+              T))
+     (R:=R) (probability_measure.Probability.sort P))
+  (P:=fun x : measurable_structure.Measurable.sort T => (X x <= Y x)%R)
+  (inPhantom
+     (forall x : measurable_structure.Measurable.sort T, (X x <= Y x)%R)) ->
+('E_P[X] <= 'E_P[Y])%E
 
 expectation_le is not universe polymorphic
 Arguments expectation_le [d]%_measure_display_scope 
@@ -2165,10 +2440,21 @@ library mathcomp.analysis.probability_theory.random_variable, line 524, characte
 Qed.</div></details>
 <br/>
 <span class="vernacular">Lemma</span><span class="id"> </span><span id="expectationD" class="id"><a name="expectationD" class="" title="expectationD :
-forall [d : measure_display] [T : measurableType d] 
-  [R : realType] [P : probability T R] [X Y : T -> R],
-X \in Lfun (T:=T) (R:=R) P 1 ->
-Y \in Lfun (T:=T) (R:=R) P 1 -> ('E_P[(X \+ Y)])%E = ('E_P[X] + 'E_P[Y])%E
+forall [d : measurable_structure.measure_display]
+  [T : measurable_structure.Measurable.type d] [R : realType]
+  [P : probability_measure.Probability.type T R]
+  [X Y : measurable_structure.Measurable.sort T -> R],
+X
+  \in Lfun (T:=T) (R:=R)
+        (probability_measure.Probability.Exports.probability_measure_Probability__to__measure_function_Measure
+           P)
+        1 ->
+Y
+  \in Lfun (T:=T) (R:=R)
+        (probability_measure.Probability.Exports.probability_measure_Probability__to__measure_function_Measure
+           P)
+        1 ->
+('E_P[(X \+ Y)])%E = ('E_P[X] + 'E_P[Y])%E
 
 expectationD is not universe polymorphic
 Arguments expectationD [d]%_measure_display_scope 
@@ -2187,10 +2473,21 @@ library mathcomp.analysis.probability_theory.random_variable, line 538, characte
 Qed.</div></details>
 <br/>
 <span class="vernacular">Lemma</span><span class="id"> </span><span id="expectationB" class="id"><a name="expectationB" class="" title="expectationB :
-forall [d : measure_display] [T : measurableType d] 
-  [R : realType] [P : probability T R] [X Y : T -> R],
-X \in Lfun (T:=T) (R:=R) P 1 ->
-Y \in Lfun (T:=T) (R:=R) P 1 -> ('E_P[(X \- Y)])%E = ('E_P[X] - 'E_P[Y])%E
+forall [d : measurable_structure.measure_display]
+  [T : measurable_structure.Measurable.type d] [R : realType]
+  [P : probability_measure.Probability.type T R]
+  [X Y : measurable_structure.Measurable.sort T -> R],
+X
+  \in Lfun (T:=T) (R:=R)
+        (probability_measure.Probability.Exports.probability_measure_Probability__to__measure_function_Measure
+           P)
+        1 ->
+Y
+  \in Lfun (T:=T) (R:=R)
+        (probability_measure.Probability.Exports.probability_measure_Probability__to__measure_function_Measure
+           P)
+        1 ->
+('E_P[(X \- Y)])%E = ('E_P[X] - 'E_P[Y])%E
 
 expectationB is not universe polymorphic
 Arguments expectationB [d]%_measure_display_scope 
@@ -2209,10 +2506,17 @@ library mathcomp.analysis.probability_theory.random_variable, line 544, characte
 Qed.</div></details>
 <br/>
 <span class="vernacular">Lemma</span><span class="id"> </span><span id="expectation_sum" class="id"><a name="expectation_sum" class="" title="expectation_sum :
-forall [d : measure_display] [T : measurableType d] 
-  [R : realType] [P : probability T R] [X : seq (T -> R)],
+forall [d : measurable_structure.measure_display]
+  [T : measurable_structure.Measurable.type d] [R : realType]
+  [P : probability_measure.Probability.type T R]
+  [X : seq (measurable_structure.Measurable.sort T -> R)],
 (forall Xi : prod__canonical__eqtype_Equality (fun=> R),
- Xi \in X -> Xi \in Lfun (T:=T) (R:=R) P 1) ->
+ Xi \in X ->
+ Xi
+   \in Lfun (T:=T) (R:=R)
+         (probability_measure.Probability.Exports.probability_measure_Probability__to__measure_function_Measure
+            P)
+         1) ->
 ('E_P[(\sum_(Xi <- X) Xi)])%E = (\sum_(Xi <- X) ('E_P[Xi])%E)%R
 
 expectation_sum is not universe polymorphic
@@ -2247,10 +2551,17 @@ Qed.</div></details>
 <span class="vernacular">Let</span><span class="id"> </span><span id="tail_expectation_formula.mu" class="id"><a name="tail_expectation_formula.mu" class="">mu</a></span><span class="id"> :</span><span class="id"> </span><span class="id"><a href="mathcomp.analysis.measure_theory.measure_function.html#cab9a9776ae9e3a4c36de416efb30851">{measure</a></span><span class="id"><a href="mathcomp.analysis.measure_theory.measure_function.html#cab9a9776ae9e3a4c36de416efb30851"> set</a></span><span class="id"><a href="mathcomp.analysis.measure_theory.measure_function.html#cab9a9776ae9e3a4c36de416efb30851"> </a></span>_<span class="id"><a href="mathcomp.analysis.measure_theory.measure_function.html#cab9a9776ae9e3a4c36de416efb30851"> -&gt;</a></span><span class="id"><a href="mathcomp.analysis.measure_theory.measure_function.html#cab9a9776ae9e3a4c36de416efb30851"> \bar</a></span><span class="id"><a href="mathcomp.analysis.measure_theory.measure_function.html#cab9a9776ae9e3a4c36de416efb30851"> </a></span><span class="id"><a href="mathcomp.analysis.probability_theory.random_variable.html#tail_expectation_formula.R">R</a></span><span class="id"><a href="mathcomp.analysis.measure_theory.measure_function.html#cab9a9776ae9e3a4c36de416efb30851">}</a></span><span class="id"> :=</span><span class="id"> @</span><span class="id"><a href="mathcomp.analysis.lebesgue_measure.html#lebesgue_measure">lebesgue_measure</a></span><span class="id"> </span><span class="id"><a href="mathcomp.analysis.probability_theory.random_variable.html#tail_expectation_formula.R">R</a></span>.<br/>
 <br/>
 <span class="vernacular">Lemma</span><span class="id"> </span><span id="ge0_expectation_ccdf" class="id"><a name="ge0_expectation_ccdf" class="" title="ge0_expectation_ccdf :
-forall [d : measure_display] [T : measurableType d] 
-  [R : realType] [P : probability T R] [X : {RV P >-> R}],
-(forall x : T, (0 <= X x)%R) ->
-('E_P[X])%E = (\int[lebesgue_measure]_(r in `[0%R, +oo[) ccdf (P:=P) X r)%E
+forall [d : measurable_structure.measure_display]
+  [T : measurable_structure.Measurable.type d] [R : realType]
+  [P : probability_measure.Probability.type T R] [X : {RV P >-> R}],
+(forall
+   x : measurable_structure.SigmaRing.sort
+         (measurable_structure.Measurable.Exports.measurable_structure_Measurable__to__measurable_structure_SigmaRing
+            T),
+ (0 <= measurable_function.MeasurableFun.sort X x)%R) ->
+('E_P[(measurable_function.MeasurableFun.sort X)])%E =
+(\int[measure_function.Measure.sort lebesgue_measure]_(r in `[0%R, +oo[)
+    ccdf (P:=P) X r)%E
 
 ge0_expectation_ccdf is not universe polymorphic
 Arguments ge0_expectation_ccdf [d]%_measure_display_scope 
@@ -2355,11 +2666,18 @@ Qed.</div></details>
 Qed.</div></details>
 <br/>
 <span class="vernacular">Lemma</span><span class="id"> </span><span id="le0_expectation_cdf" class="id"><a name="le0_expectation_cdf" class="" title="le0_expectation_cdf :
-forall [d : measure_display] [T : measurableType d] 
-  [R : realType] [P : probability T R] [X : {RV P >-> R}],
-(forall x : T, (X x <= 0)%R) ->
-('E_P[X])%E =
-(- (\int[lebesgue_measure]_(r in `]-oo, 0%R[) cdf (P:=P) X r))%E
+forall [d : measurable_structure.measure_display]
+  [T : measurable_structure.Measurable.type d] [R : realType]
+  [P : probability_measure.Probability.type T R] [X : {RV P >-> R}],
+(forall
+   x : measurable_structure.SigmaRing.sort
+         (measurable_structure.Measurable.Exports.measurable_structure_Measurable__to__measurable_structure_SigmaRing
+            T),
+ (measurable_function.MeasurableFun.sort X x <= 0)%R) ->
+('E_P[(measurable_function.MeasurableFun.sort X)])%E =
+(-
+ (\int[measure_function.Measure.sort lebesgue_measure]_(r in `]-oo, 0%R[)
+     cdf (P:=P) X r))%E
 
 le0_expectation_cdf is not universe polymorphic
 Arguments le0_expectation_cdf [d]%_measure_display_scope 
@@ -2405,8 +2723,10 @@ Qed.</div></details>
 <br/>
 <span id="covariance_unlock_subterm" class="id"><span id="covariance" class="id"><span id="covariance.unlock" class="id"><span id="covariance.body" class="id"><span id="covariance" class="id"><span id="covariance_Locked.unlock" class="id"><span id="covariance_Locked.body" class="id"><span id="covariance_Locked" class="id"><a name="covariance_unlock_subterm" class="" title="covariance_unlock_subterm :
 unlockable
-  (fun (d : measure_display) (T : measurableType d) 
-     (R : realType) (P : probability T R) (X Y : T -> R) =>
+  (fun (d : measurable_structure.measure_display)
+     (T : measurable_structure.Measurable.type d) 
+     (R : realType) (P : probability_measure.Probability.type T R)
+     (X Y : measurable_structure.Measurable.sort T -> R) =>
    ('E_P[((X \- cst (fine 'E_P[X])) * (Y \- cst (fine 'E_P[Y])))])%E)
 
 covariance_unlock_subterm is not universe polymorphic
@@ -2417,8 +2737,10 @@ Declared in
 library mathcomp.analysis.probability_theory.random_variable, line 693, characters 0-180
 ">HB</a></span></span></span></span></span></span></span></span>.<span id="covariance_unlock_subterm" class="id"><span id="covariance" class="id"><span id="covariance.unlock" class="id"><span id="covariance.body" class="id"><span id="covariance" class="id"><span id="covariance_Locked.unlock" class="id"><span id="covariance_Locked.body" class="id"><span id="covariance_Locked" class="id"><a name="covariance_unlock_subterm" class="" title="covariance_unlock_subterm :
 unlockable
-  (fun (d : measure_display) (T : measurableType d) 
-     (R : realType) (P : probability T R) (X Y : T -> R) =>
+  (fun (d : measurable_structure.measure_display)
+     (T : measurable_structure.Measurable.type d) 
+     (R : realType) (P : probability_measure.Probability.type T R)
+     (X Y : measurable_structure.Measurable.sort T -> R) =>
    ('E_P[((X \- cst (fine 'E_P[X])) * (Y \- cst (fine 'E_P[Y])))])%E)
 
 covariance_unlock_subterm is not universe polymorphic
@@ -2429,8 +2751,10 @@ Declared in
 library mathcomp.analysis.probability_theory.random_variable, line 693, characters 0-180
 ">lock</a></span></span></span></span></span></span></span></span><span class="vernacular"> Definition</span><span id="covariance_unlock_subterm" class="id"><span id="covariance" class="id"><span id="covariance.unlock" class="id"><span id="covariance.body" class="id"><span id="covariance" class="id"><span id="covariance_Locked.unlock" class="id"><span id="covariance_Locked.body" class="id"><span id="covariance_Locked" class="id"><a name="covariance_unlock_subterm" class="" title="covariance_unlock_subterm :
 unlockable
-  (fun (d : measure_display) (T : measurableType d) 
-     (R : realType) (P : probability T R) (X Y : T -> R) =>
+  (fun (d : measurable_structure.measure_display)
+     (T : measurable_structure.Measurable.type d) 
+     (R : realType) (P : probability_measure.Probability.type T R)
+     (X Y : measurable_structure.Measurable.sort T -> R) =>
    ('E_P[((X \- cst (fine 'E_P[X])) * (Y \- cst (fine 'E_P[Y])))])%E)
 
 covariance_unlock_subterm is not universe polymorphic
@@ -2441,8 +2765,10 @@ Declared in
 library mathcomp.analysis.probability_theory.random_variable, line 693, characters 0-180
 "> covariance</a></span></span></span></span></span></span></span></span><span id="covariance_unlock_subterm" class="id"><span id="covariance" class="id"><span id="covariance.unlock" class="id"><span id="covariance.body" class="id"><span id="covariance" class="id"><span id="covariance_Locked.unlock" class="id"><span id="covariance_Locked.body" class="id"><span id="covariance_Locked" class="id"><a name="covariance_unlock_subterm" class="" title="covariance_unlock_subterm :
 unlockable
-  (fun (d : measure_display) (T : measurableType d) 
-     (R : realType) (P : probability T R) (X Y : T -> R) =>
+  (fun (d : measurable_structure.measure_display)
+     (T : measurable_structure.Measurable.type d) 
+     (R : realType) (P : probability_measure.Probability.type T R)
+     (X Y : measurable_structure.Measurable.sort T -> R) =>
    ('E_P[((X \- cst (fine 'E_P[X])) * (Y \- cst (fine 'E_P[Y])))])%E)
 
 covariance_unlock_subterm is not universe polymorphic
@@ -2456,8 +2782,10 @@ library mathcomp.analysis.probability_theory.random_variable, line 693, characte
 &nbsp;&nbsp;<span class="id"><a href="mathcomp.analysis.probability_theory.random_variable.html#69ec4e730a589c79df0349357bb8311f">'E_</a></span><span class="id"><a href="mathcomp.analysis.probability_theory.random_variable.html#P:287">P</a></span><span class="id"><a href="mathcomp.analysis.probability_theory.random_variable.html#69ec4e730a589c79df0349357bb8311f">[</a></span>(<span class="id"><a href="mathcomp.analysis.probability_theory.random_variable.html#X:288">X</a></span><span class="id"><a href="https://math-comp.github.io/htmldoc_2_4_0/mathcomp.algebra.ssralg.html#0bb5d11fe8761db1e6494d75cb45a3cb"> \-</a></span><span class="id"><a href="https://math-comp.github.io/htmldoc_2_4_0/mathcomp.algebra.ssralg.html#0bb5d11fe8761db1e6494d75cb45a3cb"> </a></span><span class="id"><a href="mathcomp.classical.functions.html#cst">cst</a></span> (<span class="id"><a href="mathcomp.reals.constructive_ereal.html#fine">fine</a></span><span class="id"> </span><span class="id"><a href="mathcomp.analysis.probability_theory.random_variable.html#69ec4e730a589c79df0349357bb8311f">'E_</a></span><span class="id"><a href="mathcomp.analysis.probability_theory.random_variable.html#P:287">P</a></span><span class="id"><a href="mathcomp.analysis.probability_theory.random_variable.html#69ec4e730a589c79df0349357bb8311f">[</a></span><span class="id"><a href="mathcomp.analysis.probability_theory.random_variable.html#X:288">X</a></span><span class="id"><a href="mathcomp.analysis.probability_theory.random_variable.html#69ec4e730a589c79df0349357bb8311f">]</a></span>))<span class="id"><a href="https://math-comp.github.io/htmldoc_2_4_0/mathcomp.algebra.ssralg.html#2d0cfb150261028f4ebd2ba355623dcc"> *</a></span> (<span class="id"><a href="mathcomp.analysis.probability_theory.random_variable.html#Y:289">Y</a></span><span class="id"><a href="https://math-comp.github.io/htmldoc_2_4_0/mathcomp.algebra.ssralg.html#0bb5d11fe8761db1e6494d75cb45a3cb"> \-</a></span><span class="id"><a href="https://math-comp.github.io/htmldoc_2_4_0/mathcomp.algebra.ssralg.html#0bb5d11fe8761db1e6494d75cb45a3cb"> </a></span><span class="id"><a href="mathcomp.classical.functions.html#cst">cst</a></span> (<span class="id"><a href="mathcomp.reals.constructive_ereal.html#fine">fine</a></span><span class="id"> </span><span class="id"><a href="mathcomp.analysis.probability_theory.random_variable.html#69ec4e730a589c79df0349357bb8311f">'E_</a></span><span class="id"><a href="mathcomp.analysis.probability_theory.random_variable.html#P:287">P</a></span><span class="id"><a href="mathcomp.analysis.probability_theory.random_variable.html#69ec4e730a589c79df0349357bb8311f">[</a></span><span class="id"><a href="mathcomp.analysis.probability_theory.random_variable.html#Y:289">Y</a></span><span class="id"><a href="mathcomp.analysis.probability_theory.random_variable.html#69ec4e730a589c79df0349357bb8311f">]</a></span>))<span class="id"><a href="mathcomp.analysis.probability_theory.random_variable.html#69ec4e730a589c79df0349357bb8311f">]</a></span><span class="id">%E</span>.<br/>
 <span class="vernacular">Canonical</span><span class="id"> </span><span id="covariance_unlockable" class="id"><a name="covariance_unlockable" class="" title="covariance_unlockable :
 unlockable
-  (fun (d : measure_display) (T : measurableType d) 
-     (R : realType) (P : probability T R) (X Y : T -> R) =>
+  (fun (d : measurable_structure.measure_display)
+     (T : measurable_structure.Measurable.type d) 
+     (R : realType) (P : probability_measure.Probability.type T R)
+     (X Y : measurable_structure.Measurable.sort T -> R) =>
    ('E_P[((X \- cst (fine 'E_P[X])) * (Y \- cst (fine 'E_P[Y])))])%E)
 
 covariance_unlockable is not universe polymorphic
@@ -2477,11 +2805,25 @@ library mathcomp.analysis.probability_theory.random_variable, line 696, characte
 <span class="vernacular">Context</span><span class="id"> </span><span id="covariance_lemmas.d" class="id"><a name="covariance_lemmas.d" class="">d</a></span> (<span id="covariance_lemmas.T" class="id"><a name="covariance_lemmas.T" class="">T</a></span><span class="id"> :</span><span class="id"> </span><span class="id"><a href="mathcomp.analysis.measure_theory.measurable_structure.html#Measurable.Exports.measurableType">measurableType</a></span><span class="id"> </span><span class="id"><a href="mathcomp.analysis.probability_theory.random_variable.html#d:296">d</a></span>) (<span id="covariance_lemmas.R" class="id"><a name="covariance_lemmas.R" class="">R</a></span><span class="id"> :</span><span class="id"> </span><span class="id"><a href="mathcomp.reals.reals.html#Real.Exports.realType">realType</a></span>) (<span id="covariance_lemmas.P" class="id"><a name="covariance_lemmas.P" class="">P</a></span><span class="id"> :</span><span class="id"> </span><span class="id"><a href="mathcomp.analysis.measure_theory.probability_measure.html#Probability.Exports.probability">probability</a></span><span class="id"> </span><span class="id"><a href="mathcomp.analysis.probability_theory.random_variable.html#T:297">T</a></span><span class="id"> </span><span class="id"><a href="mathcomp.analysis.probability_theory.random_variable.html#R:298">R</a></span>).<br/>
 <br/>
 <span class="vernacular">Lemma</span><span class="id"> </span><span id="covarianceE" class="id"><a name="covarianceE" class="" title="covarianceE :
-forall [d : measure_display] [T : measurableType d] 
-  [R : realType] [P : probability T R] [X Y : T -> R],
-X \in Lfun (T:=T) (R:=R) P 1 ->
-Y \in Lfun (T:=T) (R:=R) P 1 ->
-(X * Y)%R \in Lfun (T:=T) (R:=R) P 1 ->
+forall [d : measurable_structure.measure_display]
+  [T : measurable_structure.Measurable.type d] [R : realType]
+  [P : probability_measure.Probability.type T R]
+  [X Y : measurable_structure.Measurable.sort T -> R],
+X
+  \in Lfun (T:=T) (R:=R)
+        (probability_measure.Probability.Exports.probability_measure_Probability__to__measure_function_Measure
+           P)
+        1 ->
+Y
+  \in Lfun (T:=T) (R:=R)
+        (probability_measure.Probability.Exports.probability_measure_Probability__to__measure_function_Measure
+           P)
+        1 ->
+(X * Y)%R
+  \in Lfun (T:=T) (R:=R)
+        (probability_measure.Probability.Exports.probability_measure_Probability__to__measure_function_Measure
+           P)
+        1 ->
 covariance P X Y = ('E_P[(X * Y)] - 'E_P[X] * 'E_P[Y])%E
 
 covarianceE is not universe polymorphic
@@ -2513,8 +2855,10 @@ library mathcomp.analysis.probability_theory.random_variable, line 706, characte
 Qed.</div></details>
 <br/>
 <span class="vernacular">Lemma</span><span class="id"> </span><span id="covarianceC" class="id"><a name="covarianceC" class="" title="covarianceC :
-forall [d : measure_display] [T : measurableType d] 
-  [R : realType] (P : probability T R) (X Y : T -> R),
+forall [d : measurable_structure.measure_display]
+  [T : measurable_structure.Measurable.type d] [R : realType]
+  (P : probability_measure.Probability.type T R)
+  (X Y : measurable_structure.Measurable.sort T -> R),
 covariance P X Y = covariance P Y X
 
 covarianceC is not universe polymorphic
@@ -2533,11 +2877,26 @@ library mathcomp.analysis.probability_theory.random_variable, line 724, characte
 Qed.</div></details>
 <br/>
 <span class="vernacular">Lemma</span><span class="id"> </span><span id="covariance_fin_num" class="id"><a name="covariance_fin_num" class="" title="covariance_fin_num :
-forall [d : measure_display] [T : measurableType d] 
-  [R : realType] [P : probability T R] [X Y : T -> R],
-X \in Lfun (T:=T) (R:=R) P 1 ->
-Y \in Lfun (T:=T) (R:=R) P 1 ->
-(X * Y)%R \in Lfun (T:=T) (R:=R) P 1 -> covariance P X Y \is a fin_num
+forall [d : measurable_structure.measure_display]
+  [T : measurable_structure.Measurable.type d] [R : realType]
+  [P : probability_measure.Probability.type T R]
+  [X Y : measurable_structure.Measurable.sort T -> R],
+X
+  \in Lfun (T:=T) (R:=R)
+        (probability_measure.Probability.Exports.probability_measure_Probability__to__measure_function_Measure
+           P)
+        1 ->
+Y
+  \in Lfun (T:=T) (R:=R)
+        (probability_measure.Probability.Exports.probability_measure_Probability__to__measure_function_Measure
+           P)
+        1 ->
+(X * Y)%R
+  \in Lfun (T:=T) (R:=R)
+        (probability_measure.Probability.Exports.probability_measure_Probability__to__measure_function_Measure
+           P)
+        1 ->
+covariance P X Y \is a fin_num
 
 covariance_fin_num is not universe polymorphic
 Arguments covariance_fin_num [d]%_measure_display_scope 
@@ -2558,8 +2917,10 @@ library mathcomp.analysis.probability_theory.random_variable, line 729, characte
 Qed.</div></details>
 <br/>
 <span class="vernacular">Lemma</span><span class="id"> </span><span id="covariance_cst_l" class="id"><a name="covariance_cst_l" class="" title="covariance_cst_l :
-forall [d : measure_display] [T : measurableType d] 
-  [R : realType] (P : probability T R) (c : R) (X : T -> R),
+forall [d : measurable_structure.measure_display]
+  [T : measurable_structure.Measurable.type d] [R : realType]
+  (P : probability_measure.Probability.type T R) (c : R)
+  (X : measurable_structure.Measurable.sort T -> R),
 covariance P (cst c) X = 0%R
 
 covariance_cst_l is not universe polymorphic
@@ -2580,8 +2941,10 @@ library mathcomp.analysis.probability_theory.random_variable, line 737, characte
 Qed.</div></details>
 <br/>
 <span class="vernacular">Lemma</span><span class="id"> </span><span id="covariance_cst_r" class="id"><a name="covariance_cst_r" class="" title="covariance_cst_r :
-forall [d : measure_display] [T : measurableType d] 
-  [R : realType] (P : probability T R) (X : T -> R) 
+forall [d : measurable_structure.measure_display]
+  [T : measurable_structure.Measurable.type d] [R : realType]
+  (P : probability_measure.Probability.type T R)
+  (X : measurable_structure.Measurable.sort T -> R) 
   (c : R),
 covariance P X (cst c) = 0%R
 
@@ -2600,11 +2963,25 @@ library mathcomp.analysis.probability_theory.random_variable, line 744, characte
 <span class="gallina-kwd"> by</span><span class="id"> rewrite</span><span class="id"> </span><span class="id"><a href="mathcomp.analysis.probability_theory.random_variable.html#covarianceC">covarianceC</a></span><span class="id"> </span><span class="id"><a href="mathcomp.analysis.probability_theory.random_variable.html#covariance_cst_l">covariance_cst_l</a></span>. Qed.</div></details>
 <br/>
 <span class="vernacular">Lemma</span><span class="id"> </span><span id="covarianceZl" class="id"><a name="covarianceZl" class="" title="covarianceZl :
-forall [d : measure_display] [T : measurableType d] 
-  [R : realType] [P : probability T R] (a : R) [X Y : T -> R],
-X \in Lfun (T:=T) (R:=R) P 1 ->
-Y \in Lfun (T:=T) (R:=R) P 1 ->
-(X * Y)%R \in Lfun (T:=T) (R:=R) P 1 ->
+forall [d : measurable_structure.measure_display]
+  [T : measurable_structure.Measurable.type d] [R : realType]
+  [P : probability_measure.Probability.type T R] (a : R)
+  [X Y : measurable_structure.Measurable.sort T -> R],
+X
+  \in Lfun (T:=T) (R:=R)
+        (probability_measure.Probability.Exports.probability_measure_Probability__to__measure_function_Measure
+           P)
+        1 ->
+Y
+  \in Lfun (T:=T) (R:=R)
+        (probability_measure.Probability.Exports.probability_measure_Probability__to__measure_function_Measure
+           P)
+        1 ->
+(X * Y)%R
+  \in Lfun (T:=T) (R:=R)
+        (probability_measure.Probability.Exports.probability_measure_Probability__to__measure_function_Measure
+           P)
+        1 ->
 covariance P (a \o* X) Y = (a%:E * covariance P X Y)%E
 
 covarianceZl is not universe polymorphic
@@ -2633,11 +3010,25 @@ library mathcomp.analysis.probability_theory.random_variable, line 747, characte
 Qed.</div></details>
 <br/>
 <span class="vernacular">Lemma</span><span class="id"> </span><span id="covarianceZr" class="id"><a name="covarianceZr" class="" title="covarianceZr :
-forall [d : measure_display] [T : measurableType d] 
-  [R : realType] [P : probability T R] (a : R) [X Y : T -> R],
-X \in Lfun (T:=T) (R:=R) P 1 ->
-Y \in Lfun (T:=T) (R:=R) P 1 ->
-(X * Y)%R \in Lfun (T:=T) (R:=R) P 1 ->
+forall [d : measurable_structure.measure_display]
+  [T : measurable_structure.Measurable.type d] [R : realType]
+  [P : probability_measure.Probability.type T R] (a : R)
+  [X Y : measurable_structure.Measurable.sort T -> R],
+X
+  \in Lfun (T:=T) (R:=R)
+        (probability_measure.Probability.Exports.probability_measure_Probability__to__measure_function_Measure
+           P)
+        1 ->
+Y
+  \in Lfun (T:=T) (R:=R)
+        (probability_measure.Probability.Exports.probability_measure_Probability__to__measure_function_Measure
+           P)
+        1 ->
+(X * Y)%R
+  \in Lfun (T:=T) (R:=R)
+        (probability_measure.Probability.Exports.probability_measure_Probability__to__measure_function_Measure
+           P)
+        1 ->
 covariance P X (a \o* Y) = (a%:E * covariance P X Y)%E
 
 covarianceZr is not universe polymorphic
@@ -2660,11 +3051,25 @@ library mathcomp.analysis.probability_theory.random_variable, line 761, characte
 Qed.</div></details>
 <br/>
 <span class="vernacular">Lemma</span><span class="id"> </span><span id="covarianceNl" class="id"><a name="covarianceNl" class="" title="covarianceNl :
-forall [d : measure_display] [T : measurableType d] 
-  [R : realType] [P : probability T R] [X Y : T -> R],
-X \in Lfun (T:=T) (R:=R) P 1 ->
-Y \in Lfun (T:=T) (R:=R) P 1 ->
-(X * Y)%R \in Lfun (T:=T) (R:=R) P 1 ->
+forall [d : measurable_structure.measure_display]
+  [T : measurable_structure.Measurable.type d] [R : realType]
+  [P : probability_measure.Probability.type T R]
+  [X Y : measurable_structure.Measurable.sort T -> R],
+X
+  \in Lfun (T:=T) (R:=R)
+        (probability_measure.Probability.Exports.probability_measure_Probability__to__measure_function_Measure
+           P)
+        1 ->
+Y
+  \in Lfun (T:=T) (R:=R)
+        (probability_measure.Probability.Exports.probability_measure_Probability__to__measure_function_Measure
+           P)
+        1 ->
+(X * Y)%R
+  \in Lfun (T:=T) (R:=R)
+        (probability_measure.Probability.Exports.probability_measure_Probability__to__measure_function_Measure
+           P)
+        1 ->
 covariance P (\- X) Y = (- covariance P X Y)%E
 
 covarianceNl is not universe polymorphic
@@ -2687,11 +3092,25 @@ library mathcomp.analysis.probability_theory.random_variable, line 769, characte
 Qed.</div></details>
 <br/>
 <span class="vernacular">Lemma</span><span class="id"> </span><span id="covarianceNr" class="id"><a name="covarianceNr" class="" title="covarianceNr :
-forall [d : measure_display] [T : measurableType d] 
-  [R : realType] [P : probability T R] [X Y : T -> R],
-X \in Lfun (T:=T) (R:=R) P 1 ->
-Y \in Lfun (T:=T) (R:=R) P 1 ->
-(X * Y)%R \in Lfun (T:=T) (R:=R) P 1 ->
+forall [d : measurable_structure.measure_display]
+  [T : measurable_structure.Measurable.type d] [R : realType]
+  [P : probability_measure.Probability.type T R]
+  [X Y : measurable_structure.Measurable.sort T -> R],
+X
+  \in Lfun (T:=T) (R:=R)
+        (probability_measure.Probability.Exports.probability_measure_Probability__to__measure_function_Measure
+           P)
+        1 ->
+Y
+  \in Lfun (T:=T) (R:=R)
+        (probability_measure.Probability.Exports.probability_measure_Probability__to__measure_function_Measure
+           P)
+        1 ->
+(X * Y)%R
+  \in Lfun (T:=T) (R:=R)
+        (probability_measure.Probability.Exports.probability_measure_Probability__to__measure_function_Measure
+           P)
+        1 ->
 covariance P X (\- Y) = (- covariance P X Y)%E
 
 covarianceNr is not universe polymorphic
@@ -2711,11 +3130,25 @@ library mathcomp.analysis.probability_theory.random_variable, line 778, characte
 <span class="gallina-kwd"> by</span><span class="id"> move=&gt;</span><span class="id"> X1</span><span class="id"> Y1</span><span class="id"> XY1;</span><span class="id"> rewrite</span><span class="id"> !</span>(<span class="id"><a href="mathcomp.analysis.probability_theory.random_variable.html#covarianceC">covarianceC</a></span><span class="id"> X</span>)<span class="id"> </span><span class="id"><a href="mathcomp.analysis.probability_theory.random_variable.html#covarianceNl">covarianceNl</a></span><span class="id"> 1?</span><span class="id"><a href="https://math-comp.github.io/htmldoc_2_4_0/mathcomp.algebra.ssralg.html#GRing.Theory.mulrC">mulrC</a></span>. Qed.</div></details>
 <br/>
 <span class="vernacular">Lemma</span><span class="id"> </span><span id="covarianceNN" class="id"><a name="covarianceNN" class="" title="covarianceNN :
-forall [d : measure_display] [T : measurableType d] 
-  [R : realType] [P : probability T R] [X Y : T -> R],
-X \in Lfun (T:=T) (R:=R) P 1 ->
-Y \in Lfun (T:=T) (R:=R) P 1 ->
-(X * Y)%R \in Lfun (T:=T) (R:=R) P 1 ->
+forall [d : measurable_structure.measure_display]
+  [T : measurable_structure.Measurable.type d] [R : realType]
+  [P : probability_measure.Probability.type T R]
+  [X Y : measurable_structure.Measurable.sort T -> R],
+X
+  \in Lfun (T:=T) (R:=R)
+        (probability_measure.Probability.Exports.probability_measure_Probability__to__measure_function_Measure
+           P)
+        1 ->
+Y
+  \in Lfun (T:=T) (R:=R)
+        (probability_measure.Probability.Exports.probability_measure_Probability__to__measure_function_Measure
+           P)
+        1 ->
+(X * Y)%R
+  \in Lfun (T:=T) (R:=R)
+        (probability_measure.Probability.Exports.probability_measure_Probability__to__measure_function_Measure
+           P)
+        1 ->
 covariance P (\- X) (\- Y) = covariance P X Y
 
 covarianceNN is not universe polymorphic
@@ -2736,11 +3169,25 @@ library mathcomp.analysis.probability_theory.random_variable, line 783, characte
 Qed.</div></details>
 <br/>
 <span class="vernacular">Lemma</span><span class="id"> </span><span id="covarianceDl" class="id"><a name="covarianceDl" class="" title="covarianceDl :
-forall [d : measure_display] [T : measurableType d] 
-  [R : realType] [P : probability T R] [X Y Z : T -> R],
-X \in Lfun (T:=T) (R:=R) P 2 ->
-Y \in Lfun (T:=T) (R:=R) P 2 ->
-Z \in Lfun (T:=T) (R:=R) P 2 ->
+forall [d : measurable_structure.measure_display]
+  [T : measurable_structure.Measurable.type d] [R : realType]
+  [P : probability_measure.Probability.type T R]
+  [X Y Z : measurable_structure.Measurable.sort T -> R],
+X
+  \in Lfun (T:=T) (R:=R)
+        (probability_measure.Probability.Exports.probability_measure_Probability__to__measure_function_Measure
+           P)
+        2 ->
+Y
+  \in Lfun (T:=T) (R:=R)
+        (probability_measure.Probability.Exports.probability_measure_Probability__to__measure_function_Measure
+           P)
+        2 ->
+Z
+  \in Lfun (T:=T) (R:=R)
+        (probability_measure.Probability.Exports.probability_measure_Probability__to__measure_function_Measure
+           P)
+        2 ->
 covariance P (X \+ Y) Z = (covariance P X Z + covariance P Y Z)%E
 
 covarianceDl is not universe polymorphic
@@ -2772,11 +3219,25 @@ library mathcomp.analysis.probability_theory.random_variable, line 790, characte
 Qed.</div></details>
 <br/>
 <span class="vernacular">Lemma</span><span class="id"> </span><span id="covarianceDr" class="id"><a name="covarianceDr" class="" title="covarianceDr :
-forall [d : measure_display] [T : measurableType d] 
-  [R : realType] [P : probability T R] [X Y Z : T -> R],
-X \in Lfun (T:=T) (R:=R) P 2 ->
-Y \in Lfun (T:=T) (R:=R) P 2 ->
-Z \in Lfun (T:=T) (R:=R) P 2 ->
+forall [d : measurable_structure.measure_display]
+  [T : measurable_structure.Measurable.type d] [R : realType]
+  [P : probability_measure.Probability.type T R]
+  [X Y Z : measurable_structure.Measurable.sort T -> R],
+X
+  \in Lfun (T:=T) (R:=R)
+        (probability_measure.Probability.Exports.probability_measure_Probability__to__measure_function_Measure
+           P)
+        2 ->
+Y
+  \in Lfun (T:=T) (R:=R)
+        (probability_measure.Probability.Exports.probability_measure_Probability__to__measure_function_Measure
+           P)
+        2 ->
+Z
+  \in Lfun (T:=T) (R:=R)
+        (probability_measure.Probability.Exports.probability_measure_Probability__to__measure_function_Measure
+           P)
+        2 ->
 covariance P X (Y \+ Z) = (covariance P X Y + covariance P X Z)%E
 
 covarianceDr is not universe polymorphic
@@ -2797,11 +3258,25 @@ library mathcomp.analysis.probability_theory.random_variable, line 808, characte
 Qed.</div></details>
 <br/>
 <span class="vernacular">Lemma</span><span class="id"> </span><span id="covarianceBl" class="id"><a name="covarianceBl" class="" title="covarianceBl :
-forall [d : measure_display] [T : measurableType d] 
-  [R : realType] [P : probability T R] [X Y Z : T -> R],
-X \in Lfun (T:=T) (R:=R) P 2 ->
-Y \in Lfun (T:=T) (R:=R) P 2 ->
-Z \in Lfun (T:=T) (R:=R) P 2 ->
+forall [d : measurable_structure.measure_display]
+  [T : measurable_structure.Measurable.type d] [R : realType]
+  [P : probability_measure.Probability.type T R]
+  [X Y Z : measurable_structure.Measurable.sort T -> R],
+X
+  \in Lfun (T:=T) (R:=R)
+        (probability_measure.Probability.Exports.probability_measure_Probability__to__measure_function_Measure
+           P)
+        2 ->
+Y
+  \in Lfun (T:=T) (R:=R)
+        (probability_measure.Probability.Exports.probability_measure_Probability__to__measure_function_Measure
+           P)
+        2 ->
+Z
+  \in Lfun (T:=T) (R:=R)
+        (probability_measure.Probability.Exports.probability_measure_Probability__to__measure_function_Measure
+           P)
+        2 ->
 covariance P (X \- Y) Z = (covariance P X Z - covariance P Y Z)%E
 
 covarianceBl is not universe polymorphic
@@ -2827,11 +3302,25 @@ library mathcomp.analysis.probability_theory.random_variable, line 815, characte
 Qed.</div></details>
 <br/>
 <span class="vernacular">Lemma</span><span class="id"> </span><span id="covarianceBr" class="id"><a name="covarianceBr" class="" title="covarianceBr :
-forall [d : measure_display] [T : measurableType d] 
-  [R : realType] [P : probability T R] [X Y Z : T -> R],
-X \in Lfun (T:=T) (R:=R) P 2 ->
-Y \in Lfun (T:=T) (R:=R) P 2 ->
-Z \in Lfun (T:=T) (R:=R) P 2 ->
+forall [d : measurable_structure.measure_display]
+  [T : measurable_structure.Measurable.type d] [R : realType]
+  [P : probability_measure.Probability.type T R]
+  [X Y Z : measurable_structure.Measurable.sort T -> R],
+X
+  \in Lfun (T:=T) (R:=R)
+        (probability_measure.Probability.Exports.probability_measure_Probability__to__measure_function_Measure
+           P)
+        2 ->
+Y
+  \in Lfun (T:=T) (R:=R)
+        (probability_measure.Probability.Exports.probability_measure_Probability__to__measure_function_Measure
+           P)
+        2 ->
+Z
+  \in Lfun (T:=T) (R:=R)
+        (probability_measure.Probability.Exports.probability_measure_Probability__to__measure_function_Measure
+           P)
+        2 ->
 covariance P X (Y \- Z) = (covariance P X Y - covariance P X Z)%E
 
 covarianceBr is not universe polymorphic
@@ -2863,8 +3352,11 @@ Qed.</div></details>
 <span class="vernacular">Context</span><span class="id"> </span><span id="variance.d" class="id"><a name="variance.d" class="">d</a></span> (<span id="variance.T" class="id"><a name="variance.T" class="">T</a></span><span class="id"> :</span><span class="id"> </span><span class="id"><a href="mathcomp.analysis.measure_theory.measurable_structure.html#Measurable.Exports.measurableType">measurableType</a></span><span class="id"> </span><span class="id"><a href="mathcomp.analysis.probability_theory.random_variable.html#d:337">d</a></span>) (<span id="variance.R" class="id"><a name="variance.R" class="">R</a></span><span class="id"> :</span><span class="id"> </span><span class="id"><a href="mathcomp.reals.reals.html#Real.Exports.realType">realType</a></span>) (<span id="variance.P" class="id"><a name="variance.P" class="">P</a></span><span class="id"> :</span><span class="id"> </span><span class="id"><a href="mathcomp.analysis.measure_theory.probability_measure.html#Probability.Exports.probability">probability</a></span><span class="id"> </span><span class="id"><a href="mathcomp.analysis.probability_theory.random_variable.html#T:338">T</a></span><span class="id"> </span><span class="id"><a href="mathcomp.analysis.probability_theory.random_variable.html#R:339">R</a></span>).<br/>
 <br/>
 <span class="vernacular">Definition</span><span class="id"> </span><span id="variance" class="id"><a name="variance" class="" title="variance :
-forall [d : measure_display] [T : measurableType d] [R : realType],
-probability T R -> (T -> R) -> GRing.BaseAddMagma.sort \bar R
+forall [d : measurable_structure.measure_display]
+  [T : measurable_structure.Measurable.type d] [R : realType],
+probability_measure.Probability.type T R ->
+(measurable_structure.Measurable.sort T -> R) ->
+GRing.BaseAddMagma.sort \bar R
 
 variance is not universe polymorphic
 Arguments variance [d]%_measure_display_scope [T R] P X%_function_scope
@@ -2877,9 +3369,16 @@ library mathcomp.analysis.probability_theory.random_variable, line 845, characte
 <span class="vernacular">Local</span><span class="vernacular"> Notation</span> <span id="de9eec9fd477bbbff8d31b0d161e82f0" class="id"><a name="de9eec9fd477bbbff8d31b0d161e82f0" class="">&quot;''V_' P [ X ]&quot;</a></span><span class="id"> :=</span> (<span class="id"><a href="mathcomp.analysis.probability_theory.random_variable.html#variance">variance</a></span><span class="id"> X</span>).<br/>
 <br/>
 <span class="vernacular">Lemma</span><span class="id"> </span><span id="varianceE" class="id"><a name="varianceE" class="" title="varianceE :
-forall [d : measure_display] [T : measurableType d] 
-  [R : realType] [P : probability T R] [X : T -> R],
-X \in Lfun (T:=T) (R:=R) P 2 -> 'V_P[X] = ('E_P[(X ^+ 2)] - 'E_P[X] ^+ 2)%E
+forall [d : measurable_structure.measure_display]
+  [T : measurable_structure.Measurable.type d] [R : realType]
+  [P : probability_measure.Probability.type T R]
+  [X : measurable_structure.Measurable.sort T -> R],
+X
+  \in Lfun (T:=T) (R:=R)
+        (probability_measure.Probability.Exports.probability_measure_Probability__to__measure_function_Measure
+           P)
+        2 ->
+'V_P[X] = ('E_P[(X ^+ 2)] - 'E_P[X] ^+ 2)%E
 
 varianceE is not universe polymorphic
 Arguments varianceE [d]%_measure_display_scope [T R P] [X]%_function_scope _
@@ -2898,9 +3397,16 @@ library mathcomp.analysis.probability_theory.random_variable, line 848, characte
 Qed.</div></details>
 <br/>
 <span class="vernacular">Lemma</span><span class="id"> </span><span id="variance_fin_num" class="id"><a name="variance_fin_num" class="" title="variance_fin_num :
-forall [d : measure_display] [T : measurableType d] 
-  [R : realType] [P : probability T R] [X : T -> R],
-X \in Lfun (T:=T) (R:=R) P 2 -> 'V_P[X] \is a fin_num
+forall [d : measurable_structure.measure_display]
+  [T : measurable_structure.Measurable.type d] [R : realType]
+  [P : probability_measure.Probability.type T R]
+  [X : measurable_structure.Measurable.sort T -> R],
+X
+  \in Lfun (T:=T) (R:=R)
+        (probability_measure.Probability.Exports.probability_measure_Probability__to__measure_function_Measure
+           P)
+        2 ->
+'V_P[X] \is a fin_num
 
 variance_fin_num is not universe polymorphic
 Arguments variance_fin_num [d]%_measure_display_scope 
@@ -2920,8 +3426,10 @@ library mathcomp.analysis.probability_theory.random_variable, line 855, characte
 Qed.</div></details>
 <br/>
 <span class="vernacular">Lemma</span><span class="id"> </span><span id="variance_ge0" class="id"><a name="variance_ge0" class="" title="variance_ge0 :
-forall [d : measure_display] [T : measurableType d] 
-  [R : realType] (P : probability T R) (X : T -> R),
+forall [d : measurable_structure.measure_display]
+  [T : measurable_structure.Measurable.type d] [R : realType]
+  (P : probability_measure.Probability.type T R)
+  (X : measurable_structure.Measurable.sort T -> R),
 (0%R <= 'V_P[X])%E
 
 variance_ge0 is not universe polymorphic
@@ -2939,8 +3447,9 @@ library mathcomp.analysis.probability_theory.random_variable, line 862, characte
 Qed.</div></details>
 <br/>
 <span class="vernacular">Lemma</span><span class="id"> </span><span id="variance_cst" class="id"><a name="variance_cst" class="" title="variance_cst :
-forall [d : measure_display] [T : measurableType d] 
-  [R : realType] (P : probability T R) (r : R),
+forall [d : measurable_structure.measure_display]
+  [T : measurable_structure.Measurable.type d] [R : realType]
+  (P : probability_measure.Probability.type T R) (r : R),
 'V_P[(cst r)] = 0%R
 
 variance_cst is not universe polymorphic
@@ -2960,9 +3469,16 @@ library mathcomp.analysis.probability_theory.random_variable, line 867, characte
 Qed.</div></details>
 <br/>
 <span class="vernacular">Lemma</span><span class="id"> </span><span id="varianceZ" class="id"><a name="varianceZ" class="" title="varianceZ :
-forall [d : measure_display] [T : measurableType d] 
-  [R : realType] [P : probability T R] (a : R) [X : T -> R],
-X \in Lfun (T:=T) (R:=R) P 2 -> 'V_P[(a \o* X)%R] = ((a ^+ 2)%:E * 'V_P[X])%E
+forall [d : measurable_structure.measure_display]
+  [T : measurable_structure.Measurable.type d] [R : realType]
+  [P : probability_measure.Probability.type T R] (a : R)
+  [X : measurable_structure.Measurable.sort T -> R],
+X
+  \in Lfun (T:=T) (R:=R)
+        (probability_measure.Probability.Exports.probability_measure_Probability__to__measure_function_Measure
+           P)
+        2 ->
+'V_P[(a \o* X)%R] = ((a ^+ 2)%:E * 'V_P[X])%E
 
 varianceZ is not universe polymorphic
 Arguments varianceZ [d]%_measure_display_scope [T R P] 
@@ -2987,9 +3503,16 @@ library mathcomp.analysis.probability_theory.random_variable, line 874, characte
 Qed.</div></details>
 <br/>
 <span class="vernacular">Lemma</span><span class="id"> </span><span id="varianceN" class="id"><a name="varianceN" class="" title="varianceN :
-forall [d : measure_display] [T : measurableType d] 
-  [R : realType] [P : probability T R] [X : T -> R],
-X \in Lfun (T:=T) (R:=R) P 2 -> 'V_P[(\- X)%R] = 'V_P[X]
+forall [d : measurable_structure.measure_display]
+  [T : measurable_structure.Measurable.type d] [R : realType]
+  [P : probability_measure.Probability.type T R]
+  [X : measurable_structure.Measurable.sort T -> R],
+X
+  \in Lfun (T:=T) (R:=R)
+        (probability_measure.Probability.Exports.probability_measure_Probability__to__measure_function_Measure
+           P)
+        2 ->
+'V_P[(\- X)%R] = 'V_P[X]
 
 varianceN is not universe polymorphic
 Arguments varianceN [d]%_measure_display_scope [T R P] [X]%_function_scope _
@@ -3007,10 +3530,20 @@ library mathcomp.analysis.probability_theory.random_variable, line 886, characte
 Qed.</div></details>
 <br/>
 <span class="vernacular">Lemma</span><span class="id"> </span><span id="varianceD" class="id"><a name="varianceD" class="" title="varianceD :
-forall [d : measure_display] [T : measurableType d] 
-  [R : realType] [P : probability T R] [X Y : T -> R],
-X \in Lfun (T:=T) (R:=R) P 2 ->
-Y \in Lfun (T:=T) (R:=R) P 2 ->
+forall [d : measurable_structure.measure_display]
+  [T : measurable_structure.Measurable.type d] [R : realType]
+  [P : probability_measure.Probability.type T R]
+  [X Y : measurable_structure.Measurable.sort T -> R],
+X
+  \in Lfun (T:=T) (R:=R)
+        (probability_measure.Probability.Exports.probability_measure_Probability__to__measure_function_Measure
+           P)
+        2 ->
+Y
+  \in Lfun (T:=T) (R:=R)
+        (probability_measure.Probability.Exports.probability_measure_Probability__to__measure_function_Measure
+           P)
+        2 ->
 'V_P[(X \+ Y)%R] = ('V_P[X] + 'V_P[Y] + 2 * covariance P X Y)%E
 
 varianceD is not universe polymorphic
@@ -3038,10 +3571,20 @@ library mathcomp.analysis.probability_theory.random_variable, line 892, characte
 Qed.</div></details>
 <br/>
 <span class="vernacular">Lemma</span><span class="id"> </span><span id="varianceB" class="id"><a name="varianceB" class="" title="varianceB :
-forall [d : measure_display] [T : measurableType d] 
-  [R : realType] [P : probability T R] [X Y : T -> R],
-X \in Lfun (T:=T) (R:=R) P 2 ->
-Y \in Lfun (T:=T) (R:=R) P 2 ->
+forall [d : measurable_structure.measure_display]
+  [T : measurable_structure.Measurable.type d] [R : realType]
+  [P : probability_measure.Probability.type T R]
+  [X Y : measurable_structure.Measurable.sort T -> R],
+X
+  \in Lfun (T:=T) (R:=R)
+        (probability_measure.Probability.Exports.probability_measure_Probability__to__measure_function_Measure
+           P)
+        2 ->
+Y
+  \in Lfun (T:=T) (R:=R)
+        (probability_measure.Probability.Exports.probability_measure_Probability__to__measure_function_Measure
+           P)
+        2 ->
 'V_P[(X \- Y)%R] = ('V_P[X] + 'V_P[Y] - 2 * covariance P X Y)%E
 
 varianceB is not universe polymorphic
@@ -3067,9 +3610,16 @@ library mathcomp.analysis.probability_theory.random_variable, line 906, characte
 Qed.</div></details>
 <br/>
 <span class="vernacular">Lemma</span><span class="id"> </span><span id="varianceD_cst_l" class="id"><a name="varianceD_cst_l" class="" title="varianceD_cst_l :
-forall [d : measure_display] [T : measurableType d] 
-  [R : realType] [P : probability T R] (c : R) [X : T -> R],
-X \in Lfun (T:=T) (R:=R) P 2 -> 'V_P[(cst c \+ X)%R] = 'V_P[X]
+forall [d : measurable_structure.measure_display]
+  [T : measurable_structure.Measurable.type d] [R : realType]
+  [P : probability_measure.Probability.type T R] (c : R)
+  [X : measurable_structure.Measurable.sort T -> R],
+X
+  \in Lfun (T:=T) (R:=R)
+        (probability_measure.Probability.Exports.probability_measure_Probability__to__measure_function_Measure
+           P)
+        2 ->
+'V_P[(cst c \+ X)%R] = 'V_P[X]
 
 varianceD_cst_l is not universe polymorphic
 Arguments varianceD_cst_l [d]%_measure_display_scope 
@@ -3089,10 +3639,17 @@ library mathcomp.analysis.probability_theory.random_variable, line 918, characte
 Qed.</div></details>
 <br/>
 <span class="vernacular">Lemma</span><span class="id"> </span><span id="varianceD_cst_r" class="id"><a name="varianceD_cst_r" class="" title="varianceD_cst_r :
-forall [d : measure_display] [T : measurableType d] 
-  [R : realType] [P : probability T R] [X : T -> R] 
+forall [d : measurable_structure.measure_display]
+  [T : measurable_structure.Measurable.type d] [R : realType]
+  [P : probability_measure.Probability.type T R]
+  [X : measurable_structure.Measurable.sort T -> R] 
   (c : R),
-X \in Lfun (T:=T) (R:=R) P 2 -> 'V_P[(X \+ cst c)%R] = 'V_P[X]
+X
+  \in Lfun (T:=T) (R:=R)
+        (probability_measure.Probability.Exports.probability_measure_Probability__to__measure_function_Measure
+           P)
+        2 ->
+'V_P[(X \+ cst c)%R] = 'V_P[X]
 
 varianceD_cst_r is not universe polymorphic
 Arguments varianceD_cst_r [d]%_measure_display_scope 
@@ -3113,9 +3670,16 @@ library mathcomp.analysis.probability_theory.random_variable, line 925, characte
 Qed.</div></details>
 <br/>
 <span class="vernacular">Lemma</span><span class="id"> </span><span id="varianceB_cst_l" class="id"><a name="varianceB_cst_l" class="" title="varianceB_cst_l :
-forall [d : measure_display] [T : measurableType d] 
-  [R : realType] [P : probability T R] (c : R) [X : T -> R],
-X \in Lfun (T:=T) (R:=R) P 2 -> 'V_P[(cst c \- X)%R] = 'V_P[X]
+forall [d : measurable_structure.measure_display]
+  [T : measurable_structure.Measurable.type d] [R : realType]
+  [P : probability_measure.Probability.type T R] (c : R)
+  [X : measurable_structure.Measurable.sort T -> R],
+X
+  \in Lfun (T:=T) (R:=R)
+        (probability_measure.Probability.Exports.probability_measure_Probability__to__measure_function_Measure
+           P)
+        2 ->
+'V_P[(cst c \- X)%R] = 'V_P[X]
 
 varianceB_cst_l is not universe polymorphic
 Arguments varianceB_cst_l [d]%_measure_display_scope 
@@ -3135,10 +3699,17 @@ library mathcomp.analysis.probability_theory.random_variable, line 933, characte
 Qed.</div></details>
 <br/>
 <span class="vernacular">Lemma</span><span class="id"> </span><span id="varianceB_cst_r" class="id"><a name="varianceB_cst_r" class="" title="varianceB_cst_r :
-forall [d : measure_display] [T : measurableType d] 
-  [R : realType] [P : probability T R] [X : T -> R] 
+forall [d : measurable_structure.measure_display]
+  [T : measurable_structure.Measurable.type d] [R : realType]
+  [P : probability_measure.Probability.type T R]
+  [X : measurable_structure.Measurable.sort T -> R] 
   (c : R),
-X \in Lfun (T:=T) (R:=R) P 2 -> 'V_P[(X \- cst c)%R] = 'V_P[X]
+X
+  \in Lfun (T:=T) (R:=R)
+        (probability_measure.Probability.Exports.probability_measure_Probability__to__measure_function_Measure
+           P)
+        2 ->
+'V_P[(X \- cst c)%R] = 'V_P[X]
 
 varianceB_cst_r is not universe polymorphic
 Arguments varianceB_cst_r [d]%_measure_display_scope 
@@ -3157,10 +3728,20 @@ library mathcomp.analysis.probability_theory.random_variable, line 940, characte
 Qed.</div></details>
 <br/>
 <span class="vernacular">Lemma</span><span class="id"> </span><span id="covariance_le" class="id"><a name="covariance_le" class="" title="covariance_le :
-forall [d : measure_display] [T : measurableType d] 
-  [R : realType] [P : probability T R] [X Y : T -> R],
-X \in Lfun (T:=T) (R:=R) P 2 ->
-Y \in Lfun (T:=T) (R:=R) P 2 ->
+forall [d : measurable_structure.measure_display]
+  [T : measurable_structure.Measurable.type d] [R : realType]
+  [P : probability_measure.Probability.type T R]
+  [X Y : measurable_structure.Measurable.sort T -> R],
+X
+  \in Lfun (T:=T) (R:=R)
+        (probability_measure.Probability.Exports.probability_measure_Probability__to__measure_function_Measure
+           P)
+        2 ->
+Y
+  \in Lfun (T:=T) (R:=R)
+        (probability_measure.Probability.Exports.probability_measure_Probability__to__measure_function_Measure
+           P)
+        2 ->
 (covariance P X Y <= sqrte (R:=R) 'V_P[X] * sqrte (R:=R) 'V_P[Y])%E
 
 covariance_le is not universe polymorphic
@@ -3208,8 +3789,11 @@ Qed.</div></details>
 <span class="vernacular">Notation</span> <span id="9e50536fce9e14b365e2c78395616442" class="id"><a name="9e50536fce9e14b365e2c78395616442" class="">&quot;'V_ P [ X ]&quot;</a></span><span class="id"> :=</span> (<span class="id"><a href="mathcomp.analysis.probability_theory.random_variable.html#variance">variance</a></span><span class="id"> P</span><span class="id"> X</span>).<br/>
 <br/>
 <span class="vernacular">Definition</span><span class="id"> </span><span id="mmt_gen_fun" class="id"><a name="mmt_gen_fun" class="" title="mmt_gen_fun :
-forall [d : measure_display] [T : measurableType d] [R : realType],
-probability T R -> (T -> R) -> R -> GRing.BaseAddMagma.sort \bar R
+forall [d : measurable_structure.measure_display]
+  [T : measurable_structure.Measurable.type d] [R : realType],
+probability_measure.Probability.type T R ->
+(measurable_structure.Measurable.sort T -> R) ->
+R -> GRing.BaseAddMagma.sort \bar R
 
 mmt_gen_fun is not universe polymorphic
 Arguments mmt_gen_fun [d]%_measure_display_scope [T R] 
@@ -3228,19 +3812,23 @@ library mathcomp.analysis.probability_theory.random_variable, line 980, characte
 <span class="vernacular">Context</span><span class="id"> </span><span id="markov_chebyshev_cantelli.d" class="id"><a name="markov_chebyshev_cantelli.d" class="">d</a></span> (<span id="markov_chebyshev_cantelli.T" class="id"><a name="markov_chebyshev_cantelli.T" class="">T</a></span><span class="id"> :</span><span class="id"> </span><span class="id"><a href="mathcomp.analysis.measure_theory.measurable_structure.html#Measurable.Exports.measurableType">measurableType</a></span><span class="id"> </span><span class="id"><a href="mathcomp.analysis.probability_theory.random_variable.html#d:370">d</a></span>) (<span id="markov_chebyshev_cantelli.R" class="id"><a name="markov_chebyshev_cantelli.R" class="">R</a></span><span class="id"> :</span><span class="id"> </span><span class="id"><a href="mathcomp.reals.reals.html#Real.Exports.realType">realType</a></span>) (<span id="markov_chebyshev_cantelli.P" class="id"><a name="markov_chebyshev_cantelli.P" class="">P</a></span><span class="id"> :</span><span class="id"> </span><span class="id"><a href="mathcomp.analysis.measure_theory.probability_measure.html#Probability.Exports.probability">probability</a></span><span class="id"> </span><span class="id"><a href="mathcomp.analysis.probability_theory.random_variable.html#T:371">T</a></span><span class="id"> </span><span class="id"><a href="mathcomp.analysis.probability_theory.random_variable.html#R:372">R</a></span>).<br/>
 <br/>
 <span class="vernacular">Lemma</span><span class="id"> </span><span id="markov" class="id"><a name="markov" class="" title="markov :
-forall [d : measure_display] [T : measurableType d] 
-  [R : realType] [P : probability T R] (X : {RV P >-> R}) 
+forall [d : measurable_structure.measure_display]
+  [T : measurable_structure.Measurable.type d] [R : realType]
+  [P : probability_measure.Probability.type T R] (X : {RV P >-> R})
   [f : R -> R] [eps : R],
 (0 < eps)%R ->
-measurable_fun (T:=Real_sort__canonical__measurable_structure_SigmaRing R)
+measurable_function.measurable_fun
+  (T:=Real_sort__canonical__measurable_structure_SigmaRing R)
   (U:=Real_sort__canonical__measurable_structure_SigmaRing R) [set: R] f ->
 (forall
    r : join_Num_POrderedZmodule_between_Algebra_BaseAddUMagma_and_Order_Preorder
          R,
  (0 <= r)%R -> (0 <= f r)%R) ->
 {in Num.nneg &, {homo f : x y / (x <= y)%R}} ->
-((f eps)%:E * P [set x | eps%:E <= `|(X x)%:E|]%classic <=
- 'E_P[((f \o [eta normr]) \o X)])%E
+((f eps)%:E *
+ probability_measure.Probability.sort P
+   [set x | eps%:E <= `|(measurable_function.MeasurableFun.sort X x)%:E|] <=
+ 'E_P[((f \o [eta normr]) \o measurable_function.MeasurableFun.sort X)])%E
 
 markov is not universe polymorphic
 Arguments markov [d]%_measure_display_scope [T R P] 
@@ -3271,11 +3859,14 @@ library mathcomp.analysis.probability_theory.random_variable, line 988, characte
 Qed.</div></details>
 <br/>
 <span class="vernacular">Lemma</span><span class="id"> </span><span id="chernoff" class="id"><a name="chernoff" class="" title="chernoff :
-forall [d : measure_display] [T : measurableType d] 
-  [R : realType] [P : probability T R] (X : {RV P >-> R}) 
+forall [d : measurable_structure.measure_display]
+  [T : measurable_structure.Measurable.type d] [R : realType]
+  [P : probability_measure.Probability.type T R] (X : {RV P >-> R}) 
   [r : R] (a : R),
 (0 < r)%R ->
-(P [set x | (a <= X x)%R]%classic <= 'M_P X r * (expR (- (r * a)))%:E)%E
+(probability_measure.Probability.sort P
+   [set x | (a <= measurable_function.MeasurableFun.sort X x)%R] <=
+ 'M_P (measurable_function.MeasurableFun.sort X) r * (expR (- (r * a)))%:E)%E
 
 chernoff is not universe polymorphic
 Arguments chernoff [d]%_measure_display_scope [T R P] 
@@ -3302,12 +3893,16 @@ library mathcomp.analysis.probability_theory.random_variable, line 1005, charact
 Qed.</div></details>
 <br/>
 <span class="vernacular">Lemma</span><span class="id"> </span><span id="chebyshev" class="id"><a name="chebyshev" class="" title="chebyshev :
-forall [d : measure_display] [T : measurableType d] 
-  [R : realType] [P : probability T R] (X : {RV P >-> R}) 
+forall [d : measurable_structure.measure_display]
+  [T : measurable_structure.Measurable.type d] [R : realType]
+  [P : probability_measure.Probability.type T R] (X : {RV P >-> R}) 
   [eps : R],
 (0 < eps)%R ->
-(P [set x | (eps <= `|X x - fine 'E_P[X]|)%R]%classic <=
- (eps ^- 2)%:E * 'V_P[X])%E
+(probability_measure.Probability.sort P
+   [set x | (eps <=
+             `|measurable_function.MeasurableFun.sort X x -
+               fine 'E_P[(measurable_function.MeasurableFun.sort X)]|)%R] <=
+ (eps ^- 2)%:E * 'V_P[(measurable_function.MeasurableFun.sort X)])%E
 
 chebyshev is not universe polymorphic
 Arguments chebyshev [d]%_measure_display_scope [T R P] X [eps]%_ring_scope _
@@ -3342,13 +3937,24 @@ library mathcomp.analysis.probability_theory.random_variable, line 1019, charact
 Qed.</div></details>
 <br/>
 <span class="vernacular">Lemma</span><span class="id"> </span><span id="cantelli" class="id"><a name="cantelli" class="" title="cantelli :
-forall [d : measure_display] [T : measurableType d] 
-  [R : realType] [P : probability T R] [X : {RV P >-> R}] 
+forall [d : measurable_structure.measure_display]
+  [T : measurable_structure.Measurable.type d] [R : realType]
+  [P : probability_measure.Probability.type T R] [X : {RV P >-> R}]
   [lambda : R],
-(X : T -> R) \in Lfun (T:=T) (R:=R) P 2 ->
+(measurable_function.MeasurableFun.sort X
+ :
+ measurable_structure.Measurable.sort T -> R)
+  \in Lfun (T:=T) (R:=R)
+        (probability_measure.Probability.Exports.probability_measure_Probability__to__measure_function_Measure
+           P)
+        2 ->
 (0 < lambda)%R ->
-(P [set x | lambda%:E <= (X x)%:E - 'E_P[X]]%classic <=
- (fine 'V_P[X] / (fine 'V_P[X] + lambda ^ 2))%:E)%E
+(probability_measure.Probability.sort P
+   [set x | lambda%:E <=
+            (measurable_function.MeasurableFun.sort X x)%:E -
+            'E_P[(measurable_function.MeasurableFun.sort X)]] <=
+ (fine 'V_P[(measurable_function.MeasurableFun.sort X)] /
+  (fine 'V_P[(measurable_function.MeasurableFun.sort X)] + lambda ^ 2))%:E)%E
 
 cantelli is not universe polymorphic
 Arguments cantelli [d]%_measure_display_scope [T R P X] 
@@ -3442,8 +4048,10 @@ Qed.</div></details>
 &nbsp;&nbsp;(<span class="id">@</span><span class="id"><a href="mathcomp.analysis.probability_theory.random_variable.html#type">discreteMeasurableFun</a></span>.<span class="id"><a href="mathcomp.analysis.probability_theory.random_variable.html#type">type</a></span><span class="id"> _</span><span class="id"> _</span><span class="id"> aT</span><span class="id"> T</span>)<span class="id"> :</span><span class="id"> form_scope</span>.<br/>
 <br/>
 <span class="vernacular">Definition</span><span class="id"> </span><span id="discrete_random_variable" class="id"><a name="discrete_random_variable" class="" title="discrete_random_variable :
-forall [d d' : measure_display] [T : measurableType d],
-measurableType d' -> forall [R : realType], probability T R -> Type
+forall [d d' : measurable_structure.measure_display]
+  [T : measurable_structure.Measurable.type d],
+measurable_structure.Measurable.type d' ->
+forall [R : realType], probability_measure.Probability.type T R -> Type
 
 discrete_random_variable is not universe polymorphic
 Arguments discrete_random_variable [d d']%_measure_display_scope [T] T' [R] P
@@ -3464,9 +4072,10 @@ library mathcomp.analysis.probability_theory.random_variable, line 1123, charact
 &nbsp;&nbsp;(<span id="dRV_definitions.P" class="id"><a name="dRV_definitions.P" class="">P</a></span><span class="id"> :</span><span class="id"> </span><span class="id"><a href="mathcomp.analysis.measure_theory.probability_measure.html#Probability.Exports.probability">probability</a></span><span class="id"> </span><span class="id"><a href="mathcomp.analysis.probability_theory.random_variable.html#T:437">T</a></span><span class="id"> </span><span class="id"><a href="mathcomp.analysis.probability_theory.random_variable.html#R:439">R</a></span>).<br/>
 <br/>
 <span class="vernacular">Lemma</span><span class="id"> </span><span id="dRV_dom_enum" class="id"><a name="dRV_dom_enum" class="" title="dRV_dom_enum :
-forall {d d' : measure_display} {T : measurableType d}
-  {T' : measurableType d'} {R : realType} [P : probability T R]
-  (X : {dRV P >-> T'}),
+forall {d d' : measurable_structure.measure_display}
+  {T : measurable_structure.Measurable.type d}
+  {T' : measurable_structure.Measurable.type d'} {R : realType}
+  [P : probability_measure.Probability.type T R] (X : {dRV P >-> T'}),
 {B : set nat & {splitbij B >-> range X}}
 
 dRV_dom_enum is not universe polymorphic
@@ -3487,8 +4096,10 @@ library mathcomp.analysis.probability_theory.random_variable, line 1134, charact
 Qed.</div></details>
 <br/>
 <span class="vernacular">Definition</span><span class="id"> </span><span id="dRV_dom" class="id"><a name="dRV_dom" class="" title="dRV_dom :
-forall {d d' : measure_display} {T : measurableType d}
-  {T' : measurableType d'} {R : realType} [P : probability T R],
+forall {d d' : measurable_structure.measure_display}
+  {T : measurable_structure.Measurable.type d}
+  {T' : measurable_structure.Measurable.type d'} {R : realType}
+  [P : probability_measure.Probability.type T R],
 {dRV P >-> T'} -> set nat
 
 dRV_dom is not universe polymorphic
@@ -3501,9 +4112,10 @@ library mathcomp.analysis.probability_theory.random_variable, line 1142, charact
 ">dRV_dom</a></span> (<span id="X:443" class="id"><a name="X:443" class="">X</a></span><span class="id"> :</span><span class="id"> </span><span class="id"><a href="mathcomp.analysis.probability_theory.random_variable.html#b5a1ea6c8f3277fde90807f8c5935ab3">{dRV</a></span><span class="id"><a href="mathcomp.analysis.probability_theory.random_variable.html#b5a1ea6c8f3277fde90807f8c5935ab3"> </a></span><span class="id"><a href="mathcomp.analysis.probability_theory.random_variable.html#dRV_definitions.P">P</a></span><span class="id"><a href="mathcomp.analysis.probability_theory.random_variable.html#b5a1ea6c8f3277fde90807f8c5935ab3"> &gt;-&gt;</a></span><span class="id"><a href="mathcomp.analysis.probability_theory.random_variable.html#b5a1ea6c8f3277fde90807f8c5935ab3"> </a></span><span class="id"><a href="mathcomp.analysis.probability_theory.random_variable.html#dRV_definitions.T'">T'</a></span><span class="id"><a href="mathcomp.analysis.probability_theory.random_variable.html#b5a1ea6c8f3277fde90807f8c5935ab3">}</a></span>)<span class="id"> :</span><span class="id"> </span><span class="id"><a href="mathcomp.classical.classical_sets.html#set">set</a></span><span class="id"> </span><span class="id"><a href="https://rocq-prover.org/corelib/Corelib.Init.Datatypes.html#nat">nat</a></span><span class="id"> :=</span><span class="id"> </span><span class="id"><a href="https://rocq-prover.org/corelib/Corelib.Init.Specif.html#projT1">projT1</a></span> (<span class="id"><a href="mathcomp.analysis.probability_theory.random_variable.html#dRV_dom_enum">dRV_dom_enum</a></span><span class="id"> </span><span class="id"><a href="mathcomp.analysis.probability_theory.random_variable.html#X:443">X</a></span>).<br/>
 <br/>
 <span class="vernacular">Definition</span><span class="id"> </span><span id="dRV_enum" class="id"><a name="dRV_enum" class="" title="dRV_enum :
-forall {d d' : measure_display} {T : measurableType d}
-  {T' : measurableType d'} {R : realType} [P : probability T R]
-  (X : {dRV P >-> T'}),
+forall {d d' : measurable_structure.measure_display}
+  {T : measurable_structure.Measurable.type d}
+  {T' : measurable_structure.Measurable.type d'} {R : realType}
+  [P : probability_measure.Probability.type T R] (X : {dRV P >-> T'}),
 {splitbij dRV_dom (P:=P) X >-> range X}
 
 dRV_enum is not universe polymorphic
@@ -3517,10 +4129,12 @@ library mathcomp.analysis.probability_theory.random_variable, line 1144, charact
 &nbsp;&nbsp;<span class="id"><a href="https://rocq-prover.org/corelib/Corelib.Init.Specif.html#projT2">projT2</a></span> (<span class="id"><a href="mathcomp.analysis.probability_theory.random_variable.html#dRV_dom_enum">dRV_dom_enum</a></span><span class="id"> </span><span class="id"><a href="mathcomp.analysis.probability_theory.random_variable.html#X:444">X</a></span>).<br/>
 <br/>
 <span class="vernacular">Definition</span><span class="id"> </span><span id="enum_prob" class="id"><a name="enum_prob" class="" title="enum_prob :
-forall {d d' : measure_display} {T : measurableType d}
-  {T' : measurableType d'} {R : realType} [P : probability T R],
+forall {d d' : measurable_structure.measure_display}
+  {T : measurable_structure.Measurable.type d}
+  {T' : measurable_structure.Measurable.type d'} {R : realType}
+  [P : probability_measure.Probability.type T R],
 {dRV P >-> T'} ->
-nat -> constructive_ereal_extended__canonical__classical_sets_Pointed R
+nat -> ereal.constructive_ereal_extended__canonical__classical_sets_Pointed R
 
 enum_prob is not universe polymorphic
 Arguments enum_prob {d d'}%_measure_display_scope {T T' R} [P] X u%_nat_scope
@@ -3541,9 +4155,11 @@ library mathcomp.analysis.probability_theory.random_variable, line 1147, charact
 <span class="vernacular">Variable</span><span class="id"> </span><span id="distribution_dRV.X" class="id"><a name="distribution_dRV.X" class="">X</a></span><span class="id"> :</span><span class="id"> </span><span class="id"><a href="mathcomp.analysis.probability_theory.random_variable.html#b5a1ea6c8f3277fde90807f8c5935ab3">{dRV</a></span><span class="id"><a href="mathcomp.analysis.probability_theory.random_variable.html#b5a1ea6c8f3277fde90807f8c5935ab3"> </a></span><span class="id"><a href="mathcomp.analysis.probability_theory.random_variable.html#distribution_dRV.P">P</a></span><span class="id"><a href="mathcomp.analysis.probability_theory.random_variable.html#b5a1ea6c8f3277fde90807f8c5935ab3"> &gt;-&gt;</a></span><span class="id"><a href="mathcomp.analysis.probability_theory.random_variable.html#b5a1ea6c8f3277fde90807f8c5935ab3"> </a></span><span class="id"><a href="mathcomp.analysis.probability_theory.random_variable.html#distribution_dRV.T'">T'</a></span><span class="id"><a href="mathcomp.analysis.probability_theory.random_variable.html#b5a1ea6c8f3277fde90807f8c5935ab3">}</a></span>.<br/>
 <br/>
 <span class="vernacular">Lemma</span><span class="id"> </span><span id="distribution_dRV_enum" class="id"><a name="distribution_dRV_enum" class="" title="distribution_dRV_enum :
-forall [d d' : measure_display] [T : measurableType d]
-  [T' : measurableType d'] [R : realType] [P : probability T R]
-  [X : {dRV P >-> T'}] [n : nat],
+forall [d d' : measurable_structure.measure_display]
+  [T : measurable_structure.Measurable.type d]
+  [T' : measurable_structure.Measurable.type d'] [R : realType]
+  [P : probability_measure.Probability.type T R] [X : {dRV P >-> T'}]
+  [n : nat],
 n \in dRV_dom (P:=P) X ->
 distribution (T':=T') P X [set dRV_enum (P:=P) X n] = enum_prob (P:=P) X n
 
@@ -3566,15 +4182,22 @@ Qed.</div></details>
 <span class="vernacular">Hypothesis</span><span class="id"> </span><span id="distribution_dRV.measurable_set1T'" class="id"><a name="distribution_dRV.measurable_set1T'" class="">measurable_set1T'</a></span><span class="id"> :</span><span class="gallina-kwd"> forall</span><span class="id"> </span><span id="x:456" class="id"><a name="x:456" class="">x</a></span><span class="id"> :</span><span class="id"> </span><span class="id"><a href="mathcomp.analysis.probability_theory.random_variable.html#distribution_dRV.T'">T'</a></span><span class="id">,</span><span class="id"> </span><span class="id"><a href="mathcomp.analysis.measure_theory.measurable_structure.html#measurable">measurable</a></span><span class="id"> </span><span class="id"><a href="mathcomp.classical.classical_sets.html#29c78c22490f2dae838b1b504eb858a2">[set</a></span><span class="id"><a href="mathcomp.classical.classical_sets.html#29c78c22490f2dae838b1b504eb858a2"> </a></span><span class="id"><a href="mathcomp.analysis.probability_theory.random_variable.html#x:456">x</a></span><span class="id"><a href="mathcomp.classical.classical_sets.html#29c78c22490f2dae838b1b504eb858a2">]</a></span>.<br/>
 <br/>
 <span class="vernacular">Lemma</span><span class="id"> </span><span id="distribution_dRV" class="id"><a name="distribution_dRV" class="" title="distribution_dRV :
-forall [d d' : measure_display] [T : measurableType d]
-  [T' : measurableType d'] [R : realType] [P : probability T R]
-  (X : {dRV P >-> T'}),
-(forall x : T', d'.-measurable%classic [set x]) ->
-forall [A : set T'],
-d'.-measurable%classic A ->
+forall [d d' : measurable_structure.measure_display]
+  [T : measurable_structure.Measurable.type d]
+  [T' : measurable_structure.Measurable.type d'] [R : realType]
+  [P : probability_measure.Probability.type T R] (X : {dRV P >-> T'}),
+(forall x : measurable_structure.Measurable.sort T',
+ measurable_structure.measurable [set x]) ->
+forall
+  [A : set
+         (measurable_structure.SemiRingOfSets.sort
+            (measurable_structure.SigmaRing.Exports.measurable_structure_SigmaRing__to__measurable_structure_SemiRingOfSets
+               (measurable_structure.Measurable.Exports.measurable_structure_Measurable__to__measurable_structure_SigmaRing
+                  T')))],
+measurable_structure.measurable A ->
 distribution (T':=T') P X A =
 \big[+%E/0%R]_(0 <= k <oo)
-   (enum_prob (P:=P) X k * (\d_(dRV_enum (P:=P) X k))%R A)%E
+   (enum_prob (P:=P) X k * dirac_measure.dirac (dRV_enum (P:=P) X k) A)%E
 
 distribution_dRV is not universe polymorphic
 Arguments distribution_dRV [d d']%_measure_display_scope 
@@ -3624,10 +4247,12 @@ library mathcomp.analysis.probability_theory.random_variable, line 1166, charact
 Qed.</div></details>
 <br/>
 <span class="vernacular">Lemma</span><span class="id"> </span><span id="sum_enum_prob" class="id"><a name="sum_enum_prob" class="" title="sum_enum_prob :
-forall [d d' : measure_display] [T : measurableType d]
-  [T' : measurableType d'] [R : realType] [P : probability T R]
-  (X : {dRV P >-> T'}),
-(forall x : T', d'.-measurable%classic [set x]) ->
+forall [d d' : measurable_structure.measure_display]
+  [T : measurable_structure.Measurable.type d]
+  [T' : measurable_structure.Measurable.type d'] [R : realType]
+  [P : probability_measure.Probability.type T R] (X : {dRV P >-> T'}),
+(forall x : measurable_structure.Measurable.sort T',
+ measurable_structure.measurable [set x]) ->
 \big[+%E/0%R]_(0 <= n <oo) enum_prob (P:=P) X n = 1%E
 
 sum_enum_prob is not universe polymorphic
@@ -3654,9 +4279,11 @@ Qed.</div></details>
 <span class="vernacular">Context</span><span class="id"> </span><span id="discrete_distribution.d" class="id"><a name="discrete_distribution.d" class="">d</a></span> (<span id="discrete_distribution.T" class="id"><a name="discrete_distribution.T" class="">T</a></span><span class="id"> :</span><span class="id"> </span><span class="id"><a href="mathcomp.analysis.measure_theory.measurable_structure.html#Measurable.Exports.measurableType">measurableType</a></span><span class="id"> </span><span class="id"><a href="mathcomp.analysis.probability_theory.random_variable.html#d:479">d</a></span>) (<span id="discrete_distribution.R" class="id"><a name="discrete_distribution.R" class="">R</a></span><span class="id"> :</span><span class="id"> </span><span class="id"><a href="mathcomp.reals.reals.html#Real.Exports.realType">realType</a></span>) (<span id="discrete_distribution.P" class="id"><a name="discrete_distribution.P" class="">P</a></span><span class="id"> :</span><span class="id"> </span><span class="id"><a href="mathcomp.analysis.measure_theory.probability_measure.html#Probability.Exports.probability">probability</a></span><span class="id"> </span><span class="id"><a href="mathcomp.analysis.probability_theory.random_variable.html#T:480">T</a></span><span class="id"> </span><span class="id"><a href="mathcomp.analysis.probability_theory.random_variable.html#R:481">R</a></span>).<br/>
 <br/>
 <span class="vernacular">Lemma</span><span class="id"> </span><span id="dRV_expectation" class="id"><a name="dRV_expectation" class="" title="dRV_expectation :
-forall [d : measure_display] [T : measurableType d] 
-  [R : realType] [P : probability T R] [X : {dRV P >-> R}],
-P.-integrable [set: T] (EFin \o X) ->
+forall [d : measurable_structure.measure_display]
+  [T : measurable_structure.Measurable.type d] [R : realType]
+  [P : probability_measure.Probability.type T R] [X : {dRV P >-> R}],
+(probability_measure.Probability.sort P).-integrable
+  [set: measurable_structure.Measurable.sort T] (EFin \o X) ->
 ('E_P[X])%E =
 \big[+%E/0%R]_(0 <= n <oo)
    (enum_prob (P:=P) X n * (dRV_enum (P:=P) X n)%:E)%E
@@ -3717,9 +4344,11 @@ library mathcomp.analysis.probability_theory.random_variable, line 1215, charact
 Qed.</div></details>
 <br/>
 <span class="vernacular">Lemma</span><span class="id"> </span><span id="expectation_pmf" class="id"><a name="expectation_pmf" class="" title="expectation_pmf :
-forall [d : measure_display] [T : measurableType d] 
-  [R : realType] [P : probability T R] [X : {dRV P >-> R}],
-P.-integrable [set: T] (EFin \o X) ->
+forall [d : measurable_structure.measure_display]
+  [T : measurable_structure.Measurable.type d] [R : realType]
+  [P : probability_measure.Probability.type T R] [X : {dRV P >-> R}],
+(probability_measure.Probability.sort P).-integrable
+  [set: measurable_structure.Measurable.sort T] (EFin \o X) ->
 ('E_P[X])%E =
 \big[+%E/0%R]_(0 <= n <oo | n \in dRV_dom (P:=P) X) 
 ((pmf (P:=P) X (dRV_enum (P:=P) X n))%:E * (dRV_enum (P:=P) X n)%:E)%E

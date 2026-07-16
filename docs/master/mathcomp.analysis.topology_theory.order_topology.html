@@ -305,7 +305,7 @@
 <br/>
 <span class="vernacular">Lemma</span><span class="id"> </span><span id="rray_open" class="id"><a name="rray_open" class="" title="rray_open :
 forall {d : Order.disp_t} {T : orderTopologicalType d} (x : T),
-open `]x, +oo[%classic
+topology_structure.open `]x, +oo[%classic
 
 rray_open is not universe polymorphic
 Arguments rray_open {d T} x
@@ -325,7 +325,7 @@ Qed.</div></details>
 <br/>
 <span class="vernacular">Lemma</span><span class="id"> </span><span id="lray_open" class="id"><a name="lray_open" class="" title="lray_open :
 forall {d : Order.disp_t} {T : orderTopologicalType d} (x : T),
-open `]-oo, x[%classic
+topology_structure.open `]-oo, x[%classic
 
 lray_open is not universe polymorphic
 Arguments lray_open {d T} x
@@ -345,7 +345,7 @@ Qed.</div></details>
 <br/>
 <span class="vernacular">Lemma</span><span class="id"> </span><span id="itv_open" class="id"><a name="itv_open" class="" title="itv_open :
 forall {d : Order.disp_t} {T : orderTopologicalType d} (x y : T),
-open `]x, y[%classic
+topology_structure.open `]x, y[%classic
 
 itv_open is not universe polymorphic
 Arguments itv_open {d T} x y
@@ -363,7 +363,7 @@ library mathcomp.analysis.topology_theory.order_topology, line 93, characters 6-
 <br/>
 <span class="vernacular">Lemma</span><span class="id"> </span><span id="itv_open_ends_open" class="id"><a name="itv_open_ends_open" class="" title="itv_open_ends_open :
 forall {d : Order.disp_t} {T : orderTopologicalType d} [i : interval T],
-itv_open_ends i -> open [set` i]%classic
+itv_open_ends i -> topology_structure.open [set` i]%classic
 
 itv_open_ends_open is not universe polymorphic
 Arguments itv_open_ends_open {d T} [i] _
@@ -382,13 +382,14 @@ Qed.</div></details>
 <br/>
 <span class="vernacular">Lemma</span><span class="id"> </span><span id="rray_closed" class="id"><a name="rray_closed" class="" title="rray_closed :
 forall {d : Order.disp_t} {T : orderTopologicalType d} [x : T],
-closed `[x, +oo[
+topology_structure.closed `[x, +oo[
 
 rray_closed is not universe polymorphic
 Expanded type for implicit arguments
 rray_closed :
-forall {d : Order.disp_t} {T : orderTopologicalType d} [x t : T],
-closure `[x, +oo[ t -> (t \in `[x, +oo[%R) = true
+forall {d : Order.disp_t} {T : orderTopologicalType d} 
+  [x : T] [t : topology_structure.Topological.sort T],
+topology_structure.closure `[x, +oo[ t -> (t \in `[x, +oo[%R) = true
 
 Arguments rray_closed {d T} [x t] _
 rray_closed is opaque
@@ -405,13 +406,14 @@ library mathcomp.analysis.topology_theory.order_topology, line 103, characters 6
 <br/>
 <span class="vernacular">Lemma</span><span class="id"> </span><span id="lray_closed" class="id"><a name="lray_closed" class="" title="lray_closed :
 forall {d : Order.disp_t} {T : orderTopologicalType d} [x : T],
-closed `]-oo, x]
+topology_structure.closed `]-oo, x]
 
 lray_closed is not universe polymorphic
 Expanded type for implicit arguments
 lray_closed :
-forall {d : Order.disp_t} {T : orderTopologicalType d} [x t : T],
-closure `]-oo, x] t -> (t \in `]-oo, x]%R) = true
+forall {d : Order.disp_t} {T : orderTopologicalType d} 
+  [x : T] [t : topology_structure.Topological.sort T],
+topology_structure.closure `]-oo, x] t -> (t \in `]-oo, x]%R) = true
 
 Arguments lray_closed {d T} [x t] _
 lray_closed is opaque
@@ -428,13 +430,14 @@ library mathcomp.analysis.topology_theory.order_topology, line 107, characters 6
 <br/>
 <span class="vernacular">Lemma</span><span class="id"> </span><span id="itv_closed" class="id"><a name="itv_closed" class="" title="itv_closed :
 forall {d : Order.disp_t} {T : orderTopologicalType d} [x y : T],
-closed `[x, y]
+topology_structure.closed `[x, y]
 
 itv_closed is not universe polymorphic
 Expanded type for implicit arguments
 itv_closed :
-forall {d : Order.disp_t} {T : orderTopologicalType d} [x y t : T],
-closure `[x, y] t -> (t \in `[x, y]%R) = true
+forall {d : Order.disp_t} {T : orderTopologicalType d} 
+  [x y : T] [t : topology_structure.Topological.sort T],
+topology_structure.closure `[x, y] t -> (t \in `[x, y]%R) = true
 
 Arguments itv_closed {d T} [x y t] _
 itv_closed is opaque
@@ -451,7 +454,7 @@ library mathcomp.analysis.topology_theory.order_topology, line 111, characters 6
 <br/>
 <span class="vernacular">Lemma</span><span class="id"> </span><span id="itv_closed_ends_closed" class="id"><a name="itv_closed_ends_closed" class="" title="itv_closed_ends_closed :
 forall {d : Order.disp_t} {T : orderTopologicalType d} [i : interval T],
-itv_closed_ends i -> closed [set` i]
+itv_closed_ends i -> topology_structure.closed [set` i]
 
 itv_closed_ends_closed is not universe polymorphic
 Expanded type for implicit arguments
@@ -459,9 +462,10 @@ itv_closed_ends_closed :
 forall {d : Order.disp_t} {T : orderTopologicalType d} [i : interval T],
 itv_closed_ends i ->
 forall
-  [t : join_order_topology_POrderedTopological_between_Order_POrder_and_topology_structure_Topological
-         T],
-closure [set` i] t -> (t \in i) = true
+  [t : topology_structure.Topological.sort
+         (join_order_topology_POrderedTopological_between_Order_POrder_and_topology_structure_Topological
+            T)],
+topology_structure.closure [set` i] t -> (t \in i) = true
 
 Arguments itv_closed_ends_closed {d T} [i] _ [t] _
 itv_closed_ends_closed is opaque
@@ -478,16 +482,17 @@ library mathcomp.analysis.topology_theory.order_topology, line 115, characters 6
 <br/>
 <span class="vernacular">Lemma</span><span class="id"> </span><span id="itv_closure" class="id"><a name="itv_closure" class="" title="itv_closure :
 forall {d : Order.disp_t} {T : orderTopologicalType d} [x y : T],
-(closure `]x, y[ `<=` `[x, y])%classic
+(topology_structure.closure `]x, y[ `<=` `[x, y])%classic
 
 itv_closure is not universe polymorphic
 Expanded type for implicit arguments
 itv_closure :
 forall {d : Order.disp_t} {T : orderTopologicalType d} 
   [x y : T]
-  [t : join_order_topology_POrderedTopological_between_Order_POrder_and_topology_structure_Topological
-         T],
-closure `]x, y[ t -> (t \in `[x, y]%R) = true
+  [t : topology_structure.Topological.sort
+         (join_order_topology_POrderedTopological_between_Order_POrder_and_topology_structure_Topological
+            T)],
+topology_structure.closure `]x, y[ t -> (t \in `[x, y]%R) = true
 
 Arguments itv_closure {d T} [x y t] _
 itv_closure is opaque
@@ -505,13 +510,15 @@ Qed.</div></details>
 <br/>
 <span class="vernacular">Lemma</span><span class="id"> </span><span id="itv_closed_infimums" class="id"><a name="itv_closed_infimums" class="" title="itv_closed_infimums :
 forall {d : Order.disp_t} {T : orderTopologicalType d} [A : set T],
-(A !=set0)%classic -> closed A -> (infimums (T:=T) A `<=` A)%classic
+(A !=set0)%classic ->
+topology_structure.closed A -> (infimums (T:=T) A `<=` A)%classic
 
 itv_closed_infimums is not universe polymorphic
 Expanded type for implicit arguments
 itv_closed_infimums :
 forall {d : Order.disp_t} {T : orderTopologicalType d} [A : set T],
-(A !=set0)%classic -> closed A -> forall [t : T], infimums (T:=T) A t -> A t
+(A !=set0)%classic ->
+topology_structure.closed A -> forall [t : T], infimums (T:=T) A t -> A t
 
 Arguments itv_closed_infimums {d T} [A]%_classical_set_scope _ _ [t] _
 itv_closed_infimums is opaque
@@ -544,13 +551,15 @@ Qed.</div></details>
 <br/>
 <span class="vernacular">Lemma</span><span class="id"> </span><span id="itv_closed_supremums" class="id"><a name="itv_closed_supremums" class="" title="itv_closed_supremums :
 forall {d : Order.disp_t} {T : orderTopologicalType d} [A : set T],
-(A !=set0)%classic -> closed A -> (supremums (T:=T) A `<=` A)%classic
+(A !=set0)%classic ->
+topology_structure.closed A -> (supremums (T:=T) A `<=` A)%classic
 
 itv_closed_supremums is not universe polymorphic
 Expanded type for implicit arguments
 itv_closed_supremums :
 forall {d : Order.disp_t} {T : orderTopologicalType d} [A : set T],
-(A !=set0)%classic -> closed A -> forall [t : T], supremums (T:=T) A t -> A t
+(A !=set0)%classic ->
+topology_structure.closed A -> forall [t : T], supremums (T:=T) A t -> A t
 
 Arguments itv_closed_supremums {d T} [A]%_classical_set_scope _ _ [t] _
 itv_closed_supremums is opaque
@@ -586,11 +595,12 @@ Qed.</div></details>
 <br/>
 <span class="vernacular">Lemma</span><span class="id"> </span><span id="clopen_bigcup_clopen" class="id"><a name="clopen_bigcup_clopen" class="" title="clopen_bigcup_clopen :
 forall {d : Order.disp_t} {T : orderTopologicalType d} [x : T] [U : set T],
-clopen U ->
+topology_structure.clopen U ->
 U x ->
-clopen
+topology_structure.clopen
   (\bigcup_(i in (fun (x0 : T) (U0 : set T) (i : interval T) =>
-                  [/\ ([set` i] `<=` U0)%classic, open [set` i]%classic
+                  [/\ ([set` i] `<=` U0)%classic,
+                      topology_structure.open [set` i]%classic
                     & x0 \in i]) x U)
       [set` i]%classic)
 
@@ -816,8 +826,8 @@ library mathcomp.analysis.topology_theory.order_topology, line 209, characters 0
 <br/>
 <span class="vernacular">Lemma</span><span class="id"> </span><span id="order_nbhs_itv" class="id"><a name="order_nbhs_itv" class="" title="order_nbhs_itv :
 forall {d : Order.disp_t} {T : orderType d} (x : order_topology T),
-nbhs x =
-filter_from
+filter.nbhs x =
+filter.filter_from
   (fun i : interval order_topology_order_topology__canonical__Order_POrder =>
    itv_open_ends i /\ x \in i)
   pred_set
@@ -931,19 +941,23 @@ library mathcomp.analysis.topology_theory.order_topology, line 248, characters 0
 <span class="vernacular">End</span><span class="id"> induced_order_topology</span>.<br/>
 <br/>
 <span class="vernacular">Lemma</span><span class="id"> </span><span id="min_continuous" class="id"><a name="min_continuous" class="" title="min_continuous :
-forall {d : Order.disp_t} {T : orderTopologicalType d},
-continuous (fun xy : T * T => Order.Def.min xy.1 xy.2)
+forall {d : Order.disp_t} {T : orderTopologicalType d}
+  [x : filter.Nbhs.sort (filter.Datatypes_prod__canonical__filter_Nbhs T T)],
+filter.continuous_at (T:=filter.Datatypes_prod__canonical__filter_Nbhs T T)
+  (U:=T) x (fun xy : T * T => Order.Def.min xy.1 xy.2)
 
 min_continuous is not universe polymorphic
 Expanded type for implicit arguments
 min_continuous :
 forall {d : Order.disp_t} {T : orderTopologicalType d}
-  [x : Datatypes_prod__canonical__filter_Nbhs T T] 
-  [t : set T],
-nbhs ((fun xy : T * T => Order.Def.min xy.1 xy.2) x) t ->
-exists2 i : set T * set T,
-  (fun P : set T * set T => nbhs x.1 P.1 /\ nbhs x.2 P.2) i &
-  ((fun P : set T * set T => P.1 `*` P.2) i
+  [x : filter.Nbhs.sort (filter.Datatypes_prod__canonical__filter_Nbhs T T)]
+  [t : set (filter.Nbhs.sort T)],
+filter.nbhs ((fun xy : T * T => Order.Def.min xy.1 xy.2) x) t ->
+exists2 i : set (filter.Nbhs.sort T) * set (filter.Nbhs.sort T),
+  (fun P : set (filter.Nbhs.sort T) * set (filter.Nbhs.sort T) =>
+   filter.nbhs x.1 P.1 /\ filter.nbhs x.2 P.2) i &
+  ((fun P : set (filter.Nbhs.sort T) * set (filter.Nbhs.sort T) =>
+    P.1 `*` P.2) i
    `<=` (fun xy : T * T => Order.Def.min xy.1 xy.2) @^-1` t)%classic
 
 Arguments min_continuous {d T} [x t] _
@@ -985,22 +999,70 @@ library mathcomp.analysis.topology_theory.order_topology, line 251, characters 6
 Qed.</div></details>
 <br/>
 <span class="vernacular">Lemma</span><span class="id"> </span><span id="min_fun_continuous" class="id"><a name="min_fun_continuous" class="" title="min_fun_continuous :
-forall {d : Order.disp_t} {X : topologicalType} {T : orderTopologicalType d}
-  [f g : X -> T],
-continuous f -> continuous g -> continuous (f \min g)
+forall {d : Order.disp_t} {X : topology_structure.Topological.type}
+  {T : orderTopologicalType d}
+  [f g : topology_structure.Topological.sort X -> T],
+(forall
+   x : filter.Nbhs.sort
+         (topology_structure.Topological.Exports.topology_structure_Topological__to__filter_Nbhs
+            X),
+ filter.continuous_at
+   (T:=topology_structure.Topological.Exports.topology_structure_Topological__to__filter_Nbhs
+         X)
+   (U:=T) x f) ->
+(forall
+   x : filter.Nbhs.sort
+         (topology_structure.Topological.Exports.topology_structure_Topological__to__filter_Nbhs
+            X),
+ filter.continuous_at
+   (T:=topology_structure.Topological.Exports.topology_structure_Topological__to__filter_Nbhs
+         X)
+   (U:=T) x g) ->
+forall
+  [x : filter.Nbhs.sort
+         (topology_structure.Topological.Exports.topology_structure_Topological__to__filter_Nbhs
+            X)],
+filter.continuous_at
+  (T:=topology_structure.Topological.Exports.topology_structure_Topological__to__filter_Nbhs
+        X)
+  (U:=T) x (f \min g)
 
 min_fun_continuous is not universe polymorphic
 Expanded type for implicit arguments
 min_fun_continuous :
-forall {d : Order.disp_t} {X : topologicalType} {T : orderTopologicalType d}
-  [f g : X -> T],
-continuous f ->
-continuous g ->
-forall [x : X] [t : set T],
-nbhs ((f \min g) x) t ->
+forall {d : Order.disp_t} {X : topology_structure.Topological.type}
+  {T : orderTopologicalType d}
+  [f g : topology_structure.Topological.sort X -> T],
+(forall
+   x : filter.Nbhs.sort
+         (topology_structure.Topological.Exports.topology_structure_Topological__to__filter_Nbhs
+            X),
+ filter.continuous_at
+   (T:=topology_structure.Topological.Exports.topology_structure_Topological__to__filter_Nbhs
+         X)
+   (U:=T) x f) ->
+(forall
+   x : filter.Nbhs.sort
+         (topology_structure.Topological.Exports.topology_structure_Topological__to__filter_Nbhs
+            X),
+ filter.continuous_at
+   (T:=topology_structure.Topological.Exports.topology_structure_Topological__to__filter_Nbhs
+         X)
+   (U:=T) x g) ->
+forall
+  [x : filter.Nbhs.sort
+         (topology_structure.Topological.Exports.topology_structure_Topological__to__filter_Nbhs
+            X)]
+  [t : set (filter.Nbhs.sort T)],
+filter.nbhs ((f \min g) x) t ->
 (let (nbhs) :=
-   Topological.filter_isFiltered_mixin
-     (let (sort, class) as record return (Topological.axioms_ record) := X in
+   topology_structure.Topological.filter_isFiltered_mixin
+     (let
+        (sort, class) as record
+         return
+           (topology_structure.Topological.axioms_
+              (topology_structure.Topological.sort record)) :=
+        X in
       class) in
  nbhs) x ((f \min g) @^-1` t)%classic
 
@@ -1022,19 +1084,23 @@ library mathcomp.analysis.topology_theory.order_topology, line 281, characters 6
 Qed.</div></details>
 <br/>
 <span class="vernacular">Lemma</span><span class="id"> </span><span id="max_continuous" class="id"><a name="max_continuous" class="" title="max_continuous :
-forall {d : Order.disp_t} {T : orderTopologicalType d},
-continuous (fun xy : T * T => Order.Def.max xy.1 xy.2)
+forall {d : Order.disp_t} {T : orderTopologicalType d}
+  [x : filter.Nbhs.sort (filter.Datatypes_prod__canonical__filter_Nbhs T T)],
+filter.continuous_at (T:=filter.Datatypes_prod__canonical__filter_Nbhs T T)
+  (U:=T) x (fun xy : T * T => Order.Def.max xy.1 xy.2)
 
 max_continuous is not universe polymorphic
 Expanded type for implicit arguments
 max_continuous :
 forall {d : Order.disp_t} {T : orderTopologicalType d}
-  [x : Datatypes_prod__canonical__filter_Nbhs T T] 
-  [t : set T],
-nbhs ((fun xy : T * T => Order.Def.max xy.1 xy.2) x) t ->
-exists2 i : set T * set T,
-  (fun P : set T * set T => nbhs x.1 P.1 /\ nbhs x.2 P.2) i &
-  ((fun P : set T * set T => P.1 `*` P.2) i
+  [x : filter.Nbhs.sort (filter.Datatypes_prod__canonical__filter_Nbhs T T)]
+  [t : set (filter.Nbhs.sort T)],
+filter.nbhs ((fun xy : T * T => Order.Def.max xy.1 xy.2) x) t ->
+exists2 i : set (filter.Nbhs.sort T) * set (filter.Nbhs.sort T),
+  (fun P : set (filter.Nbhs.sort T) * set (filter.Nbhs.sort T) =>
+   filter.nbhs x.1 P.1 /\ filter.nbhs x.2 P.2) i &
+  ((fun P : set (filter.Nbhs.sort T) * set (filter.Nbhs.sort T) =>
+    P.1 `*` P.2) i
    `<=` (fun xy : T * T => Order.Def.max xy.1 xy.2) @^-1` t)%classic
 
 Arguments max_continuous {d T} [x t] _
@@ -1076,22 +1142,70 @@ library mathcomp.analysis.topology_theory.order_topology, line 289, characters 6
 Qed.</div></details>
 <br/>
 <span class="vernacular">Lemma</span><span class="id"> </span><span id="max_fun_continuous" class="id"><a name="max_fun_continuous" class="" title="max_fun_continuous :
-forall {d : Order.disp_t} {X : topologicalType} {T : orderTopologicalType d}
-  [f g : X -> T],
-continuous f -> continuous g -> continuous (f \max g)
+forall {d : Order.disp_t} {X : topology_structure.Topological.type}
+  {T : orderTopologicalType d}
+  [f g : topology_structure.Topological.sort X -> T],
+(forall
+   x : filter.Nbhs.sort
+         (topology_structure.Topological.Exports.topology_structure_Topological__to__filter_Nbhs
+            X),
+ filter.continuous_at
+   (T:=topology_structure.Topological.Exports.topology_structure_Topological__to__filter_Nbhs
+         X)
+   (U:=T) x f) ->
+(forall
+   x : filter.Nbhs.sort
+         (topology_structure.Topological.Exports.topology_structure_Topological__to__filter_Nbhs
+            X),
+ filter.continuous_at
+   (T:=topology_structure.Topological.Exports.topology_structure_Topological__to__filter_Nbhs
+         X)
+   (U:=T) x g) ->
+forall
+  [x : filter.Nbhs.sort
+         (topology_structure.Topological.Exports.topology_structure_Topological__to__filter_Nbhs
+            X)],
+filter.continuous_at
+  (T:=topology_structure.Topological.Exports.topology_structure_Topological__to__filter_Nbhs
+        X)
+  (U:=T) x (f \max g)
 
 max_fun_continuous is not universe polymorphic
 Expanded type for implicit arguments
 max_fun_continuous :
-forall {d : Order.disp_t} {X : topologicalType} {T : orderTopologicalType d}
-  [f g : X -> T],
-continuous f ->
-continuous g ->
-forall [x : X] [t : set T],
-nbhs ((f \max g) x) t ->
+forall {d : Order.disp_t} {X : topology_structure.Topological.type}
+  {T : orderTopologicalType d}
+  [f g : topology_structure.Topological.sort X -> T],
+(forall
+   x : filter.Nbhs.sort
+         (topology_structure.Topological.Exports.topology_structure_Topological__to__filter_Nbhs
+            X),
+ filter.continuous_at
+   (T:=topology_structure.Topological.Exports.topology_structure_Topological__to__filter_Nbhs
+         X)
+   (U:=T) x f) ->
+(forall
+   x : filter.Nbhs.sort
+         (topology_structure.Topological.Exports.topology_structure_Topological__to__filter_Nbhs
+            X),
+ filter.continuous_at
+   (T:=topology_structure.Topological.Exports.topology_structure_Topological__to__filter_Nbhs
+         X)
+   (U:=T) x g) ->
+forall
+  [x : filter.Nbhs.sort
+         (topology_structure.Topological.Exports.topology_structure_Topological__to__filter_Nbhs
+            X)]
+  [t : set (filter.Nbhs.sort T)],
+filter.nbhs ((f \max g) x) t ->
 (let (nbhs) :=
-   Topological.filter_isFiltered_mixin
-     (let (sort, class) as record return (Topological.axioms_ record) := X in
+   topology_structure.Topological.filter_isFiltered_mixin
+     (let
+        (sort, class) as record
+         return
+           (topology_structure.Topological.axioms_
+              (topology_structure.Topological.sort record)) :=
+        X in
       class) in
  nbhs) x ((f \max g) @^-1` t)%classic
 

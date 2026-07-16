@@ -2654,7 +2654,7 @@ library mathcomp.classical.set_interval, line 822, characters 6-18
 <br/>
 <span class="vernacular">Lemma</span><span class="id"> </span><span id="onem_factor" class="id"><a name="onem_factor" class="" title="onem_factor :
 forall [R : numFieldType] [a b : R] (x : R),
-a != b -> (factor (R:=R) a b x).~%R = factor (R:=R) b a x
+a != b -> unstable.onem (factor (R:=R) a b x) = factor (R:=R) b a x
 
 onem_factor is not universe polymorphic
 Arguments onem_factor [R] [a b]%_ring_scope x%_ring_scope _
