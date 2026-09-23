@@ -598,7 +598,7 @@ Qed.</div></details>
 (forall x y : R, Rmin x y = Num.min x y) * (forall x : R, Rabs x = `|x|%R) *
 (forall x y : R, Rdist x y = `|x - y|%R) *
 (forall (f : nat -> R) (n : nat), sum_f_R0 f n = (\sum_(0 <= k < n.+1) f k)%R) *
-(forall n : nat, Factorial.fact n = n`!)
+(forall n : nat, fact n = n`!)
 
 RealsE is not universe polymorphic
 RealsE is transparent
