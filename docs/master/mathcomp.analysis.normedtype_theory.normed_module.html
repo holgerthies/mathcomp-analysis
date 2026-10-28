@@ -10008,7 +10008,8 @@ forall {K : numFieldType} {T : Type} [F : set_system T],
 Filter F ->
 forall [f : T -> K] [a : K],
 a != 0%R ->
-(f x @[x --> F] --> a)%classic -> ((f\^-1)%R x @[x --> F] --> a^-1%R)%classic
+(f x @[x --> F] --> a)%classic ->
+(unstable.inv_fun f x @[x --> F] --> a^-1%R)%classic
 
 cvgV is not universe polymorphic
 Expanded type for implicit arguments
@@ -10018,7 +10019,7 @@ Filter F ->
 forall [f : T -> K] [a : K],
 a != 0%R ->
 (f x @[x --> F] --> a)%classic ->
-forall [t : set K], nbhs a^-1%R t -> F ((f\^-1)%R @^-1` t)%classic
+forall [t : set K], nbhs a^-1%R t -> F (unstable.inv_fun f @^-1` t)%classic
 
 Arguments cvgV {K} {T}%_type_scope [F] {FF} [f]%_function_scope
   [a]%_ring_scope _ _ [t] _
@@ -10038,7 +10039,7 @@ forall {K : numFieldType} {T : Type} [F : set_system T],
 Filter F ->
 forall (f : T -> K) [a : K],
 a != 0%R ->
-((f\^-1)%R x @[x --> F] --> a^-1%R)%classic <->
+(unstable.inv_fun f x @[x --> F] --> a^-1%R)%classic <->
 (f x @[x --> F] --> a)%classic
 
 cvgVP is not universe polymorphic
@@ -10061,7 +10062,7 @@ forall {K : numFieldType} {T : Type} [F : set_system T],
 Filter F ->
 forall [f : T -> K],
 lim (f x @[x --> F])%classic != 0%R ->
-cvg (f x @[x --> F])%classic -> cvg ((f\^-1)%R x @[x --> F])%classic
+cvg (f x @[x --> F])%classic -> cvg (unstable.inv_fun f x @[x --> F])%classic
 
 is_cvgV is not universe polymorphic
 Expanded type for implicit arguments
@@ -10072,8 +10073,8 @@ forall [f : T -> K],
 lim (f x @[x --> F])%classic != 0%R ->
 cvg (f x @[x --> F])%classic ->
 forall [t : set K],
-nbhs (lim ((f\^-1)%R x @[x --> F])%classic) t ->
-F ((f\^-1)%R @^-1` t)%classic
+nbhs (lim (unstable.inv_fun f x @[x --> F])%classic) t ->
+F (unstable.inv_fun f @^-1` t)%classic
 
 Arguments is_cvgV {K} {T}%_type_scope [F] {FF} [f]%_function_scope _ _ [t] _
 is_cvgV is opaque
@@ -10449,7 +10450,8 @@ forall {K : numFieldType} {T : Type} [F : set_system T],
 ProperFilter F ->
 forall [f : T -> K],
 lim (f x @[x --> F])%classic != 0%R ->
-lim ((f\^-1)%R x @[x --> F])%classic = (lim (f x @[x --> F])%classic)^-1%R
+lim (unstable.inv_fun f x @[x --> F])%classic =
+(lim (f x @[x --> F])%classic)^-1%R
 
 limV is not universe polymorphic
 Arguments limV {K} {T}%_type_scope [F] {FF} [f]%_function_scope _
@@ -10469,7 +10471,7 @@ forall {K : numFieldType} {T : Type} [F : set_system T],
 ProperFilter F ->
 forall [f : T -> K],
 lim (f x @[x --> F])%classic != 0%R ->
-cvg ((f\^-1)%R x @[x --> F])%classic = cvg (f x @[x --> F])%classic
+cvg (unstable.inv_fun f x @[x --> F])%classic = cvg (f x @[x --> F])%classic
 
 is_cvgVE is not universe polymorphic
 Arguments is_cvgVE {K} {T}%_type_scope [F] {FF} [f]%_function_scope _
@@ -12287,7 +12289,7 @@ forall {R : realFieldType} {I : Type} {a : set_system I},
 Filter a ->
 forall [f : I -> R],
 (\near a, (0 < f a)%R) ->
-((f\^-1)%R x @[x --> a] --> 0%R)%classic <->
+(unstable.inv_fun f x @[x --> a] --> 0%R)%classic <->
 (f x @[x --> a] --> +oo%R)%classic
 
 gtr0_cvgV0 is not universe polymorphic
@@ -12316,7 +12318,7 @@ forall {R : realFieldType} {I : Type} {a : set_system I},
 Filter a ->
 forall [f : I -> R],
 (\near a, (0 < f a)%R) ->
-((f\^-1)%R x @[x --> a] --> +oo%R)%classic <->
+(unstable.inv_fun f x @[x --> a] --> +oo%R)%classic <->
 (f x @[x --> a] --> 0%R)%classic
 
 cvgrVy is not universe polymorphic
@@ -12337,7 +12339,7 @@ forall {R : realFieldType} {I : Type} {a : set_system I},
 Filter a ->
 forall [f : I -> R],
 (\near a, (f a < 0)%R) ->
-((f\^-1)%R x @[x --> a] --> 0%R)%classic <->
+(unstable.inv_fun f x @[x --> a] --> 0%R)%classic <->
 (f x @[x --> a] --> -oo%R)%classic
 
 ltr0_cvgV0 is not universe polymorphic
@@ -12361,7 +12363,7 @@ forall {R : realFieldType} {I : Type} {a : set_system I},
 Filter a ->
 forall [f : I -> R],
 (\near a, (f a < 0)%R) ->
-((f\^-1)%R x @[x --> a] --> -oo%R)%classic <->
+(unstable.inv_fun f x @[x --> a] --> -oo%R)%classic <->
 (f x @[x --> a] --> 0%R)%classic
 
 cvgrVNy is not universe polymorphic

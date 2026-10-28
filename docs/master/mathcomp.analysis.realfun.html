@@ -2858,7 +2858,7 @@ Qed.</div></details>
 forall [R : realType] [f : R -> R] [I : interval R],
 {within [set` I], continuous f}%classic ->
 {in I &, injective f} ->
-strict_monotonic (T:=R) (T':=R) (pT:=itvPredType R) I f
+unstable.strict_monotonic (T:=R) (T':=R) (pT:=itvPredType R) I f
 
 itv_continuous_inj_mono is not universe polymorphic
 Arguments itv_continuous_inj_mono [R] [f]%_function_scope 
@@ -3131,7 +3131,7 @@ forall [R : realType] [a b : R] [f g : R -> R],
 (a <= b)%R ->
 {within `[a, b], continuous f}%classic ->
 {in `[a, b]%R, cancel f g} ->
-strict_monotonic (T:=R) (T':=R) (pT:=itvPredType R) (f @`[a, b])%R g
+unstable.strict_monotonic (T:=R) (T':=R) (pT:=itvPredType R) (f @`[a, b])%R g
 
 segment_can_mono is not universe polymorphic
 Arguments segment_can_mono [R] [a b]%_ring_scope [f g]%_function_scope 
@@ -3533,14 +3533,14 @@ Qed.</div></details>
 <br/>
 <span class="vernacular">Lemma</span><span class="id"> </span><span id="segment_mono_surj_continuous" class="id"><a name="segment_mono_surj_continuous" class="" title="segment_mono_surj_continuous :
 forall [R : realType] [a b : R] [f : R -> R],
-strict_monotonic (T:=R) (T':=R) (pT:=itvPredType R) `[a, b]%R f ->
+unstable.strict_monotonic (T:=R) (T':=R) (pT:=itvPredType R) `[a, b]%R f ->
 set_surj `[a, b] (f @`[a, b]) f -> {within `[a, b], continuous f}%classic
 
 segment_mono_surj_continuous is not universe polymorphic
 Expanded type for implicit arguments
 segment_mono_surj_continuous :
 forall [R : realType] [a b : R] [f : R -> R],
-strict_monotonic (T:=R) (T':=R) (pT:=itvPredType R) `[a, b]%R f ->
+unstable.strict_monotonic (T:=R) (T':=R) (pT:=itvPredType R) `[a, b]%R f ->
 set_surj `[a, b] (f @`[a, b]) f ->
 forall [x : subspace_topology_subspace__canonical__filter_Nbhs `[a, b]]
   [t : set (numFieldTopology.Real_sort__canonical__filter_Nbhs R)],

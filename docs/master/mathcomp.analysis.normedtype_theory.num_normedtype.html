@@ -324,14 +324,14 @@ library mathcomp.analysis.normedtype_theory.num_normedtype, line 63, characters 
 <br/>
 <span class="vernacular">Lemma</span><span class="id"> </span><span id="mono_mem_image_segment" class="id"><a name="mono_mem_image_segment" class="" title="mono_mem_image_segment :
 forall [R : realDomainType] [a b : R] [f : R -> R],
-monotonic (T:=R) (T':=R) (pT:=itvPredType R) `[a, b]%R f ->
+unstable.monotonic (T:=R) (T':=R) (pT:=itvPredType R) `[a, b]%R f ->
 {homo f : x / x \in `[a, b]%R >-> x \in (f @`[a, b])%R}
 
 mono_mem_image_segment is not universe polymorphic
 Expanded type for implicit arguments
 mono_mem_image_segment :
 forall [R : realDomainType] [a b : R] [f : R -> R],
-monotonic (T:=R) (T':=R) (pT:=itvPredType R) `[a, b]%R f ->
+unstable.monotonic (T:=R) (T':=R) (pT:=itvPredType R) `[a, b]%R f ->
 forall [x : R],
 (fun x0 : R => is_true (x0 \in `[a, b]%R)) x ->
 (f x \in (f @`[a, b])%R) = true
@@ -357,14 +357,14 @@ Qed.</div></details>
 <br/>
 <span class="vernacular">Lemma</span><span class="id"> </span><span id="mono_mem_image_itvoo" class="id"><a name="mono_mem_image_itvoo" class="" title="mono_mem_image_itvoo :
 forall [R : realDomainType] [a b : R] [f : R -> R],
-strict_monotonic (T:=R) (T':=R) (pT:=itvPredType R) `[a, b]%R f ->
+unstable.strict_monotonic (T:=R) (T':=R) (pT:=itvPredType R) `[a, b]%R f ->
 {homo f : x / x \in `]a, b[%R >-> x \in f @`]a, b[%R}
 
 mono_mem_image_itvoo is not universe polymorphic
 Expanded type for implicit arguments
 mono_mem_image_itvoo :
 forall [R : realDomainType] [a b : R] [f : R -> R],
-strict_monotonic (T:=R) (T':=R) (pT:=itvPredType R) `[a, b]%R f ->
+unstable.strict_monotonic (T:=R) (T':=R) (pT:=itvPredType R) `[a, b]%R f ->
 forall [x : R],
 (fun x0 : R => is_true (x0 \in `]a, b[%R)) x -> (f x \in f @`]a, b[%R) = true
 
@@ -391,7 +391,7 @@ Qed.</div></details>
 <span class="vernacular">Lemma</span><span class="id"> </span><span id="mono_surj_image_segment" class="id"><a name="mono_surj_image_segment" class="" title="mono_surj_image_segment :
 forall [R : realDomainType] [a b : R] [f : R -> R],
 (a <= b)%R ->
-monotonic (T:=R) (T':=R) (pT:=itvPredType R) `[a, b]%R f ->
+unstable.monotonic (T:=R) (T':=R) (pT:=itvPredType R) `[a, b]%R f ->
 set_surj `[a, b] (f @`[a, b]) f ->
 [set f x | x in `[a, b]]%classic = (f @`[a, b])%classic
 
@@ -556,7 +556,7 @@ Qed.</div></details>
 <span class="vernacular">Lemma</span><span class="id"> </span><span id="mono_surj_image_segmentP" class="id"><a name="mono_surj_image_segmentP" class="" title="mono_surj_image_segmentP :
 forall [R : realDomainType] [a b : R] [f : R -> R],
 (a <= b)%R ->
-monotonic (T:=R) (T':=R) (pT:=itvPredType R) `[a, b]%R f ->
+unstable.monotonic (T:=R) (T':=R) (pT:=itvPredType R) `[a, b]%R f ->
 set_surj `[a, b] (f @`[a, b]) f ->
 forall y : R,
 reflect (exists2 x : R, x \in `[a, b]%R & f x = y) (y \in (f @`[a, b])%R)
@@ -2029,15 +2029,15 @@ Qed.</div></details>
 <br/>
 <span class="vernacular">Lemma</span><span class="id"> </span><span id="interval_open" class="id"><a name="interval_open" class="" title="interval_open :
 forall {R : realFieldType} [a b : itv_bound R],
-~~ bound_side (T:=R) true a ->
-~~ bound_side (T:=R) false b -> open [set` Interval a b]%classic
+~~ unstable.bound_side (T:=R) true a ->
+~~ unstable.bound_side (T:=R) false b -> open [set` Interval a b]%classic
 
 interval_open is not universe polymorphic
 Expanded type for implicit arguments
 interval_open :
 forall {R : realFieldType} [a b : itv_bound R],
-~~ bound_side (T:=R) true a ->
-~~ bound_side (T:=R) false b ->
+~~ unstable.bound_side (T:=R) true a ->
+~~ unstable.bound_side (T:=R) false b ->
 forall [t : R^o],
 [set` Interval a b]%classic t ->
 exists2 i : R,
@@ -2142,15 +2142,15 @@ Qed.</div></details>
 <br/>
 <span class="vernacular">Lemma</span><span class="id"> </span><span id="interval_closed" class="id"><a name="interval_closed" class="" title="interval_closed :
 forall {R : realFieldType} [a b : itv_bound R],
-~~ bound_side (T:=R) false a ->
-~~ bound_side (T:=R) true b -> closed [set` Interval a b]
+~~ unstable.bound_side (T:=R) false a ->
+~~ unstable.bound_side (T:=R) true b -> closed [set` Interval a b]
 
 interval_closed is not universe polymorphic
 Expanded type for implicit arguments
 interval_closed :
 forall {R : realFieldType} [a b : itv_bound R],
-~~ bound_side (T:=R) false a ->
-~~ bound_side (T:=R) true b ->
+~~ unstable.bound_side (T:=R) false a ->
+~~ unstable.bound_side (T:=R) true b ->
 forall [t : GRing_regular__canonical__topology_structure_Topological R],
 closure [set` Interval a b] t -> (t \in Interval a b) = true
 
